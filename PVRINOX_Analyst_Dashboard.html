@@ -2987,19 +2987,38 @@ function updateCMP() {
 
 function refreshCMPDependents() {
   const cmp = CURRENT_CMP;
-  // Update all hardcoded CMP text references in the page
-  document.querySelectorAll('*').forEach(el => {
-    if (el.children.length === 0 && el.textContent.includes('₹987')) {
-      el.textContent = el.textContent.replace(/₹987/g, '₹' + cmp.toLocaleString('en-IN'));
+  const cmpFormatted = '₹' + cmp.toLocaleString('en-IN');
+  // Replace any CMP price reference — matches ₹ followed by 3-4 digits (price range 100-9999)
+  const cmpPattern = /₹[0-9,]{3,7}(?=\s*(?:CMP|$|[^0-9]))/g;
+
+  // Update sec-labels, chart-titles, td, th, and plain text nodes
+  document.querySelectorAll('.sec-label, .chart-title, td, th, .hup, p, div').forEach(el => {
+    if (el.children.length === 0 && el.textContent.match(/CMP ₹[0-9,]+/)) {
+      el.textContent = el.textContent.replace(/CMP ₹[0-9,]+/g, 'CMP ' + cmpFormatted);
     }
-    if (el.innerHTML && !el.children.length === 0) {
-      // For elements with mixed content, use innerHTML carefully
+    if (el.children.length > 0 && el.innerHTML.includes('CMP ₹')) {
+      // Only update leaf-level containers to avoid double-replacing
     }
   });
-  // Also update sec-labels and chart-titles which may have children
-  document.querySelectorAll('.sec-label, .chart-title, td, th').forEach(el => {
-    if (el.innerHTML.includes('₹987')) {
-      el.innerHTML = el.innerHTML.replace(/₹987/g, '₹' + cmp.toLocaleString('en-IN'));
+
+  // Targeted updates for specific elements
+  document.querySelectorAll('.sec-label, .chart-title').forEach(el => {
+    if (el.innerHTML.includes('CMP ₹')) {
+      el.innerHTML = el.innerHTML.replace(/CMP ₹[0-9,]+/g, 'CMP ' + cmpFormatted);
+    }
+  });
+
+  // Update td/th text containing CMP reference
+  document.querySelectorAll('td, th').forEach(el => {
+    if (el.innerHTML.includes('CMP ₹')) {
+      el.innerHTML = el.innerHTML.replace(/CMP ₹[0-9,]+/g, 'CMP ' + cmpFormatted);
+    }
+  });
+
+  // Update .hup divs (upside labels in house cards)
+  document.querySelectorAll('.hup').forEach(el => {
+    if (el.textContent.includes('CMP ₹')) {
+      el.textContent = el.textContent.replace(/CMP ₹[0-9,]+/g, 'CMP ' + cmpFormatted);
     }
   });
   // Avg TP and upside
