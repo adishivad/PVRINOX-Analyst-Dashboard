@@ -186,7 +186,7 @@ tbody tr:hover { background: var(--surface2); }
   .tp-bar-row { grid-template-columns: 60px 1fr 48px; font-size: 11px; }
 }
 </style>
-<style>.cell-amber{background:#FFF8E1!important;color:#7B4F00}</style><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script></head>
+<style>.cell-amber{background:#FFF8E1!important;color:#7B4F00}</style></head>
 <body>
 
 <style>
@@ -323,7 +323,7 @@ function checkPwd() {
       </div>
       <span class="tp-val-lbl">₹1,400 <span style="color:var(--buy);font-size:10px">+20</span></span>
     </div><div class="tp-bar-row">
-      <span class="tp-house-lbl">IIFL Capital</span>
+      <span class="tp-house-lbl">IIFL Research</span>
       <div class="tp-track">
         <div class="tp-fill" style="width:39%;background:#1B4F8A"></div>
         <div class="tp-cmp-line" style="left:0"></div>
@@ -384,7 +384,7 @@ function checkPwd() {
   <div class="chart-box">
     <div class="two-col" style="margin-bottom:0">
       <div>
-        <div class="chart-wrap" style="height:200px;position:relative"><canvas id="shareChart" role="img" aria-label="Shareholding pie chart Dec 2025" width="875" height="300" style="display: block; box-sizing: border-box; height: 200px; width: 583px;">Promoters 27.5%, FII 21.2%, MF/DII 34.5%, Others 16.8%</canvas></div>
+        <div class="chart-wrap" style="height:200px;position:relative"><canvas id="shareChart" role="img" aria-label="Shareholding pie chart Dec 2025" width="881" height="300" style="display: block; box-sizing: border-box; height: 200px; width: 587px;">Promoters 27.5%, FII 21.2%, MF/DII 34.5%, Others 16.8%</canvas></div>
         <div class="legend-row">
           <span class="leg-item"><span class="leg-swatch" style="background:#1A1916"></span>Promoters 27.5%</span>
           <span class="leg-item"><span class="leg-swatch" style="background:#378ADD"></span>FII 21.2%</span>
@@ -535,7 +535,7 @@ function checkPwd() {
       <div style="font-size:10px;color:var(--text3);margin-top:2px">Upgraded from HOLD</div>
     </div><div class="house-card buy-card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div class="hname">IIFL Capital</div>
+        <div class="hname">IIFL Research</div>
         <span class="tag tag-buy">BUY</span>
       </div>
       <div class="hdate">2026-04-16</div>
@@ -555,7 +555,7 @@ function checkPwd() {
       <div class="htp">₹1,100</div>
       <div class="hup">+11% upside vs CMP ₹987</div>
       <div style="font-size:10px;margin-top:4px" class="tp-chg"><span style="color:var(--text3)">TP unchanged at 1,100</span></div>
-      <div class="hbasis">10x Sep'FY27E Adj. EBITDA</div>
+      <div class="hbasis">10x Sep FY27E Adj. EBITDA</div>
       <div style="font-size:10px;color:var(--text3);margin-top:2px">Updated</div>
     </div></div>
 </div>
@@ -686,7 +686,7 @@ function checkPwd() {
       <td class="">26.5k</td>
       <td>32.2%</td>
     </tr><tr>
-      <td>IIFL Capital</td>
+      <td>IIFL Research</td>
       <td>67k</td>
       <td class="">20.4k</td>
       <td>30.6%</td>
@@ -3400,11 +3400,12 @@ function checkPwd() {
     </div>
     <input type="file" id="file-input" accept=".pdf" onchange="handleFileUpload(event)">
 
-    <div id="upload-status" style="display: block; margin-top: 12px;" class="upload-status done">Dashboard updated with data from Avendus Spark Research!</div>
+    <div id="upload-status" style="display:none;margin-top:12px" class="upload-status"></div>
 
-    <div id="parsed-output" style="display: none; margin-top: 16px;">
+    <div id="parsed-output" style="display:none;margin-top:16px">
       <div class="sec-label">Extracted data — review before applying</div>
-      <ul id="parsed-list" style="list-style:none;padding:0;margin:0 0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden"><li><span>Research house</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">Avendus Spark Research</span></li><li><span>Report date</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">2026-02-06</span></li><li><span>Rating</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">BUY</span></li><li><span>Target price</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">₹1,100</span></li><li><span>Previous TP</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">₹1,100</span></li><li><span>FY26E Revenue</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">66.8k mn</span></li><li><span>FY26E EBITDA</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">8.3k mn</span></li><li><span>FY27E Revenue</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">70.3k mn</span></li><li><span>FY27E EBITDA</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">9.6k mn</span></li><li><span>FY26E EPS</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">24.9</span></li><li><span>FY27E EPS</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">38.1</span></li><li><span>Valuation basis</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">10x Sep'FY27E Adj. EBITDA</span></li><li><span>Key positives</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">Growth story intact with opportunity to add &gt;1500 screens and increase multiplex pie by 40% to Rs. 100-120bn | Strong operating leverage demonstrated - EBITDA/screen improved to Rs. 4.0mn (26.3% occupancy) in 9MFY26 vs Rs. 2.2mn (23.9% occupancy) in 9MFY25 | F&amp;B contribution rising with SPH/ATP expected to exceed 60% from current ~50% due to premiumization | Asset-light model gaining traction with 11 properties (54 screens) under management fee model and 13 properties (95 screens) under developer partnership, reducing capex intensity | OTT window extension beyond 3 months helping maximize footfalls for exceptional content and improving unit economics | Content consistency improving across segments - Regional box office at Rs. 55bn+ vs Rs. 45bn pre-COVID, Bollywood delivering highest collections, Hollywood nearing pre-pandemic Rs. 15bn</span></li><li><span>Key risks</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">Content consistency risk - performance heavily dependent on film quality and release pipeline | Occupancy still below pre-COVID levels at 26.3% in 9MFY26, requiring further improvement to reach historical EBITDA/screen targets | High competitive intensity in multiplex space with ongoing screen additions | Low RoCE of 2.8% in FY26E despite operating leverage due to past costly acquisitions | OTT competition risk impacting theatrical window and footfalls</span></li></ul>
+      <ul id="parsed-list" style="list-style:none;padding:0;margin:0 0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+      </ul>
       <button onclick="applyUpdate()" class="btn">Apply to dashboard</button>
       <button onclick="document.getElementById('parsed-output').style.display='none'" class="btn btn-outline" style="margin-left:8px">Discard</button>
     </div>
@@ -3518,7 +3519,7 @@ const HOUSES = [
     "note": "Upgraded from HOLD"
   },
   {
-    "name": "IIFL Capital",
+    "name": "IIFL Research",
     "date": "2026-04-16",
     "rating": "BUY",
     "tp": 1350,
@@ -3534,7 +3535,7 @@ const HOUSES = [
     "tp": 1100,
     "prev": 1100,
     "chg": 0,
-    "basis": "10x Sep'FY27E Adj. EBITDA",
+    "basis": "10x Sep FY27E Adj. EBITDA",
     "note": "Updated"
   }
 ];
@@ -3631,9 +3632,9 @@ const ESTIMATES = [
     "fy28e": 26477
   },
   {
-    "house": "IIFL Capital",
+    "house": "IIFL Research",
     "fy26r": 66663,
-    "fy26e": 20398,
+    "fy26e": 20388,
     "fy27r": 71612,
     "fy27e": 22271,
     "fy28r": 80288,
@@ -5297,7 +5298,8 @@ function applyUpdate() {
 }
 
 // ══════════════════════ CMP UPDATE ══════════════════════
-let CURRENT_CMP = parseFloat(localStorage.getItem('pvrinox_cmp') || '987');
+const BAKED_CMP = 938; // set at export time — always wins over localStorage
+let CURRENT_CMP = BAKED_CMP;
 
 function updateCMP() {
   const input = document.getElementById('cmp-input').value.trim();
@@ -5357,6 +5359,12 @@ function exportDashboard() {
     'const ESTIMATES = ' + estimatesJson + ';'
   );
 
+  // Bake current CMP into the exported file
+  html = html.replace(
+    /const BAKED_CMP = [0-9.]+;/,
+    'const BAKED_CMP = ' + CURRENT_CMP + ';'
+  );
+
   // Download as file
   const blob = new Blob([html], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
@@ -5392,7 +5400,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   initAll();
   updateSnapshot();
-  CURRENT_CMP = parseFloat(localStorage.getItem('pvrinox_cmp') || '987');
+  CURRENT_CMP = BAKED_CMP;
   refreshCMPDependents();
   const saved = localStorage.getItem('anthropic_key');
   if (saved) document.getElementById('api-key-input').value = saved;
