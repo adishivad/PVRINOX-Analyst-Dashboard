@@ -186,7 +186,7 @@ tbody tr:hover { background: var(--surface2); }
   .tp-bar-row { grid-template-columns: 60px 1fr 48px; font-size: 11px; }
 }
 </style>
-<style>.cell-amber{background:#FFF8E1!important;color:#7B4F00}</style></head>
+<style>.cell-amber{background:#FFF8E1!important;color:#7B4F00}</style><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script></head>
 <body>
 
 <style>
@@ -384,7 +384,7 @@ function checkPwd() {
   <div class="chart-box">
     <div class="two-col" style="margin-bottom:0">
       <div>
-        <div class="chart-wrap" style="height:200px;position:relative"><canvas id="shareChart" role="img" aria-label="Shareholding pie chart Dec 2025" width="875" height="300" style="display: block; box-sizing: border-box; height: 200px; width: 583px;">Promoters 27.5%, FII 21.2%, MF/DII 34.5%, Others 16.8%</canvas></div>
+        <div class="chart-wrap" style="height:200px;position:relative"><canvas id="shareChart" role="img" aria-label="Shareholding pie chart Dec 2025" width="881" height="300" style="display: block; box-sizing: border-box; height: 200px; width: 587px;">Promoters 27.5%, FII 21.2%, MF/DII 34.5%, Others 16.8%</canvas></div>
         <div class="legend-row">
           <span class="leg-item"><span class="leg-swatch" style="background:#1A1916"></span>Promoters 27.5%</span>
           <span class="leg-item"><span class="leg-swatch" style="background:#378ADD"></span>FII 21.2%</span>
@@ -3400,12 +3400,11 @@ function checkPwd() {
     </div>
     <input type="file" id="file-input" accept=".pdf" onchange="handleFileUpload(event)">
 
-    <div id="upload-status" style="display:none;margin-top:12px" class="upload-status"></div>
+    <div id="upload-status" style="display: block; margin-top: 12px;" class="upload-status done">Dashboard updated with data from Avendus Spark Research!</div>
 
-    <div id="parsed-output" style="display:none;margin-top:16px">
+    <div id="parsed-output" style="display: none; margin-top: 16px;">
       <div class="sec-label">Extracted data — review before applying</div>
-      <ul id="parsed-list" style="list-style:none;padding:0;margin:0 0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
-      </ul>
+      <ul id="parsed-list" style="list-style:none;padding:0;margin:0 0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden"><li><span>Research house</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">Avendus Spark Research</span></li><li><span>Report date</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">2026-02-06</span></li><li><span>Rating</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">BUY</span></li><li><span>Target price</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">₹1,100</span></li><li><span>Previous TP</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">₹1,100</span></li><li><span>FY26E Revenue</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">66.8k mn</span></li><li><span>FY26E EBITDA</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">8.3k mn</span></li><li><span>FY27E Revenue</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">70.3k mn</span></li><li><span>FY27E EBITDA</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">9.6k mn</span></li><li><span>FY26E EPS</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">24.9</span></li><li><span>FY27E EPS</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">38.1</span></li><li><span>Valuation basis</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">10x Sep'FY27E Adj. EBITDA</span></li><li><span>Key positives</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">Growth story intact with penetration opportunity - ~2900 multiplex screens out of ~9000 screens, opportunity to add &gt;1500 screens and increase revenue by 40% to Rs 100-120bn | High operating leverage demonstrated - Rs 4.0mn EBITDA/screen with 119mn footfalls (26.3% occupancy) in 9MFY26 vs Rs 2.2mn with 107mn footfalls (23.9% occupancy) in 9MFY25 | Asset light model gaining traction - signed 11 properties (54 screens) under management fees model and 13 properties (95 screens) under asset light model, minimizing upfront capex | F&amp;B contribution rising - expect F&amp;B SPH/ATP to exceed 60% from current ~50% due to discretionary spending and premiumization | OTT window extension positive - extension to more than 3 months helps maximize footfalls for exceptional content and improves unit economics | Content consistency improving - Regional box office delivering Rs 55bn+ collections (vs 45bn pre-COVID), Bollywood delivering highest collections, Hollywood nearing pre-pandemic Rs 15bn</span></li><li><span>Key risks</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">Content consistency risk - company performance heavily dependent on continuation of quality content pipeline across Bollywood, Hollywood and Regional cinema | Low ROCE despite scale - subpar ROCE generated due to costly acquisitions in the past impacting overall returns on capital employed</span></li></ul>
       <button onclick="applyUpdate()" class="btn">Apply to dashboard</button>
       <button onclick="document.getElementById('parsed-output').style.display='none'" class="btn btn-outline" style="margin-left:8px">Discard</button>
     </div>
@@ -3634,7 +3633,7 @@ const ESTIMATES = [
   {
     "house": "IIFL Capital",
     "fy26r": 66663,
-    "fy26e": 20398,
+    "fy26e": 20385,
     "fy27r": 71612,
     "fy27e": 22271,
     "fy28r": 80288,
@@ -5341,9 +5340,16 @@ function refreshCMPDependents() {
 }
 
 // ══════════════════════ EXPORT ══════════════════════
-function exportDashboard() {
-  // Get current HTML source
-  let html = document.documentElement.outerHTML;
+async function exportDashboard() {
+  // Fetch the original HTML source (preserves password code intact)
+  let html;
+  try {
+    const resp = await fetch(window.location.href);
+    html = await resp.text();
+  } catch(e) {
+    // Fallback to DOM if fetch fails (e.g. file://)
+    html = document.documentElement.outerHTML;
+  }
 
   // Serialize current HOUSES and ESTIMATES into JS
   const housesJson = JSON.stringify(HOUSES, null, 2);
