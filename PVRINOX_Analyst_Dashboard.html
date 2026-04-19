@@ -190,6 +190,55 @@ tbody tr:hover { background: var(--surface2); }
 </style>
 </head>
 <body>
+
+<style>
+#pwd-screen { position:fixed; inset:0; background:#F4F3EF; display:flex; align-items:center; justify-content:center; z-index:9999; }
+#pwd-box { background:#fff; border:1px solid #E2E0D8; border-radius:12px; padding:40px 36px; width:320px; text-align:center; box-shadow:0 4px 24px rgba(0,0,0,0.08); }
+#pwd-box .pwd-title { font-size:18px; font-weight:600; margin-bottom:6px; font-family:'DM Sans',sans-serif; }
+#pwd-box .pwd-sub { font-size:12px; color:#6B6960; margin-bottom:24px; }
+#pwd-box input { width:100%; padding:10px 14px; border:1px solid #E2E0D8; border-radius:8px; font-size:15px; font-family:inherit; margin-bottom:12px; outline:none; text-align:center; letter-spacing:3px; }
+#pwd-box input:focus { border-color:#1A1916; }
+#pwd-box button { width:100%; padding:10px; background:#1A1916; color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:500; cursor:pointer; font-family:inherit; }
+#pwd-box .pwd-err { font-size:12px; color:#9B2226; margin-top:10px; display:none; }
+</style>
+
+<div id="pwd-screen">
+  <div id="pwd-box">
+    <div class="pwd-title">PVR INOX</div>
+    <div class="pwd-sub">Analyst Research Dashboard · 3QFY26</div>
+    <input type="password" id="pwd-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPwd()" autofocus />
+    <button onclick="checkPwd()">Access Dashboard</button>
+    <div class="pwd-err" id="pwd-err">Incorrect password. Please try again.</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  function checkAuth() {
+    if (localStorage.getItem('pvrinox_auth') === 'pvr130426') {
+      var s = document.getElementById('pwd-screen');
+      if (s) s.style.display = 'none';
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkAuth);
+  } else {
+    checkAuth();
+  }
+})();
+function checkPwd() {
+  var val = document.getElementById('pwd-input').value;
+  if (val === 'pvr130426') {
+    localStorage.setItem('pvrinox_auth', 'pvr130426');
+    document.getElementById('pwd-screen').style.display = 'none';
+  } else {
+    document.getElementById('pwd-err').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+  }
+}
+</script>
+
 <div class="page">
 
 <!-- Top bar -->
