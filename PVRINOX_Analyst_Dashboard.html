@@ -1396,46 +1396,350 @@ function checkPwd() {
 <script>
 // ══════════════════════ DATA ══════════════════════
 const HOUSES = [
-  {name:'CLSA',date:'6 Feb 2026',rating:'O-PF',tp:1920,prev:1920,chg:0,basis:'10x FY27 EV/EBITDA',note:'Unchanged'},
-  {name:'Nuvama',date:'5 Feb 2026',rating:'BUY',tp:1605,prev:1605,chg:0,basis:'DCF-based',note:'Unchanged'},
-  {name:'ICICI Sec',date:'6 Feb 2026',rating:'BUY',tp:1500,prev:1500,chg:0,basis:'15x adj FY27 EBITDA',note:'Maintained'},
-  {name:'Kotak',date:'6 Feb 2026',rating:'BUY',tp:1400,prev:1380,chg:20,basis:'12x FY28E EV/EBITDA',note:'Raised from 1,380'},
-  {name:'Nirmal Bang',date:'5 Feb 2026',rating:'BUY',tp:1344,prev:1358,chg:-14,basis:'10x Dec-27E EBITDA',note:'Slightly cut from 1,358'},
-  {name:'Elara',date:'6 Feb 2026',rating:'BUY',tp:1300,prev:1225,chg:75,basis:'13x Sep-27 pre-IndAS EBITDA',note:'Upgraded from Accum; TP raised'},
-  {name:'ICICI Direct',date:'9 Feb 2026',rating:'BUY',tp:1320,prev:1320,chg:0,basis:'11.5x FY27 ex-IndAS EBITDA',note:'Unchanged'},
-  {name:'B&K',date:'5 Feb 2026',rating:'HOLD',tp:1285,prev:1285,chg:0,basis:'DCF-based',note:'Maintained Hold'},
-  {name:'PL Capital',date:'6 Feb 2026',rating:'BUY',tp:1274,prev:1261,chg:13,basis:'9.5x FY28E pre-IndAS EBITDA',note:'Raised from 1,261'},
-  {name:'Investec',date:'6 Feb 2026',rating:'BUY',tp:1248,prev:1238,chg:10,basis:'12.5x Dec-27 EV/EBITDA',note:'Upgraded from HOLD'},
+  {
+    "name": "CLSA",
+    "date": "6 Feb 2026",
+    "rating": "O-PF",
+    "tp": 1920,
+    "prev": 1920,
+    "chg": 0,
+    "basis": "10x FY27 EV/EBITDA",
+    "note": "Unchanged"
+  },
+  {
+    "name": "Nuvama",
+    "date": "5 Feb 2026",
+    "rating": "BUY",
+    "tp": 1605,
+    "prev": 1605,
+    "chg": 0,
+    "basis": "DCF-based",
+    "note": "Unchanged"
+  },
+  {
+    "name": "ICICI Sec",
+    "date": "6 Feb 2026",
+    "rating": "BUY",
+    "tp": 1500,
+    "prev": 1500,
+    "chg": 0,
+    "basis": "15x adj FY27 EBITDA",
+    "note": "Maintained"
+  },
+  {
+    "name": "Kotak",
+    "date": "6 Feb 2026",
+    "rating": "BUY",
+    "tp": 1400,
+    "prev": 1380,
+    "chg": 20,
+    "basis": "12x FY28E EV/EBITDA",
+    "note": "Raised from 1,380"
+  },
+  {
+    "name": "Nirmal Bang",
+    "date": "5 Feb 2026",
+    "rating": "BUY",
+    "tp": 1344,
+    "prev": 1358,
+    "chg": -14,
+    "basis": "10x Dec-27E EBITDA",
+    "note": "Slightly cut from 1,358"
+  },
+  {
+    "name": "Elara",
+    "date": "6 Feb 2026",
+    "rating": "BUY",
+    "tp": 1300,
+    "prev": 1225,
+    "chg": 75,
+    "basis": "13x Sep-27 pre-IndAS EBITDA",
+    "note": "Upgraded from Accum; TP raised"
+  },
+  {
+    "name": "ICICI Direct",
+    "date": "9 Feb 2026",
+    "rating": "BUY",
+    "tp": 1320,
+    "prev": 1320,
+    "chg": 0,
+    "basis": "11.5x FY27 ex-IndAS EBITDA",
+    "note": "Unchanged"
+  },
+  {
+    "name": "B&K",
+    "date": "5 Feb 2026",
+    "rating": "HOLD",
+    "tp": 1285,
+    "prev": 1285,
+    "chg": 0,
+    "basis": "DCF-based",
+    "note": "Maintained Hold"
+  },
+  {
+    "name": "PL Capital",
+    "date": "6 Feb 2026",
+    "rating": "BUY",
+    "tp": 1274,
+    "prev": 1261,
+    "chg": 13,
+    "basis": "9.5x FY28E pre-IndAS EBITDA",
+    "note": "Raised from 1,261"
+  },
+  {
+    "name": "Investec",
+    "date": "6 Feb 2026",
+    "rating": "BUY",
+    "tp": 1248,
+    "prev": 1238,
+    "chg": 10,
+    "basis": "12.5x Dec-27 EV/EBITDA",
+    "note": "Upgraded from HOLD"
+  },
+  {
+    "name": "IIFL Capital",
+    "date": "2026-04-16",
+    "rating": "BUY",
+    "tp": 1350,
+    "prev": 1350,
+    "chg": 0,
+    "basis": "12x FY27 EV/EBITDA",
+    "note": "Updated"
+  },
+  {
+    "name": "Avendus Spark Research",
+    "date": "2026-02-06",
+    "rating": "BUY",
+    "tp": 1100,
+    "prev": 1100,
+    "chg": 0,
+    "basis": "10x Sep'FY27E Adj. EBITDA",
+    "note": "Updated"
+  }
 ];
 
 const ESTIMATES = [
-  {house:'Kotak',fy26r:66625,fy26e:8213,fy27r:71032,fy27e:10258,fy28r:76184,fy28e:11456},
-  {house:'B&K',fy26r:68535,fy26e:9298,fy27r:74612,fy27e:9562,fy28r:81973,fy28e:10948},
-  {house:'Nirmal Bang',fy26r:68180,fy26e:9069,fy27r:75819,fy27e:12036,fy28r:81637,fy28e:13855},
-  {house:'Investec',fy26r:66302,fy26e:20093,fy27r:74255,fy27e:22838,fy28r:81613,fy28e:25568},
-  {house:'CLSA',fy26r:68092,fy26e:21153,fy27r:77086,fy27e:24714,fy28r:84279,fy28e:27964},
-  {house:'Elara',fy26r:73900,fy26e:23202,fy27r:76909,fy27e:23457,fy28r:81408,fy28e:25236},
-  {house:'Nuvama',fy26r:68318,fy26e:20644,fy27r:80066,fy27e:24288,fy28r:92603,fy28e:28129},
-  {house:'PL Capital',fy26r:67923,fy26e:20153,fy27r:73759,fy27e:23286,fy28r:81275,fy28e:26063},
-  {house:'ICICI Sec',fy26r:69587,fy26e:22551,fy27r:76578,fy27e:24588,fy28r:85275,fy28e:28182},
-  {house:'ICICI Direct',fy26r:67608,fy26e:21154,fy27r:75636,fy27e:24107,fy28r:82200,fy28e:26477},
+  {
+    "house": "Kotak",
+    "fy26r": 66625,
+    "fy26e": 8213,
+    "fy27r": 71032,
+    "fy27e": 10258,
+    "fy28r": 76184,
+    "fy28e": 11456
+  },
+  {
+    "house": "B&K",
+    "fy26r": 68535,
+    "fy26e": 9298,
+    "fy27r": 74612,
+    "fy27e": 9562,
+    "fy28r": 81973,
+    "fy28e": 10948
+  },
+  {
+    "house": "Nirmal Bang",
+    "fy26r": 68180,
+    "fy26e": 9069,
+    "fy27r": 75819,
+    "fy27e": 12036,
+    "fy28r": 81637,
+    "fy28e": 13855
+  },
+  {
+    "house": "Investec",
+    "fy26r": 66302,
+    "fy26e": 20093,
+    "fy27r": 74255,
+    "fy27e": 22838,
+    "fy28r": 81613,
+    "fy28e": 25568
+  },
+  {
+    "house": "CLSA",
+    "fy26r": 68092,
+    "fy26e": 21153,
+    "fy27r": 77086,
+    "fy27e": 24714,
+    "fy28r": 84279,
+    "fy28e": 27964
+  },
+  {
+    "house": "Elara",
+    "fy26r": 73900,
+    "fy26e": 23202,
+    "fy27r": 76909,
+    "fy27e": 23457,
+    "fy28r": 81408,
+    "fy28e": 25236
+  },
+  {
+    "house": "Nuvama",
+    "fy26r": 68318,
+    "fy26e": 20644,
+    "fy27r": 80066,
+    "fy27e": 24288,
+    "fy28r": 92603,
+    "fy28e": 28129
+  },
+  {
+    "house": "PL Capital",
+    "fy26r": 67923,
+    "fy26e": 20153,
+    "fy27r": 73759,
+    "fy27e": 23286,
+    "fy28r": 81275,
+    "fy28e": 26063
+  },
+  {
+    "house": "ICICI Sec",
+    "fy26r": 69587,
+    "fy26e": 22551,
+    "fy27r": 76578,
+    "fy27e": 24588,
+    "fy28r": 85275,
+    "fy28e": 28182
+  },
+  {
+    "house": "ICICI Direct",
+    "fy26r": 67608,
+    "fy26e": 21154,
+    "fy27r": 75636,
+    "fy27e": 24107,
+    "fy28r": 82200,
+    "fy28e": 26477
+  },
+  {
+    "house": "IIFL Capital",
+    "fy26r": 66663,
+    "fy26e": 20395,
+    "fy27r": 71612,
+    "fy27e": 22271,
+    "fy28r": 80288,
+    "fy28e": 26174
+  },
+  {
+    "house": "Avendus Spark Research",
+    "fy26r": 66760,
+    "fy26e": 8290,
+    "fy27r": 70345,
+    "fy27e": 9626,
+    "fy28r": 77808,
+    "fy28e": 11670
+  }
 ];
 
 // Historical estimates — one entry per broker per quarter update
 // Each entry: { house, quarter, tp, fy27r, fy27e, fy27eps, date }
 const ESTIMATES_HISTORY = [
-  {house:'Kotak',quarter:'Q3FY26',tp:1400,fy27r:71032,fy27e:10258,fy27eps:41.9,date:'Feb 2026'},
-  {house:'B&K',quarter:'Q3FY26',tp:1285,fy27r:74612,fy27e:9562,fy27eps:38.4,date:'Feb 2026'},
-  {house:'Nirmal Bang',quarter:'Q3FY26',tp:1344,fy27r:75819,fy27e:12036,fy27eps:42.4,date:'Feb 2026'},
-  {house:'Investec',quarter:'Q3FY26',tp:1248,fy27r:74255,fy27e:22838,fy27eps:33.4,date:'Feb 2026'},
-  {house:'CLSA',quarter:'Q3FY26',tp:1920,fy27r:77086,fy27e:24714,fy27eps:51.6,date:'Feb 2026'},
-  {house:'Elara',quarter:'Q3FY26',tp:1310,fy27r:76909,fy27e:23457,fy27eps:13.2,date:'Feb 2026'},
-  {house:'Nuvama',quarter:'Q3FY26',tp:1605,fy27r:80066,fy27e:24288,fy27eps:78.2,date:'Feb 2026'},
-  {house:'PL Capital',quarter:'Q3FY26',tp:1274,fy27r:73759,fy27e:23286,fy27eps:35.1,date:'Feb 2026'},
-  {house:'ICICI Sec',quarter:'Q3FY26',tp:1500,fy27r:76578,fy27e:24588,fy27eps:47.3,date:'Feb 2026'},
-  {house:'ICICI Direct',quarter:'Q3FY26',tp:1320,fy27r:75636,fy27e:24107,fy27eps:28.7,date:'Feb 2026'},
-  {house:'Avendus Spark Research',quarter:'Q3FY26',tp:1100,fy27r:70300,fy27e:9600,fy27eps:38.1,date:'Feb 2026'},
-  {house:'IIFL Capital',quarter:'Q3FY26',tp:1350,fy27r:71612,fy27e:10381,fy27eps:24.4,date:'Apr 2026'},
+  {
+    "house": "Kotak",
+    "quarter": "Q3FY26",
+    "tp": 1400,
+    "fy27r": 71032,
+    "fy27e": 10258,
+    "fy27eps": 41.9,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "B&K",
+    "quarter": "Q3FY26",
+    "tp": 1285,
+    "fy27r": 74612,
+    "fy27e": 9562,
+    "fy27eps": 38.4,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "Nirmal Bang",
+    "quarter": "Q3FY26",
+    "tp": 1344,
+    "fy27r": 75819,
+    "fy27e": 12036,
+    "fy27eps": 42.4,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "Investec",
+    "quarter": "Q3FY26",
+    "tp": 1248,
+    "fy27r": 74255,
+    "fy27e": 22838,
+    "fy27eps": 33.4,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "CLSA",
+    "quarter": "Q3FY26",
+    "tp": 1920,
+    "fy27r": 77086,
+    "fy27e": 24714,
+    "fy27eps": 51.6,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "Elara",
+    "quarter": "Q3FY26",
+    "tp": 1310,
+    "fy27r": 76909,
+    "fy27e": 23457,
+    "fy27eps": 13.2,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "Nuvama",
+    "quarter": "Q3FY26",
+    "tp": 1605,
+    "fy27r": 80066,
+    "fy27e": 24288,
+    "fy27eps": 78.2,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "PL Capital",
+    "quarter": "Q3FY26",
+    "tp": 1274,
+    "fy27r": 73759,
+    "fy27e": 23286,
+    "fy27eps": 35.1,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "ICICI Sec",
+    "quarter": "Q3FY26",
+    "tp": 1500,
+    "fy27r": 76578,
+    "fy27e": 24588,
+    "fy27eps": 47.3,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "ICICI Direct",
+    "quarter": "Q3FY26",
+    "tp": 1320,
+    "fy27r": 75636,
+    "fy27e": 24107,
+    "fy27eps": 28.7,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "Avendus Spark Research",
+    "quarter": "Q3FY26",
+    "tp": 1100,
+    "fy27r": 70300,
+    "fy27e": 9600,
+    "fy27eps": 38.1,
+    "date": "Feb 2026"
+  },
+  {
+    "house": "IIFL Capital",
+    "quarter": "Q3FY26",
+    "tp": 1350,
+    "fy27r": 71612,
+    "fy27e": 10381,
+    "fy27eps": 24.4,
+    "date": "Apr 2026"
+  }
 ];
 
 const EPS_DATA = [
