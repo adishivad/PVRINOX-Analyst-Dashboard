@@ -272,6 +272,7 @@ function checkPwd() {
   <button class="nav-tab" onclick="showTab('valuation',this)">Valuation Matrix</button>
   <button class="nav-tab" onclick="showTab('analysts',this)">Analyst Contacts</button>
   <button class="nav-tab" onclick="showTab('industry',this)">Industry Data</button>
+  <button class="nav-tab" onclick="showTab('revisions',this)">Est. Revisions</button>
   <button class="nav-tab" onclick="showTab('update',this)">&#8593; Update</button>
 </nav>
 
@@ -1230,6 +1231,19 @@ function checkPwd() {
 </div>
 
 <!-- ══════════════════════════════════
+     TAB — ESTIMATE REVISIONS
+══════════════════════════════════ -->
+<div id="tab-revisions" class="section">
+  <div class="sec-label">Estimate revision tracker — how broker views have moved quarter on quarter</div>
+
+  <div style="background:var(--blue-bg);border:1px solid #BFDBFE;border-radius:var(--radius);padding:10px 14px;font-size:11px;color:var(--blue);margin-bottom:20px">
+    This tab tracks how each broker's TP, FY27 Revenue, FY27 EBITDA and FY27 EPS estimates have changed across result cycles. Green = upgrade, Red = downgrade, Grey = unchanged. New quarters are added automatically when you upload reports via the Update tab.
+  </div>
+
+  <div id="revisions-content"></div>
+</div>
+
+<!-- ══════════════════════════════════
      TAB 14 — UPDATE
 ══════════════════════════════════ -->
 <div id="tab-update" class="section">
@@ -1352,6 +1366,11 @@ function checkPwd() {
     <div id="api-key-status" style="font-size:11px;color:var(--text3);margin-top:-14px;margin-bottom:16px"></div>
 
     <div class="sec-label">Upload analyst report PDF</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+      <div style="font-size:12px;color:var(--text2);font-weight:500">Results cycle quarter:</div>
+      <input id="revision-quarter-input" type="text" value="Q4FY26" placeholder="e.g. Q4FY26" style="width:110px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;font-family:var(--font-mono);background:var(--surface);color:var(--text)" />
+      <div style="font-size:11px;color:var(--text3)">Used to track estimate revisions across quarters</div>
+    </div>
     <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="this.classList.remove('drag')">
       <div class="uz-icon">📄</div>
       <div class="uz-title">Drop PDF here or click to browse</div>
@@ -1377,237 +1396,46 @@ function checkPwd() {
 <script>
 // ══════════════════════ DATA ══════════════════════
 const HOUSES = [
-  {
-    "name": "CLSA",
-    "date": "6 Feb 2026",
-    "rating": "O-PF",
-    "tp": 1920,
-    "prev": 1920,
-    "chg": 0,
-    "basis": "10x FY27 EV/EBITDA",
-    "note": "Unchanged"
-  },
-  {
-    "name": "Nuvama",
-    "date": "5 Feb 2026",
-    "rating": "BUY",
-    "tp": 1605,
-    "prev": 1605,
-    "chg": 0,
-    "basis": "DCF-based",
-    "note": "Unchanged"
-  },
-  {
-    "name": "ICICI Sec",
-    "date": "6 Feb 2026",
-    "rating": "BUY",
-    "tp": 1500,
-    "prev": 1500,
-    "chg": 0,
-    "basis": "15x adj FY27 EBITDA",
-    "note": "Maintained"
-  },
-  {
-    "name": "Kotak",
-    "date": "6 Feb 2026",
-    "rating": "BUY",
-    "tp": 1400,
-    "prev": 1380,
-    "chg": 20,
-    "basis": "12x FY28E EV/EBITDA",
-    "note": "Raised from 1,380"
-  },
-  {
-    "name": "Nirmal Bang",
-    "date": "5 Feb 2026",
-    "rating": "BUY",
-    "tp": 1344,
-    "prev": 1358,
-    "chg": -14,
-    "basis": "10x Dec-27E EBITDA",
-    "note": "Slightly cut from 1,358"
-  },
-  {
-    "name": "Elara",
-    "date": "6 Feb 2026",
-    "rating": "BUY",
-    "tp": 1300,
-    "prev": 1225,
-    "chg": 75,
-    "basis": "13x Sep-27 pre-IndAS EBITDA",
-    "note": "Upgraded from Accum; TP raised"
-  },
-  {
-    "name": "ICICI Direct",
-    "date": "9 Feb 2026",
-    "rating": "BUY",
-    "tp": 1320,
-    "prev": 1320,
-    "chg": 0,
-    "basis": "11.5x FY27 ex-IndAS EBITDA",
-    "note": "Unchanged"
-  },
-  {
-    "name": "B&K",
-    "date": "5 Feb 2026",
-    "rating": "HOLD",
-    "tp": 1285,
-    "prev": 1285,
-    "chg": 0,
-    "basis": "DCF-based",
-    "note": "Maintained Hold"
-  },
-  {
-    "name": "PL Capital",
-    "date": "6 Feb 2026",
-    "rating": "BUY",
-    "tp": 1274,
-    "prev": 1261,
-    "chg": 13,
-    "basis": "9.5x FY28E pre-IndAS EBITDA",
-    "note": "Raised from 1,261"
-  },
-  {
-    "name": "Investec",
-    "date": "6 Feb 2026",
-    "rating": "BUY",
-    "tp": 1248,
-    "prev": 1238,
-    "chg": 10,
-    "basis": "12.5x Dec-27 EV/EBITDA",
-    "note": "Upgraded from HOLD"
-  },
-  {
-    "name": "IIFL Capital",
-    "date": "2026-04-16",
-    "rating": "BUY",
-    "tp": 1350,
-    "prev": 1350,
-    "chg": 0,
-    "basis": "12x FY27 EV/EBITDA",
-    "note": "Updated"
-  },
-  {
-    "name": "Avendus Spark Research",
-    "date": "2026-02-06",
-    "rating": "BUY",
-    "tp": 1100,
-    "prev": 1100,
-    "chg": 0,
-    "basis": "10x Sep'FY27E Adj. EBITDA",
-    "note": "Updated"
-  }
+  {name:'CLSA',date:'6 Feb 2026',rating:'O-PF',tp:1920,prev:1920,chg:0,basis:'10x FY27 EV/EBITDA',note:'Unchanged'},
+  {name:'Nuvama',date:'5 Feb 2026',rating:'BUY',tp:1605,prev:1605,chg:0,basis:'DCF-based',note:'Unchanged'},
+  {name:'ICICI Sec',date:'6 Feb 2026',rating:'BUY',tp:1500,prev:1500,chg:0,basis:'15x adj FY27 EBITDA',note:'Maintained'},
+  {name:'Kotak',date:'6 Feb 2026',rating:'BUY',tp:1400,prev:1380,chg:20,basis:'12x FY28E EV/EBITDA',note:'Raised from 1,380'},
+  {name:'Nirmal Bang',date:'5 Feb 2026',rating:'BUY',tp:1344,prev:1358,chg:-14,basis:'10x Dec-27E EBITDA',note:'Slightly cut from 1,358'},
+  {name:'Elara',date:'6 Feb 2026',rating:'BUY',tp:1300,prev:1225,chg:75,basis:'13x Sep-27 pre-IndAS EBITDA',note:'Upgraded from Accum; TP raised'},
+  {name:'ICICI Direct',date:'9 Feb 2026',rating:'BUY',tp:1320,prev:1320,chg:0,basis:'11.5x FY27 ex-IndAS EBITDA',note:'Unchanged'},
+  {name:'B&K',date:'5 Feb 2026',rating:'HOLD',tp:1285,prev:1285,chg:0,basis:'DCF-based',note:'Maintained Hold'},
+  {name:'PL Capital',date:'6 Feb 2026',rating:'BUY',tp:1274,prev:1261,chg:13,basis:'9.5x FY28E pre-IndAS EBITDA',note:'Raised from 1,261'},
+  {name:'Investec',date:'6 Feb 2026',rating:'BUY',tp:1248,prev:1238,chg:10,basis:'12.5x Dec-27 EV/EBITDA',note:'Upgraded from HOLD'},
 ];
 
 const ESTIMATES = [
-  {
-    "house": "Kotak",
-    "fy26r": 66625,
-    "fy26e": 8213,
-    "fy27r": 71032,
-    "fy27e": 10258,
-    "fy28r": 76184,
-    "fy28e": 11456
-  },
-  {
-    "house": "B&K",
-    "fy26r": 68535,
-    "fy26e": 9298,
-    "fy27r": 74612,
-    "fy27e": 9562,
-    "fy28r": 81973,
-    "fy28e": 10948
-  },
-  {
-    "house": "Nirmal Bang",
-    "fy26r": 68180,
-    "fy26e": 9069,
-    "fy27r": 75819,
-    "fy27e": 12036,
-    "fy28r": 81637,
-    "fy28e": 13855
-  },
-  {
-    "house": "Investec",
-    "fy26r": 66302,
-    "fy26e": 20093,
-    "fy27r": 74255,
-    "fy27e": 22838,
-    "fy28r": 81613,
-    "fy28e": 25568
-  },
-  {
-    "house": "CLSA",
-    "fy26r": 68092,
-    "fy26e": 21153,
-    "fy27r": 77086,
-    "fy27e": 24714,
-    "fy28r": 84279,
-    "fy28e": 27964
-  },
-  {
-    "house": "Elara",
-    "fy26r": 73900,
-    "fy26e": 23202,
-    "fy27r": 76909,
-    "fy27e": 23457,
-    "fy28r": 81408,
-    "fy28e": 25236
-  },
-  {
-    "house": "Nuvama",
-    "fy26r": 68318,
-    "fy26e": 20644,
-    "fy27r": 80066,
-    "fy27e": 24288,
-    "fy28r": 92603,
-    "fy28e": 28129
-  },
-  {
-    "house": "PL Capital",
-    "fy26r": 67923,
-    "fy26e": 20153,
-    "fy27r": 73759,
-    "fy27e": 23286,
-    "fy28r": 81275,
-    "fy28e": 26063
-  },
-  {
-    "house": "ICICI Sec",
-    "fy26r": 69587,
-    "fy26e": 22551,
-    "fy27r": 76578,
-    "fy27e": 24588,
-    "fy28r": 85275,
-    "fy28e": 28182
-  },
-  {
-    "house": "ICICI Direct",
-    "fy26r": 67608,
-    "fy26e": 21154,
-    "fy27r": 75636,
-    "fy27e": 24107,
-    "fy28r": 82200,
-    "fy28e": 26477
-  },
-  {
-    "house": "IIFL Capital",
-    "fy26r": 66663,
-    "fy26e": 20395,
-    "fy27r": 71612,
-    "fy27e": 22271,
-    "fy28r": 80288,
-    "fy28e": 26174
-  },
-  {
-    "house": "Avendus Spark Research",
-    "fy26r": 66760,
-    "fy26e": 8290,
-    "fy27r": 70345,
-    "fy27e": 9626,
-    "fy28r": 77808,
-    "fy28e": 11670
-  }
+  {house:'Kotak',fy26r:66625,fy26e:8213,fy27r:71032,fy27e:10258,fy28r:76184,fy28e:11456},
+  {house:'B&K',fy26r:68535,fy26e:9298,fy27r:74612,fy27e:9562,fy28r:81973,fy28e:10948},
+  {house:'Nirmal Bang',fy26r:68180,fy26e:9069,fy27r:75819,fy27e:12036,fy28r:81637,fy28e:13855},
+  {house:'Investec',fy26r:66302,fy26e:20093,fy27r:74255,fy27e:22838,fy28r:81613,fy28e:25568},
+  {house:'CLSA',fy26r:68092,fy26e:21153,fy27r:77086,fy27e:24714,fy28r:84279,fy28e:27964},
+  {house:'Elara',fy26r:73900,fy26e:23202,fy27r:76909,fy27e:23457,fy28r:81408,fy28e:25236},
+  {house:'Nuvama',fy26r:68318,fy26e:20644,fy27r:80066,fy27e:24288,fy28r:92603,fy28e:28129},
+  {house:'PL Capital',fy26r:67923,fy26e:20153,fy27r:73759,fy27e:23286,fy28r:81275,fy28e:26063},
+  {house:'ICICI Sec',fy26r:69587,fy26e:22551,fy27r:76578,fy27e:24588,fy28r:85275,fy28e:28182},
+  {house:'ICICI Direct',fy26r:67608,fy26e:21154,fy27r:75636,fy27e:24107,fy28r:82200,fy28e:26477},
+];
+
+// Historical estimates — one entry per broker per quarter update
+// Each entry: { house, quarter, tp, fy27r, fy27e, fy27eps, date }
+const ESTIMATES_HISTORY = [
+  {house:'Kotak',quarter:'Q3FY26',tp:1400,fy27r:71032,fy27e:10258,fy27eps:41.9,date:'Feb 2026'},
+  {house:'B&K',quarter:'Q3FY26',tp:1285,fy27r:74612,fy27e:9562,fy27eps:38.4,date:'Feb 2026'},
+  {house:'Nirmal Bang',quarter:'Q3FY26',tp:1344,fy27r:75819,fy27e:12036,fy27eps:42.4,date:'Feb 2026'},
+  {house:'Investec',quarter:'Q3FY26',tp:1248,fy27r:74255,fy27e:22838,fy27eps:33.4,date:'Feb 2026'},
+  {house:'CLSA',quarter:'Q3FY26',tp:1920,fy27r:77086,fy27e:24714,fy27eps:51.6,date:'Feb 2026'},
+  {house:'Elara',quarter:'Q3FY26',tp:1310,fy27r:76909,fy27e:23457,fy27eps:13.2,date:'Feb 2026'},
+  {house:'Nuvama',quarter:'Q3FY26',tp:1605,fy27r:80066,fy27e:24288,fy27eps:78.2,date:'Feb 2026'},
+  {house:'PL Capital',quarter:'Q3FY26',tp:1274,fy27r:73759,fy27e:23286,fy27eps:35.1,date:'Feb 2026'},
+  {house:'ICICI Sec',quarter:'Q3FY26',tp:1500,fy27r:76578,fy27e:24588,fy27eps:47.3,date:'Feb 2026'},
+  {house:'ICICI Direct',quarter:'Q3FY26',tp:1320,fy27r:75636,fy27e:24107,fy27eps:28.7,date:'Feb 2026'},
+  {house:'Avendus Spark Research',quarter:'Q3FY26',tp:1100,fy27r:70300,fy27e:9600,fy27eps:38.1,date:'Feb 2026'},
+  {house:'IIFL Capital',quarter:'Q3FY26',tp:1350,fy27r:71612,fy27e:10381,fy27eps:24.4,date:'Apr 2026'},
 ];
 
 const EPS_DATA = [
@@ -2749,6 +2577,7 @@ function initAll() {
   initCharts();
   initUpdateTab();
   renderIndustryCharts();
+  renderRevisions();
   showKpi('footfalls', document.querySelector('.kpi-tab.active'));
 }
 
@@ -3281,6 +3110,26 @@ function applyUpdate() {
     const ei = ESTIMATES.findIndex(e => e.house.toLowerCase().includes(r.house.toLowerCase()) || r.house.toLowerCase().includes(e.house.toLowerCase()));
     const newEst = { house: r.house, fy26r: r.fy26_rev||0, fy26e: r.fy26_ebitda||0, fy27r: r.fy27_rev||0, fy27e: r.fy27_ebitda||0, fy28r: r.fy28_rev||0, fy28e: r.fy28_ebitda||0 };
     if (ei >= 0) ESTIMATES[ei] = newEst; else ESTIMATES.push(newEst);
+
+    // Save to revision history — get current quarter from report date or prompt
+    const currentQuarter = document.getElementById('revision-quarter-input') ?
+      document.getElementById('revision-quarter-input').value.trim() || 'Q4FY26' : 'Q4FY26';
+    const histEntry = {
+      house: r.house,
+      quarter: currentQuarter,
+      tp: r.tp || 0,
+      fy27r: r.fy27_rev || 0,
+      fy27e: r.fy27_ebitda || 0,
+      fy27eps: r.fy27_eps || 0,
+      date: r.date || ''
+    };
+    // Only add if this broker+quarter combo doesn't already exist
+    const histIdx = ESTIMATES_HISTORY.findIndex(e =>
+      e.house.toLowerCase() === r.house.toLowerCase() && e.quarter === currentQuarter
+    );
+    if (histIdx >= 0) ESTIMATES_HISTORY[histIdx] = histEntry;
+    else ESTIMATES_HISTORY.push(histEntry);
+    localStorage.setItem('pvrinox_history', JSON.stringify(ESTIMATES_HISTORY));
   }
 
   renderTPBars('tp-bars-consensus');
@@ -3289,6 +3138,7 @@ function applyUpdate() {
   renderEpsTable();
   updateSnapshot();
   refreshCMPDependents();
+  renderRevisions();
 
   document.getElementById('parsed-output').style.display = 'none';
   showStatus('Dashboard updated with data from ' + r.house + '!', 'done');
@@ -3296,6 +3146,89 @@ function applyUpdate() {
   localStorage.setItem('pvrinox_houses', JSON.stringify(HOUSES));
   localStorage.setItem('pvrinox_estimates', JSON.stringify(ESTIMATES));
   alert('Dashboard updated! Switch tabs to see the refreshed data.');
+}
+
+function renderRevisions() {
+  const el = document.getElementById('revisions-content');
+  if (!el) return;
+
+  // Get all unique quarters in order
+  const quarters = [...new Set(ESTIMATES_HISTORY.map(e => e.quarter))];
+  // Get all unique houses
+  const houses = [...new Set(ESTIMATES_HISTORY.map(e => e.house))].sort();
+
+  if (quarters.length < 2) {
+    el.innerHTML = '<div style="color:var(--text2);font-size:13px;padding:20px 0">Revision tracking begins once you have data from at least two quarters. Upload reports after Q4FY26 results and the comparison will appear automatically.</div>';
+    return;
+  }
+
+  // Build summary cards showing latest vs previous quarter change
+  const latestQ = quarters[quarters.length - 1];
+  const prevQ = quarters[quarters.length - 2];
+
+  let summaryHtml = `<div class="sec-label">${prevQ} → ${latestQ} — what changed</div>`;
+  summaryHtml += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:24px">';
+
+  houses.forEach(house => {
+    const latest = ESTIMATES_HISTORY.find(e => e.house === house && e.quarter === latestQ);
+    const prev = ESTIMATES_HISTORY.find(e => e.house === house && e.quarter === prevQ);
+    if (!latest || !prev) return;
+
+    const tpChg = ((latest.tp - prev.tp) / prev.tp * 100).toFixed(1);
+    const evChg = ((latest.fy27e - prev.fy27e) / prev.fy27e * 100).toFixed(1);
+    const tpColor = tpChg > 0 ? '#1D9E75' : tpChg < 0 ? '#9B2226' : '#6B6960';
+    const tpArrow = tpChg > 0 ? '▲' : tpChg < 0 ? '▼' : '—';
+    const evColor = evChg > 0 ? '#1D9E75' : evChg < 0 ? '#9B2226' : '#6B6960';
+
+    summaryHtml += `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:8px">${house}</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:11px;color:var(--text2)">TP</span>
+          <span style="font-size:11px;font-weight:600;color:${tpColor}">${tpArrow} ${Math.abs(tpChg)}% &nbsp;<span style="color:var(--text2);font-weight:400">₹${prev.tp.toLocaleString('en-IN')} → ₹${latest.tp.toLocaleString('en-IN')}</span></span>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:11px;color:var(--text2)">FY27 EBITDA</span>
+          <span style="font-size:11px;font-weight:600;color:${evColor}">${evChg > 0 ? '▲' : evChg < 0 ? '▼' : '—'} ${Math.abs(evChg)}%</span>
+        </div>
+      </div>`;
+  });
+  summaryHtml += '</div>';
+
+  // Full history table
+  let tableHtml = `<div class="sec-label">Full revision history — all quarters</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr>
+      <th>Broker</th>
+      ${quarters.map(q => `<th colspan="3" style="text-align:center;background:var(--surface2)">${q}</th>`).join('')}
+    </tr>
+    <tr>
+      <th></th>
+      ${quarters.map(() => '<th>TP</th><th>FY27E Rev</th><th>FY27E EBITDA</th>').join('')}
+    </tr></thead>
+    <tbody>`;
+
+  houses.forEach(house => {
+    tableHtml += `<tr><td><strong>${house}</strong></td>`;
+    quarters.forEach((q, qi) => {
+      const entry = ESTIMATES_HISTORY.find(e => e.house === house && e.quarter === q);
+      const prev = qi > 0 ? ESTIMATES_HISTORY.find(e => e.house === house && e.quarter === quarters[qi-1]) : null;
+      if (!entry) { tableHtml += '<td>—</td><td>—</td><td>—</td>'; return; }
+
+      const tpStyle = prev ? (entry.tp > prev.tp ? 'color:#1D9E75;font-weight:600' : entry.tp < prev.tp ? 'color:#9B2226;font-weight:600' : '') : '';
+      const revStyle = prev ? (entry.fy27r > prev.fy27r ? 'color:#1D9E75' : entry.fy27r < prev.fy27r ? 'color:#9B2226' : '') : '';
+      const ebitdaStyle = prev ? (entry.fy27e > prev.fy27e ? 'color:#1D9E75' : entry.fy27e < prev.fy27e ? 'color:#9B2226' : '') : '';
+
+      tableHtml += `<td style="${tpStyle}">₹${entry.tp.toLocaleString('en-IN')}</td>
+        <td style="${revStyle}">${(entry.fy27r/1000).toFixed(1)}bn</td>
+        <td style="${ebitdaStyle}">${(entry.fy27e/1000).toFixed(1)}bn</td>`;
+    });
+    tableHtml += '</tr>';
+  });
+
+  tableHtml += '</tbody></table></div>';
+
+  el.innerHTML = summaryHtml + tableHtml;
 }
 
 // ══════════════════════ CMP UPDATE ══════════════════════
@@ -3413,6 +3346,13 @@ async function exportDashboard() {
     '<div id="pwd-screen">'
   );
 
+  // Bake ESTIMATES_HISTORY into exported file
+  const historyJson = JSON.stringify(ESTIMATES_HISTORY, null, 2);
+  html = html.replace(
+    /const ESTIMATES_HISTORY = \[[\s\S]*?\];/,
+    'const ESTIMATES_HISTORY = ' + historyJson + ';'
+  );
+
   // Download as file
   const blob = new Blob([html], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
@@ -3428,6 +3368,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Restore any previously saved data before rendering
   const savedHouses = localStorage.getItem('pvrinox_houses');
   const savedEstimates = localStorage.getItem('pvrinox_estimates');
+  const savedHistory = localStorage.getItem('pvrinox_history');
   if (savedHouses) {
     try {
       const parsed = JSON.parse(savedHouses);
@@ -3443,6 +3384,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (Array.isArray(parsed) && parsed.length > 0) {
         ESTIMATES.length = 0;
         parsed.forEach(e => ESTIMATES.push(e));
+      }
+    } catch(e) {}
+  }
+  if (savedHistory) {
+    try {
+      const parsed = JSON.parse(savedHistory);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        ESTIMATES_HISTORY.length = 0;
+        parsed.forEach(e => ESTIMATES_HISTORY.push(e));
       }
     } catch(e) {}
   }
