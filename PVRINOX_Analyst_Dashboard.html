@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>PVR INOX — Analyst Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=DM+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root {
@@ -188,7 +186,7 @@ tbody tr:hover { background: var(--surface2); }
   .tp-bar-row { grid-template-columns: 60px 1fr 48px; font-size: 11px; }
 }
 </style>
-</head>
+<style>.cell-amber{background:#FFF8E1!important;color:#7B4F00}</style><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script></head>
 <body>
 
 <style>
@@ -202,11 +200,11 @@ tbody tr:hover { background: var(--surface2); }
 #pwd-box .pwd-err { font-size:12px; color:#9B2226; margin-top:10px; display:none; }
 </style>
 
-<div id="pwd-screen">
+<div id="pwd-screen" style="display: none;">
   <div id="pwd-box">
     <div class="pwd-title">PVR INOX</div>
     <div class="pwd-sub">Analyst Research Dashboard · 3QFY26</div>
-    <input type="password" id="pwd-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPwd()" autofocus />
+    <input type="password" id="pwd-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPwd()" autofocus="">
     <button onclick="checkPwd()">Access Dashboard</button>
     <div class="pwd-err" id="pwd-err">Incorrect password. Please try again.</div>
   </div>
@@ -248,10 +246,10 @@ function checkPwd() {
     <div class="code">BSE: 532281 &nbsp;|&nbsp; NSE: PVRINOX &nbsp;|&nbsp; Media &amp; Entertainment</div>
   </div>
   <div class="price-block">
-    <div class="cmp" id="cmp-display">₹<span id="cmp-value">987</span></div>
-    <div class="range">Mcap: <span id="mcap-display">₹97bn</span> &nbsp;|&nbsp; 3QFY26 results cycle</div>
+    <div class="cmp" id="cmp-display">₹<span id="cmp-value">938</span></div>
+    <div class="range">Mcap: <span id="mcap-display">₹92bn</span> &nbsp;|&nbsp; 3QFY26 results cycle</div>
     <div style="margin-top:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-      <input id="cmp-input" type="number" placeholder="Update CMP e.g. 1085" style="width:170px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;font-family:var(--font-mono);background:var(--surface);color:var(--text)" />
+      <input id="cmp-input" type="number" placeholder="Update CMP e.g. 1085" style="width:170px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;font-family:var(--font-mono);background:var(--surface);color:var(--text)">
       <button onclick="updateCMP()" class="btn btn-outline" style="font-size:11px;padding:6px 14px">Update CMP</button>
       <button onclick="exportDashboard()" class="btn btn-outline" style="font-size:11px;padding:6px 14px">⬇ Export HTML</button>
     </div>
@@ -272,7 +270,7 @@ function checkPwd() {
   <button class="nav-tab" onclick="showTab('valuation',this)">Valuation Matrix</button>
   <button class="nav-tab" onclick="showTab('analysts',this)">Analyst Contacts</button>
   <button class="nav-tab" onclick="showTab('industry',this)">Industry Data</button>
-  <button class="nav-tab" onclick="showTab('update',this)">&#8593; Update</button>
+  <button class="nav-tab" onclick="showTab('update',this)">↑ Update</button>
 </nav>
 
 <!-- ══════════════════════════════════
@@ -281,9 +279,9 @@ function checkPwd() {
 <div id="tab-consensus" class="section active">
   <div class="sec-label">Snapshot — 3QFY26 post-results</div>
   <div class="metric-row">
-    <div class="metric"><div class="lbl">Houses</div><div class="val" id="snap-houses">10</div><div class="sub" id="snap-ratings">9 BUY/OP · 1 HOLD</div></div>
-    <div class="metric"><div class="lbl">Avg TP</div><div class="val" id="snap-avg-tp">₹1,380</div><div class="sub up" id="snap-upside">+40% upside</div></div>
-    <div class="metric"><div class="lbl">TP range</div><div class="val" id="snap-tp-low">₹1,248</div><div class="sub" id="snap-tp-high">to ₹1,920</div></div>
+    <div class="metric"><div class="lbl">Houses</div><div class="val" id="snap-houses">12</div><div class="sub" id="snap-ratings">11 BUY/OP · 1 HOLD</div></div>
+    <div class="metric"><div class="lbl">Avg TP</div><div class="val" id="snap-avg-tp">₹1,387</div><div class="sub up" id="snap-upside">+48% upside</div></div>
+    <div class="metric"><div class="lbl">TP range</div><div class="val" id="snap-tp-low">₹1,100</div><div class="sub" id="snap-tp-high">to ₹1,920</div></div>
     <div class="metric"><div class="lbl">Revenue 3Q</div><div class="val">18,798</div><div class="sub up">+9.5% YoY</div></div>
     <div class="metric"><div class="lbl">EBITDA 3Q</div><div class="val">3,156</div><div class="sub up">+33% YoY · 16.8%</div></div>
     <div class="metric"><div class="lbl">Occupancy</div><div class="val">28.5%</div><div class="sub up">+280 bps YoY</div></div>
@@ -296,13 +294,97 @@ function checkPwd() {
   </div>
 
   <div class="sec-label" style="margin-top:8px">Target price range — all houses vs CMP ₹987</div>
-  <div class="tp-bars" id="tp-bars-consensus"></div>
+  <div class="tp-bars" id="tp-bars-consensus"><div class="tp-bar-row">
+      <span class="tp-house-lbl">CLSA</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:100%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,920 <span style="color:var(--text3);font-size:10px">unch</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">Nuvama</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:66%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,605 <span style="color:var(--text3);font-size:10px">unch</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">ICICI Sec</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:55%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,500 <span style="color:var(--text3);font-size:10px">unch</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">Kotak</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:44%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,400 <span style="color:var(--buy);font-size:10px">+20</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">IIFL Capital</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:39%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,350 <span style="color:var(--text3);font-size:10px">unch</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">Nirmal Bang</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:38%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,344 <span style="color:var(--red);font-size:10px">-14</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">ICICI Direct</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:36%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,320 <span style="color:var(--text3);font-size:10px">unch</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">Elara</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:34%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,300 <span style="color:var(--buy);font-size:10px">+75</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">B&amp;K</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:32%;background:#B07D00"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,285 <span style="color:var(--text3);font-size:10px">unch</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">PL Capital</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:31%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,274 <span style="color:var(--buy);font-size:10px">+13</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">Investec</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:28%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,248 <span style="color:var(--buy);font-size:10px">+10</span></span>
+    </div><div class="tp-bar-row">
+      <span class="tp-house-lbl">Avendus Spark Research</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:12%;background:#1B4F8A"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹1,100 <span style="color:var(--text3);font-size:10px">unch</span></span>
+    </div></div>
 
   <div class="sec-label">Shareholding pattern — Dec 2025</div>
   <div class="chart-box">
     <div class="two-col" style="margin-bottom:0">
       <div>
-        <div class="chart-wrap" style="height:200px;position:relative"><canvas id="shareChart" role="img" aria-label="Shareholding pie chart Dec 2025">Promoters 27.5%, FII 21.2%, MF/DII 34.5%, Others 16.8%</canvas></div>
+        <div class="chart-wrap" style="height:200px;position:relative"><canvas id="shareChart" role="img" aria-label="Shareholding pie chart Dec 2025" width="875" height="300" style="display: block; box-sizing: border-box; height: 200px; width: 583px;">Promoters 27.5%, FII 21.2%, MF/DII 34.5%, Others 16.8%</canvas></div>
         <div class="legend-row">
           <span class="leg-item"><span class="leg-swatch" style="background:#1A1916"></span>Promoters 27.5%</span>
           <span class="leg-item"><span class="leg-swatch" style="background:#378ADD"></span>FII 21.2%</span>
@@ -331,7 +413,151 @@ function checkPwd() {
 ══════════════════════════════════ -->
 <div id="tab-ratings" class="section">
   <div class="sec-label">All research houses — 3QFY26 result cycle</div>
-  <div class="cards-grid" id="house-cards"></div>
+  <div class="cards-grid" id="house-cards"><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">CLSA</div>
+        <span class="tag tag-buy">O-PF</span>
+      </div>
+      <div class="hdate">6 Feb 2026</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,920</div>
+      <div class="hup">+95% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span style="color:var(--text3)">TP unchanged at 1,920</span></div>
+      <div class="hbasis">10x FY27 EV/EBITDA</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Unchanged</div>
+    </div><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">Nuvama</div>
+        <span class="tag tag-buy">BUY</span>
+      </div>
+      <div class="hdate">5 Feb 2026</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,605</div>
+      <div class="hup">+63% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span style="color:var(--text3)">TP unchanged at 1,605</span></div>
+      <div class="hbasis">DCF-based</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Unchanged</div>
+    </div><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">ICICI Sec</div>
+        <span class="tag tag-buy">BUY</span>
+      </div>
+      <div class="hdate">6 Feb 2026</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,500</div>
+      <div class="hup">+52% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span style="color:var(--text3)">TP unchanged at 1,500</span></div>
+      <div class="hbasis">15x adj FY27 EBITDA</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Maintained</div>
+    </div><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">Kotak</div>
+        <span class="tag tag-buy">BUY</span>
+      </div>
+      <div class="hdate">6 Feb 2026</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,400</div>
+      <div class="hup">+42% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span class="tp-up">TP +20 from 1,380</span></div>
+      <div class="hbasis">12x FY28E EV/EBITDA</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Raised from 1,380</div>
+    </div><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">Nirmal Bang</div>
+        <span class="tag tag-buy">BUY</span>
+      </div>
+      <div class="hdate">5 Feb 2026</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,344</div>
+      <div class="hup">+36% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span class="tp-dn">TP -14 from 1,358</span></div>
+      <div class="hbasis">10x Dec-27E EBITDA</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Slightly cut from 1,358</div>
+    </div><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">Elara</div>
+        <span class="tag tag-buy">BUY</span>
+      </div>
+      <div class="hdate">6 Feb 2026</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,300</div>
+      <div class="hup">+32% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span class="tp-up">TP +75 from 1,225</span></div>
+      <div class="hbasis">13x Sep-27 pre-IndAS EBITDA</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Upgraded from Accum; TP raised</div>
+    </div><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">ICICI Direct</div>
+        <span class="tag tag-buy">BUY</span>
+      </div>
+      <div class="hdate">9 Feb 2026</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,320</div>
+      <div class="hup">+34% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span style="color:var(--text3)">TP unchanged at 1,320</span></div>
+      <div class="hbasis">11.5x FY27 ex-IndAS EBITDA</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Unchanged</div>
+    </div><div class="house-card hold-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">B&amp;K</div>
+        <span class="tag tag-hold">HOLD</span>
+      </div>
+      <div class="hdate">5 Feb 2026</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,285</div>
+      <div class="hup">+30% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span style="color:var(--text3)">TP unchanged at 1,285</span></div>
+      <div class="hbasis">DCF-based</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Maintained Hold</div>
+    </div><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">PL Capital</div>
+        <span class="tag tag-buy">BUY</span>
+      </div>
+      <div class="hdate">6 Feb 2026</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,274</div>
+      <div class="hup">+29% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span class="tp-up">TP +13 from 1,261</span></div>
+      <div class="hbasis">9.5x FY28E pre-IndAS EBITDA</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Raised from 1,261</div>
+    </div><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">Investec</div>
+        <span class="tag tag-buy">BUY</span>
+      </div>
+      <div class="hdate">6 Feb 2026</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,248</div>
+      <div class="hup">+26% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span class="tp-up">TP +10 from 1,238</span></div>
+      <div class="hbasis">12.5x Dec-27 EV/EBITDA</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Upgraded from HOLD</div>
+    </div><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">IIFL Capital</div>
+        <span class="tag tag-buy">BUY</span>
+      </div>
+      <div class="hdate">2026-04-16</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,350</div>
+      <div class="hup">+37% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span style="color:var(--text3)">TP unchanged at 1,350</span></div>
+      <div class="hbasis">12x FY27 EV/Ebitda</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Updated</div>
+    </div><div class="house-card buy-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">Avendus Spark Research</div>
+        <span class="tag tag-buy">BUY</span>
+      </div>
+      <div class="hdate">2026-02-06</div>
+      <div class="divider"></div>
+      <div class="htp">₹1,100</div>
+      <div class="hup">+11% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg"><span style="color:var(--text3)">TP unchanged at 1,100</span></div>
+      <div class="hbasis">10x Sep'FY27E Adj. EBITDA</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Updated</div>
+    </div></div>
 </div>
 
 <!-- ══════════════════════════════════
@@ -349,7 +575,139 @@ function checkPwd() {
           <th>FY28E Rev</th><th>FY28E EBITDA</th><th>Mgn%</th>
         </tr>
       </thead>
-      <tbody id="est-body"></tbody>
+      <tbody id="est-body"><tr>
+      <td>Kotak</td>
+      <td>67k</td>
+      <td class="cell-lo">8.2k</td>
+      <td>12.3%</td>
+      <td>71k</td>
+      <td class="">10.3k</td>
+      <td>14.4%</td>
+      <td>76k</td>
+      <td class="">11.5k</td>
+      <td>15.0%</td>
+    </tr><tr>
+      <td>B&amp;K</td>
+      <td>69k</td>
+      <td class="">9.3k</td>
+      <td>13.6%</td>
+      <td>75k</td>
+      <td class="cell-lo">9.6k</td>
+      <td>12.8%</td>
+      <td>82k</td>
+      <td class="cell-lo">10.9k</td>
+      <td>13.4%</td>
+    </tr><tr>
+      <td>Nirmal Bang</td>
+      <td>68k</td>
+      <td class="">9.1k</td>
+      <td>13.3%</td>
+      <td>76k</td>
+      <td class="">12.0k</td>
+      <td>15.9%</td>
+      <td>82k</td>
+      <td class="">13.9k</td>
+      <td>17.0%</td>
+    </tr><tr>
+      <td>Investec</td>
+      <td>66k</td>
+      <td class="">20.1k</td>
+      <td>30.3%</td>
+      <td>74k</td>
+      <td class="">22.8k</td>
+      <td>30.8%</td>
+      <td>82k</td>
+      <td class="">25.6k</td>
+      <td>31.3%</td>
+    </tr><tr>
+      <td>CLSA</td>
+      <td>68k</td>
+      <td class="">21.2k</td>
+      <td>31.1%</td>
+      <td>77k</td>
+      <td class="cell-hi">24.7k</td>
+      <td>32.1%</td>
+      <td>84k</td>
+      <td class="">28.0k</td>
+      <td>33.2%</td>
+    </tr><tr>
+      <td>Elara</td>
+      <td>74k</td>
+      <td class="cell-hi">23.2k</td>
+      <td>31.4%</td>
+      <td>77k</td>
+      <td class="">23.5k</td>
+      <td>30.5%</td>
+      <td>81k</td>
+      <td class="">25.2k</td>
+      <td>31.0%</td>
+    </tr><tr>
+      <td>Nuvama</td>
+      <td>68k</td>
+      <td class="">20.6k</td>
+      <td>30.2%</td>
+      <td>80k</td>
+      <td class="">24.3k</td>
+      <td>30.3%</td>
+      <td>93k</td>
+      <td class="">28.1k</td>
+      <td>30.4%</td>
+    </tr><tr>
+      <td>PL Capital</td>
+      <td>68k</td>
+      <td class="">20.2k</td>
+      <td>29.7%</td>
+      <td>74k</td>
+      <td class="">23.3k</td>
+      <td>31.6%</td>
+      <td>81k</td>
+      <td class="">26.1k</td>
+      <td>32.1%</td>
+    </tr><tr>
+      <td>ICICI Sec</td>
+      <td>70k</td>
+      <td class="">22.6k</td>
+      <td>32.4%</td>
+      <td>77k</td>
+      <td class="">24.6k</td>
+      <td>32.1%</td>
+      <td>85k</td>
+      <td class="cell-hi">28.2k</td>
+      <td>33.0%</td>
+    </tr><tr>
+      <td>ICICI Direct</td>
+      <td>68k</td>
+      <td class="">21.2k</td>
+      <td>31.3%</td>
+      <td>76k</td>
+      <td class="">24.1k</td>
+      <td>31.9%</td>
+      <td>82k</td>
+      <td class="">26.5k</td>
+      <td>32.2%</td>
+    </tr><tr>
+      <td>IIFL Capital</td>
+      <td>67k</td>
+      <td class="">20.4k</td>
+      <td>30.6%</td>
+      <td>72k</td>
+      <td class="">22.3k</td>
+      <td>31.1%</td>
+      <td>80k</td>
+      <td class="">26.2k</td>
+      <td>32.6%</td>
+    </tr><tr>
+      <td>Avendus Spark Research</td>
+      <td>67k</td>
+      <td class="">8.3k</td>
+      <td>12.4%</td>
+      <td>70k</td>
+      <td class="">9.6k</td>
+      <td>13.7%</td>
+      <td>78k</td>
+      <td class="">11.7k</td>
+      <td>15.0%</td>
+    </tr></tbody>
     </table>
   </div>
 
@@ -359,7 +717,87 @@ function checkPwd() {
       <thead>
         <tr><th>House</th><th>FY26E EPS</th><th>FY27E EPS</th><th>FY28E EPS</th><th>FY26E PAT (mn)</th><th>FY27E PAT (mn)</th><th>Valuation</th></tr>
       </thead>
-      <tbody id="eps-body"></tbody>
+      <tbody id="eps-body"><tr>
+      <td>CLSA</td>
+      <td>23.4</td>
+      <td>51.6</td>
+      <td>75.2</td>
+      <td>2,296</td>
+      <td>5,054</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">10x FY27 EV/EBITDA</td>
+    </tr><tr>
+      <td>Nuvama</td>
+      <td>45.5</td>
+      <td>78.2</td>
+      <td>96.7</td>
+      <td>4,473</td>
+      <td>7,678</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">DCF</td>
+    </tr><tr>
+      <td>ICICI Sec</td>
+      <td>33.5</td>
+      <td>47.3</td>
+      <td>62.1</td>
+      <td>3,281</td>
+      <td>4,632</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">15x adj FY27 EBITDA</td>
+    </tr><tr>
+      <td>Kotak</td>
+      <td>45.4</td>
+      <td>41.9</td>
+      <td>52.9</td>
+      <td>4,454</td>
+      <td>4,118</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">12x FY28 EV/EBITDA</td>
+    </tr><tr>
+      <td>Nirmal Bang</td>
+      <td>25</td>
+      <td>42.4</td>
+      <td>56.8</td>
+      <td>2,452</td>
+      <td>4,161</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">10x Dec-27 EBITDA</td>
+    </tr><tr>
+      <td>Elara</td>
+      <td>33.8</td>
+      <td>13.2</td>
+      <td>15.3</td>
+      <td>3,315</td>
+      <td>1,293</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">13x Sep-27 EBITDA</td>
+    </tr><tr>
+      <td>ICICI Direct</td>
+      <td>17.9</td>
+      <td>28.7</td>
+      <td>41.6</td>
+      <td>1,758</td>
+      <td>2,821</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">11.5x FY27 EBITDA</td>
+    </tr><tr>
+      <td>B&amp;K</td>
+      <td>33.4</td>
+      <td>38.4</td>
+      <td>52.2</td>
+      <td>3,278</td>
+      <td>3,769</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">DCF</td>
+    </tr><tr>
+      <td>PL Capital</td>
+      <td>13.4</td>
+      <td>35.1</td>
+      <td>58.6</td>
+      <td>1,320</td>
+      <td>3,448</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">9.5x FY28 EBITDA</td>
+    </tr><tr>
+      <td>Investec</td>
+      <td>13.2</td>
+      <td>33.4</td>
+      <td>54.2</td>
+      <td>1,300</td>
+      <td>3,279</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">12.5x Dec-27 EBITDA</td>
+    </tr></tbody>
     </table>
   </div>
 
@@ -397,7 +835,7 @@ function checkPwd() {
     <div class="kpi-tab" onclick="showKpi('screens',this)">Screens</div>
   </div>
   <div class="chart-box">
-    <div class="chart-wrap" style="height:300px"><canvas id="kpiChart" role="img" aria-label="KPI trend chart PVR INOX quarterly"></canvas></div>
+    <div class="chart-wrap" style="height:300px"><canvas id="kpiChart" role="img" aria-label="KPI trend chart PVR INOX quarterly" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
   </div>
 
   <div class="sec-label" style="margin-top:4px">Full quarterly data table</div>
@@ -406,7 +844,115 @@ function checkPwd() {
       <thead>
         <tr><th>Quarter</th><th>Revenue</th><th>Post-IAS EBITDA</th><th>Mgn%</th><th>Pre-IAS EBITDA</th><th>Pre-IAS Mgn%</th><th>Footfalls</th><th>Occupancy</th><th>ATP</th><th>SPH</th><th>Net debt</th></tr>
       </thead>
-      <tbody id="kpi-tbl-body"></tbody>
+      <tbody id="kpi-tbl-body"><tr>
+      <td style="font-family:var(--font-mono);font-size:10px">Q3FY24</td>
+      <td>15,459</td>
+      <td>4,724</td>
+      <td>30.6%</td>
+      <td>2,259</td>
+      <td>14.4%</td>
+      <td>36.5</td>
+      <td>25%</td>
+      <td>271</td>
+      <td>132</td>
+      <td>16,081</td>
+    </tr><tr>
+      <td style="font-family:var(--font-mono);font-size:10px">Q4FY24</td>
+      <td>12,564</td>
+      <td>2,784</td>
+      <td>22.2%</td>
+      <td>352</td>
+      <td>2.7%</td>
+      <td>32.6</td>
+      <td>23%</td>
+      <td>233</td>
+      <td>129</td>
+      <td>12,940</td>
+    </tr><tr>
+      <td style="font-family:var(--font-mono);font-size:10px">Q1FY25</td>
+      <td>11,907</td>
+      <td>2,515</td>
+      <td>21.1%</td>
+      <td>(199)</td>
+      <td>-1.6%</td>
+      <td>30.4</td>
+      <td>20%</td>
+      <td>235</td>
+      <td>134</td>
+      <td>13,195</td>
+    </tr><tr>
+      <td style="font-family:var(--font-mono);font-size:10px">Q2FY25</td>
+      <td>16,221</td>
+      <td>4,793</td>
+      <td>29.5%</td>
+      <td>2,069</td>
+      <td>12.6%</td>
+      <td>38.8</td>
+      <td>26%</td>
+      <td>257</td>
+      <td>136</td>
+      <td>11,531</td>
+    </tr><tr>
+      <td style="font-family:var(--font-mono);font-size:10px">Q3FY25</td>
+      <td>17,173</td>
+      <td>5,277</td>
+      <td>30.7%</td>
+      <td>2,583</td>
+      <td>14.9%</td>
+      <td>37.3</td>
+      <td>26%</td>
+      <td>281</td>
+      <td>140</td>
+      <td>9,958</td>
+    </tr><tr>
+      <td style="font-family:var(--font-mono);font-size:10px">Q4FY25</td>
+      <td>12,498</td>
+      <td>2,831</td>
+      <td>22.7%</td>
+      <td>250</td>
+      <td>1.9%</td>
+      <td>30.5</td>
+      <td>21%</td>
+      <td>258</td>
+      <td>125</td>
+      <td>9,522</td>
+    </tr><tr>
+      <td style="font-family:var(--font-mono);font-size:10px">Q1FY26</td>
+      <td>14,691</td>
+      <td>3,973</td>
+      <td>27.0%</td>
+      <td>1,141</td>
+      <td>7.7%</td>
+      <td>34</td>
+      <td>22%</td>
+      <td>254</td>
+      <td>148</td>
+      <td>8,915</td>
+    </tr><tr>
+      <td style="font-family:var(--font-mono);font-size:10px">Q2FY26</td>
+      <td>18,230</td>
+      <td>6,117</td>
+      <td>33.6%</td>
+      <td>3,273</td>
+      <td>17.8%</td>
+      <td>44.5</td>
+      <td>29%</td>
+      <td>262</td>
+      <td>134</td>
+      <td>6,188</td>
+    </tr><tr>
+      <td style="font-family:var(--font-mono);font-size:10px">Q3FY26</td>
+      <td>18,798</td>
+      <td>6,223</td>
+      <td>33.1%</td>
+      <td>3,435</td>
+      <td>18.0%</td>
+      <td>40.5</td>
+      <td>29%</td>
+      <td>293</td>
+      <td>146</td>
+      <td>3,652</td>
+    </tr></tbody>
     </table>
   </div>
 </div>
@@ -419,23 +965,23 @@ function checkPwd() {
   <div class="two-col">
     <div class="chart-box">
       <div class="chart-title">Revenue mix 3QFY26 (Rs mn)</div>
-      <div class="chart-wrap" style="height:220px"><canvas id="mixChart" role="img" aria-label="Doughnut chart revenue mix 3QFY26">Tickets 53%, F&B 32%, Ad 6%, Other 9%</canvas></div>
+      <div class="chart-wrap" style="height:220px"><canvas id="mixChart" role="img" aria-label="Doughnut chart revenue mix 3QFY26" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0">Tickets 53%, F&amp;B 32%, Ad 6%, Other 9%</canvas></div>
       <div class="legend-row" style="margin-top:12px">
         <span class="leg-item"><span class="leg-swatch" style="background:#1B4F8A"></span>Tickets 10,056 (53%)</span>
-        <span class="leg-item"><span class="leg-swatch" style="background:#1D9E75"></span>F&B 5,938 (32%)</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#1D9E75"></span>F&amp;B 5,938 (32%)</span>
         <span class="leg-item"><span class="leg-swatch" style="background:#B07D00"></span>Advert 1,180 (6%)</span>
         <span class="leg-item"><span class="leg-swatch" style="background:#888780"></span>Other 1,624 (9%)</span>
       </div>
     </div>
     <div class="chart-box">
       <div class="chart-title">Cost structure 3QFY26 (Rs mn)</div>
-      <div class="chart-wrap" style="height:220px"><canvas id="costsChart" role="img" aria-label="Horizontal bar chart cost structure 3QFY26"></canvas></div>
+      <div class="chart-wrap" style="height:220px"><canvas id="costsChart" role="img" aria-label="Horizontal bar chart cost structure 3QFY26" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
     </div>
   </div>
 
   <div class="sec-label">Revenue trend — quarterly YoY growth</div>
   <div class="chart-box">
-    <div class="chart-wrap" style="height:260px"><canvas id="revTrendChart" role="img" aria-label="Bar chart quarterly revenue trend"></canvas></div>
+    <div class="chart-wrap" style="height:260px"><canvas id="revTrendChart" role="img" aria-label="Bar chart quarterly revenue trend" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
   </div>
 
   <div class="sec-label" style="margin-top:8px">Revenue composition — genre / language mix 3QFY26</div>
@@ -444,8 +990,8 @@ function checkPwd() {
     <div class="metric"><div class="lbl">Regional</div><div class="val">27%</div><div class="sub">vs 26% in 2QFY26</div></div>
     <div class="metric"><div class="lbl">English</div><div class="val">12%</div><div class="sub">vs 24% in 2QFY26</div></div>
     <div class="metric"><div class="lbl">Hindi Dubbed</div><div class="val">8%</div><div class="sub">vs 3% in 2QFY26</div></div>
-    <div class="metric"><div class="lbl">Online ticket share</div><div class="val">>50%</div><div class="sub">app + aggregators</div></div>
-    <div class="metric"><div class="lbl">F&B gross margin</div><div class="val">76.5%</div><div class="sub up">+223 bps YoY</div></div>
+    <div class="metric"><div class="lbl">Online ticket share</div><div class="val">&gt;50%</div><div class="sub">app + aggregators</div></div>
+    <div class="metric"><div class="lbl">F&amp;B gross margin</div><div class="val">76.5%</div><div class="sub up">+223 bps YoY</div></div>
   </div>
 </div>
 
@@ -454,7 +1000,207 @@ function checkPwd() {
 ══════════════════════════════════ -->
 <div id="tab-history" class="section">
   <div class="sec-label">Historical rating &amp; TP track — selected houses</div>
-  <div class="hist-grid" id="hist-grid"></div>
+  <div class="hist-grid" id="hist-grid"><div class="hist-card">
+      <div class="hc-title">Nirmal Bang</div>
+      <table><thead><tr><th>Date</th><th>Rating</th><th style="text-align:right">TP</th></tr></thead>
+      <tbody><tr>
+        <td>05 Feb 2026</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,344</td>
+      </tr><tr>
+        <td>20 Oct 2025</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,358</td>
+      </tr><tr>
+        <td>07 Aug 2025</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,259</td>
+      </tr><tr>
+        <td>13 May 2025</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,251</td>
+      </tr><tr>
+        <td>07 Feb 2025</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,598</td>
+      </tr><tr>
+        <td>16 Oct 2024</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,863</td>
+      </tr><tr>
+        <td>22 Jul 2024</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,759</td>
+      </tr><tr>
+        <td>15 May 2024</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,754</td>
+      </tr></tbody></table>
+    </div><div class="hist-card">
+      <div class="hc-title">CLSA</div>
+      <table><thead><tr><th>Date</th><th>Rating</th><th style="text-align:right">TP</th></tr></thead>
+      <tbody><tr>
+        <td>06 Feb 2026</td>
+        <td><span class="tag tag-buy">O-PF</span></td>
+        <td style="text-align:right">₹1,920</td>
+      </tr><tr>
+        <td>07 Feb 2025</td>
+        <td><span class="tag tag-buy">O-PF</span></td>
+        <td style="text-align:right">₹1,980</td>
+      </tr><tr>
+        <td>16 Oct 2024</td>
+        <td><span class="tag tag-buy">O-PF</span></td>
+        <td style="text-align:right">₹2,450</td>
+      </tr><tr>
+        <td>28 Jun 2024</td>
+        <td><span class="tag tag-buy">O-PF</span></td>
+        <td style="text-align:right">₹2,420</td>
+      </tr><tr>
+        <td>15 May 2024</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹2,420</td>
+      </tr><tr>
+        <td>20 Oct 2023</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹2,280</td>
+      </tr><tr>
+        <td>16 May 2023</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹2,015</td>
+      </tr><tr>
+        <td>20 Feb 2023</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹2,500</td>
+      </tr></tbody></table>
+    </div><div class="hist-card">
+      <div class="hc-title">PL Capital</div>
+      <table><thead><tr><th>Date</th><th>Rating</th><th style="text-align:right">TP</th></tr></thead>
+      <tbody><tr>
+        <td>06 Feb 2026</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,274</td>
+      </tr><tr>
+        <td>07 Jan 2026</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,261</td>
+      </tr><tr>
+        <td>18 Oct 2025</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="text-align:right">₹1,211</td>
+      </tr><tr>
+        <td>07 Oct 2025</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="text-align:right">₹1,191</td>
+      </tr><tr>
+        <td>07 Aug 2025</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="text-align:right">₹1,052</td>
+      </tr><tr>
+        <td>09 Jul 2025</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="text-align:right">₹1,045</td>
+      </tr><tr>
+        <td>13 May 2025</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="text-align:right">₹1,040</td>
+      </tr><tr>
+        <td>07 Feb 2025</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="text-align:right">₹1,215</td>
+      </tr></tbody></table>
+    </div><div class="hist-card">
+      <div class="hc-title">Investec</div>
+      <table><thead><tr><th>Date</th><th>Rating</th><th style="text-align:right">TP</th></tr></thead>
+      <tbody><tr>
+        <td>06 Feb 2026</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,248</td>
+      </tr><tr>
+        <td>02 Jan 2026</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="text-align:right">₹1,238</td>
+      </tr><tr>
+        <td>06 Oct 2025</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="text-align:right">₹1,215</td>
+      </tr><tr>
+        <td>07 Aug 2025</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="text-align:right">₹1,147</td>
+      </tr><tr>
+        <td>12 May 2025</td>
+        <td><span class="tag tag-sell">SELL</span></td>
+        <td style="text-align:right">₹996</td>
+      </tr><tr>
+        <td>06 Feb 2025</td>
+        <td><span class="tag tag-sell">SELL</span></td>
+        <td style="text-align:right">₹1,140</td>
+      </tr><tr>
+        <td>04 Oct 2024</td>
+        <td><span class="tag tag-sell">SELL</span></td>
+        <td style="text-align:right">₹1,399</td>
+      </tr><tr>
+        <td>06 Aug 2024</td>
+        <td><span class="tag tag-sell">SELL</span></td>
+        <td style="text-align:right">₹1,333</td>
+      </tr></tbody></table>
+    </div><div class="hist-card">
+      <div class="hc-title">Elara</div>
+      <table><thead><tr><th>Date</th><th>Rating</th><th style="text-align:right">TP</th></tr></thead>
+      <tbody><tr>
+        <td>06 Feb 2026</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,300</td>
+      </tr><tr>
+        <td>17 Oct 2025</td>
+        <td><span class="tag tag-hold">ACCUM</span></td>
+        <td style="text-align:right">₹1,225</td>
+      </tr><tr>
+        <td>06 Aug 2025</td>
+        <td><span class="tag tag-hold">ACCUM</span></td>
+        <td style="text-align:right">₹1,150</td>
+      </tr><tr>
+        <td>12 May 2025</td>
+        <td><span class="tag tag-hold">ACCUM</span></td>
+        <td style="text-align:right">₹1,100</td>
+      </tr><tr>
+        <td>06 Feb 2025</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,600</td>
+      </tr><tr>
+        <td>15 Oct 2024</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,950</td>
+      </tr><tr>
+        <td>28 Jun 2024</td>
+        <td><span class="tag tag-buy">O-PF</span></td>
+        <td style="text-align:right">₹2,420</td>
+      </tr><tr>
+        <td>18 Jan 2024</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,900</td>
+      </tr></tbody></table>
+    </div><div class="hist-card">
+      <div class="hc-title">Nuvama</div>
+      <table><thead><tr><th>Date</th><th>Rating</th><th style="text-align:right">TP</th></tr></thead>
+      <tbody><tr>
+        <td>05 Feb 2026</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,605</td>
+      </tr><tr>
+        <td>17 Oct 2025</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,086</td>
+      </tr><tr>
+        <td>06 Aug 2025</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹1,035</td>
+      </tr><tr>
+        <td>12 May 2025</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="text-align:right">₹962</td>
+      </tr></tbody></table>
+    </div></div>
 </div>
 
 <!-- ══════════════════════════════════
@@ -467,14 +1213,14 @@ function checkPwd() {
       <div class="bb-title">Bull case</div>
       <div class="bb-item"><span class="bb-icon">✓</span><span>Two consecutive quarters of 28%+ occupancy and 16%+ pre-IndAS margin; structural cost benefits from merger (synergies vs pre-Covid require 350–400 bps higher occupancy for same margin)</span></div>
       <div class="bb-item"><span class="bb-icon">✓</span><span>Net debt down 74% to Rs 3.7bn since merger; path to net cash positive by Q4FY26E; 4700BC sale (Rs 2.3bn cash) further accelerates deleveraging</span></div>
-      <div class="bb-item"><span class="bb-icon">✓</span><span>All-time high ATP Rs 293; SPH Rs 146; management guided 3.5–4% annual growth; F&B gross margin 76.5% with in-house brand scaling</span></div>
+      <div class="bb-item"><span class="bb-icon">✓</span><span>All-time high ATP Rs 293; SPH Rs 146; management guided 3.5–4% annual growth; F&amp;B gross margin 76.5% with in-house brand scaling</span></div>
       <div class="bb-item"><span class="bb-icon">✓</span><span>CY25 strongest year ever: Rs 134bn industry GBOC, 37 films crossing Rs 1bn; CY26 expected bigger with King, Ramayana, Avengers, Dune 3, Battle of Galwan</span></div>
       <div class="bb-item"><span class="bb-icon">✓</span><span>149 screens signed capital-light (54 FOCO + 95 asset-light); 150 gross additions guided FY27 at Rs 3.5–4bn capex</span></div>
       <div class="bb-item"><span class="bb-icon">✓</span><span>~65% multiplex screen share in India; formidable barriers to entry; pricing power vs mall operators, distributors, advertisers</span></div>
-      <div class="bb-item"><span class="bb-icon">✓</span><span>India multiplex penetration very low (~3,700 screens vs >75,000 in China); long compounding runway; rising addressable household base</span></div>
+      <div class="bb-item"><span class="bb-icon">✓</span><span>India multiplex penetration very low (~3,700 screens vs &gt;75,000 in China); long compounding runway; rising addressable household base</span></div>
     </div>
     <div class="bb-card bear">
-      <div class="bb-title">Bear / risk case (B&K Hold)</div>
+      <div class="bb-title">Bear / risk case (B&amp;K Hold)</div>
       <div class="bb-item"><span class="bb-icon">✗</span><span>Ad revenue down 21% YoY to Rs 1.18bn in 3Q; still 30–35% below pre-Covid levels; volumes volatile with film slate quality; only 4 marketable films in 3QFY26 vs 8 in 3QFY25</span></div>
       <div class="bb-item"><span class="bb-icon">✗</span><span>Content concentration risk: ~29% of 3QFY26 BO from single film (Dhurandhar); structural prediction problem persists despite improving content diversity</span></div>
       <div class="bb-item"><span class="bb-icon">✗</span><span>OTT structural threat: Warner Bros–Netflix matter sub-judice in US; could shorten theatrical windows globally if precedent set</span></div>
@@ -511,7 +1257,7 @@ function checkPwd() {
   <div class="chart-box" style="margin-bottom:20px">
     <div class="chart-title">Target price bridge — key assumption differences by house</div>
     <div class="chart-wrap" style="height:320px">
-      <canvas id="tpCompChart" role="img" aria-label="Horizontal bar chart comparing target prices by research house"></canvas>
+      <canvas id="tpCompChart" role="img" aria-label="Horizontal bar chart comparing target prices by research house" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
     </div>
   </div>
 
@@ -551,13 +1297,223 @@ function checkPwd() {
           <th>Key differentiator</th>
         </tr>
       </thead>
-      <tbody id="tp-assump-body"></tbody>
+      <tbody id="tp-assump-body"><tr>
+      <td style="font-weight:600">CLSA</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹1,920</td>
+      <td><span class="tag tag-buy">O-PF</span></td>
+      <td style="font-size:10px">EV/EBITDA</td>
+      <td style="font-family:var(--font-mono)">10x</td>
+      <td style="font-family:var(--font-mono);font-size:10px">Rs 24,714mn</td>
+      <td style="font-size:10px">FY27CL</td>
+      <td style="font-size:10px;color:var(--text3)">Rs 247,143mn</td>
+      <td style="font-size:10px;color:var(--red)">Rs 60,046mn (incl. Ind AS 116 leases)</td>
+      <td><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#DBEAFE;color:#1B4F8A">Post-IAS</span></td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">Uses post-IndAS EBITDA (~2.5x higher) but deducts full Ind AS 116 lease liabilit...</td>
+    </tr><tr>
+      <td style="font-weight:600">Nuvama</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹1,605</td>
+      <td><span class="tag tag-buy">BUY</span></td>
+      <td style="font-size:10px">DCF</td>
+      <td style="font-family:var(--font-mono)">DCF-based</td>
+      <td style="font-family:var(--font-mono);font-size:10px">Rs 20,644mn (FY26E)</td>
+      <td style="font-size:10px">FY26E–FY28E</td>
+      <td style="font-size:10px;color:var(--text3)">Implied ~Rs 170bn+</td>
+      <td style="font-size:10px;color:var(--red)">Minimal (pre-IndAS basis)</td>
+      <td><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#DBEAFE;color:#1B4F8A">Post-IAS</span></td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">Only house using explicit DCF. FY27E revenue of Rs 80bn and EPS of Rs 78 are the...</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Sec</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹1,500</td>
+      <td><span class="tag tag-buy">BUY</span></td>
+      <td style="font-size:10px">EV/EBITDA</td>
+      <td style="font-family:var(--font-mono)">15x</td>
+      <td style="font-family:var(--font-mono);font-size:10px">Rs 24,588mn</td>
+      <td style="font-size:10px">adj. FY27E</td>
+      <td style="font-size:10px;color:var(--text3)">Derived from 15x multiple</td>
+      <td style="font-size:10px;color:var(--red)">Post-4700BC sale net debt</td>
+      <td><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#DBEAFE;color:#1B4F8A">Post-IAS</span></td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">Uses the highest multiple (15x) among all houses, but on a different EBITDA base...</td>
+    </tr><tr>
+      <td style="font-weight:600">Kotak</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹1,400</td>
+      <td><span class="tag tag-buy">BUY</span></td>
+      <td style="font-size:10px">EV/EBITDA</td>
+      <td style="font-family:var(--font-mono)">12x</td>
+      <td style="font-family:var(--font-mono);font-size:10px">Rs 11,456mn</td>
+      <td style="font-size:10px">FY28E</td>
+      <td style="font-size:10px;color:var(--text3)">Derived from DCF-roll forward</td>
+      <td style="font-size:10px;color:var(--red)">Pre-IndAS net debt ~Rs 3.5bn</td>
+      <td><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#D8F3DC;color:#2D6A4F">Pre-IAS</span></td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">Uses pre-IndAS EBITDA (lowest base) with 12x FY28E multiple — conservative appro...</td>
+    </tr><tr>
+      <td style="font-weight:600">Nirmal Bang</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹1,344</td>
+      <td><span class="tag tag-buy">BUY</span></td>
+      <td style="font-size:10px">EV/EBITDA</td>
+      <td style="font-family:var(--font-mono)">10x</td>
+      <td style="font-family:var(--font-mono);font-size:10px">Rs 12,036mn</td>
+      <td style="font-size:10px">Dec-27E</td>
+      <td style="font-size:10px;color:var(--text3)">~Rs 120bn</td>
+      <td style="font-size:10px;color:var(--red)">Pre-IndAS net debt ~Rs 4.4bn</td>
+      <td><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#D8F3DC;color:#2D6A4F">Pre-IAS</span></td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">Uses Dec-27E (mid-year) EBITDA at 0.5 standard deviation of 5-year average EV/EB...</td>
+    </tr><tr>
+      <td style="font-weight:600">Elara</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹1,300</td>
+      <td><span class="tag tag-buy">BUY</span></td>
+      <td style="font-size:10px">EV/EBITDA</td>
+      <td style="font-family:var(--font-mono)">13x</td>
+      <td style="font-family:var(--font-mono);font-size:10px">Rs 9,468mn</td>
+      <td style="font-size:10px">Sep-27E</td>
+      <td style="font-size:10px;color:var(--text3)">Rs 120,982mn</td>
+      <td style="font-size:10px;color:var(--red)">Rs 4,058mn (post asset sale)</td>
+      <td><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#D8F3DC;color:#2D6A4F">Pre-IAS</span></td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">Uses Sep-27E (mid-year) with 13x multiple — slightly more aggressive multiple th...</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Direct</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹1,320</td>
+      <td><span class="tag tag-buy">BUY</span></td>
+      <td style="font-size:10px">EV/EBITDA</td>
+      <td style="font-family:var(--font-mono)">11.5x</td>
+      <td style="font-family:var(--font-mono);font-size:10px">Rs 11,210mn</td>
+      <td style="font-size:10px">FY27E</td>
+      <td style="font-size:10px;color:var(--text3)">~Rs 129bn</td>
+      <td style="font-size:10px;color:var(--red)">Pre-IndAS ~Rs 3.7bn</td>
+      <td><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#D8F3DC;color:#2D6A4F">Pre-IAS</span></td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">Retail-focused house, uses 11.5x FY27E ex-IndAS EBITDA. Footfall CAGR of 10% ove...</td>
+    </tr><tr>
+      <td style="font-weight:600">B&amp;K</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹1,285</td>
+      <td><span class="tag tag-hold">HOLD</span></td>
+      <td style="font-size:10px">DCF</td>
+      <td style="font-family:var(--font-mono)">DCF (10x/9x FY27/28E)</td>
+      <td style="font-family:var(--font-mono);font-size:10px">Rs 9,562mn</td>
+      <td style="font-size:10px">FY27E</td>
+      <td style="font-size:10px;color:var(--text3)">Implied ~Rs 120bn</td>
+      <td style="font-size:10px;color:var(--red)">Pre-IndAS net debt</td>
+      <td><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#D8F3DC;color:#2D6A4F">Pre-IAS</span></td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">Only HOLD in the group. DCF-based valuation is most conservative. Key concern: "...</td>
+    </tr><tr>
+      <td style="font-weight:600">PL Capital</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹1,274</td>
+      <td><span class="tag tag-buy">BUY</span></td>
+      <td style="font-size:10px">EV/EBITDA</td>
+      <td style="font-family:var(--font-mono)">9.5x</td>
+      <td style="font-family:var(--font-mono);font-size:10px">Rs 12,640mn</td>
+      <td style="font-size:10px">FY28E</td>
+      <td style="font-size:10px;color:var(--text3)">Rs 120,078mn</td>
+      <td style="font-size:10px;color:var(--red)">Rs 4,658mn</td>
+      <td><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#D8F3DC;color:#2D6A4F">Pre-IAS</span></td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">Lowest multiple (9.5x) in the BUY group, anchored to FY28E. Previously HOLD — up...</td>
+    </tr><tr>
+      <td style="font-weight:600">Investec</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹1,248</td>
+      <td><span class="tag tag-buy">BUY</span></td>
+      <td style="font-size:10px">EV/EBITDA</td>
+      <td style="font-family:var(--font-mono)">12.5x</td>
+      <td style="font-family:var(--font-mono);font-size:10px">Rs 22,838mn</td>
+      <td style="font-size:10px">Dec-27 (post-IndAS)</td>
+      <td style="font-size:10px;color:var(--text3)">Derived from 12.5x</td>
+      <td style="font-size:10px;color:var(--red)">Post-IndAS lease liabilities included</td>
+      <td><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#DBEAFE;color:#1B4F8A">Post-IAS</span></td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">Just upgraded from Hold to Buy this cycle. Uses 12.5x on Dec-27 EBITDA (post-Ind...</td>
+    </tr></tbody>
     </table>
   </div>
 
   <!-- Qualitative thesis comparison -->
   <div class="sec-label">Qualitative thesis — what each house is betting on</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:24px" id="thesis-cards"></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:24px" id="thesis-cards"><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #1B4F8A;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">CLSA</span>
+        <span class="tag tag-buy" style="font-size:9px">₹1,920</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">10x · FY27CL · Post-IndAS</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> Uses post-IndAS EBITDA (~2.5x higher) but deducts full Ind AS 116 lease liability (~Rs 57bn) as debt. Net result: higher numerator and higher denominator — equity value per share lands higher because EV expansion outpaces debt. 5-yr avg multiple of 10x.</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> Highest conviction on structural BO recovery. Hollywood share recovery (49% up in CY25) directly benefits CLSA given PVR's premium screen dominance in English content. Views ad revenue normalisation as the single biggest earnings catalyst.</div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #2D6A4F;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">Nuvama</span>
+        <span class="tag tag-buy" style="font-size:9px">₹1,605</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">DCF-based · FY26E–FY28E · Post-IndAS</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> Only house using explicit DCF. FY27E revenue of Rs 80bn and EPS of Rs 78 are the highest among all houses — reflects aggressive footfall CAGR assumption of ~10% and ATP growth of 3.5–4%. Terminal value likely drives significant value.</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> Most bullish on revenue trajectory. Sees FY28E EPS of Rs 96.7 — nearly 2x the CLSA estimate. Key call: ad revenue recovery to near pre-Covid levels by FY28, adding ~Rs 2bn incremental EBITDA. Also positive on F&amp;B premiumisation.</div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #7C3AED;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">ICICI Sec</span>
+        <span class="tag tag-buy" style="font-size:9px">₹1,500</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">15x · adj. FY27E · Post-IndAS</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> Uses the highest multiple (15x) among all houses, but on a different EBITDA base. The 15x reflects a structural rerating thesis: post-merger cost structure means 28% occupancy now delivers margins that pre-merger required 32–33%. Net cash positive by Q4FY26 is the key trigger.</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> Focuses on balance sheet transformation as the re-rating catalyst. Key insight: net debt down Rs 10.7bn since merger, driven by FCF + capex discipline + asset sales. Once net cash, dividend/buyback potential unlocks a new investor base.</div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #B07D00;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">Kotak</span>
+        <span class="tag tag-buy" style="font-size:9px">₹1,400</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">12x · FY28E · Pre-IndAS</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> Uses pre-IndAS EBITDA (lowest base) with 12x FY28E multiple — conservative approach that strips out Ind AS 116 lease distortion. Roll-forward to FY28 (vs FY27 used by most others) adds ~1 year of earnings growth, partially offsetting the lower multiple.</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> Most focused on cost initiatives and capital-light model. Calls out rent renegotiation, solar panel deployment, variable cost conversion. FY2026E EBITDA raised 7% post-results. Screen additions under FOCO/asset-light cited as the key to FCF preservation.</div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #9B2226;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">Nirmal Bang</span>
+        <span class="tag tag-buy" style="font-size:9px">₹1,344</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">10x · Dec-27E · Pre-IndAS</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> Uses Dec-27E (mid-year) EBITDA at 0.5 standard deviation of 5-year average EV/EBITDA. Conservative multiple reflects structural content volatility risk. Among the most granular on operational assumptions — screen-level ATP, occupancy, ad revenue per screen.</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> Longest-covering analyst on PVR (track record since 2016). Core thesis: monopoly-like structure (65% of functional multiplex screens) creates durable pricing power. Highlight: India has only 3,700 multiplex screens vs 75,000 in China — penetration story is the 10-year call.</div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #0F6E56;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">Elara</span>
+        <span class="tag tag-buy" style="font-size:9px">₹1,300</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">13x · Sep-27E · Pre-IndAS</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> Uses Sep-27E (mid-year) with 13x multiple — slightly more aggressive multiple than Kotak/Nirmal Bang to compensate for the lower mid-year EBITDA. Just upgraded from Accumulate to Buy post-3Q. EBITDA estimates raised 13% for FY27/28 — biggest estimate revision this cycle.</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> Newly turned bullish post 3Q print. Key call: ad revenue is still ~30% below pre-Covid levels — recovery is the earnings surprise most houses are not fully pricing in. Also flags Paramount and Universal exploring wider India releases as a Hollywood tailwind.</div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #534AB7;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">ICICI Direct</span>
+        <span class="tag tag-buy" style="font-size:9px">₹1,320</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">11.5x · FY27E · Pre-IndAS</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> Retail-focused house, uses 11.5x FY27E ex-IndAS EBITDA. Footfall CAGR of 10% over FY25–27 is one of the higher estimates. Focuses on consumption proxy angle — positions PVR as a discretionary entertainment spend play linked to urban India income growth.</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> Emphasises footfall recovery trajectory. Forecasts 183mn footfalls in FY28 (10% CAGR over FY25–27). Key metrics: Box office/F&amp;B revenue CAGR of 13.3%/14.3% over FY25–28. Screens growing from 1,723 to 1,979 by FY28 is the volume driver.</div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #888780;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">B&amp;K</span>
+        <span class="tag tag-hold" style="font-size:9px">₹1,285</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">DCF (10x/9x FY27/28E) · FY27E · Pre-IndAS</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> Only HOLD in the group. DCF-based valuation is most conservative. Key concern: "decoding the content piece is challenging" — structural volatility in earnings means valuation multiples remain "extremely fluid." PAT estimates +7%/9% for FY27/28 vs prior — but margin thesis is tempered.</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> Most cautious on structural durability of margins. Acknowledges strong execution on costs and balance sheet, but unwilling to assign re-rating multiple until content-driven earnings volatility subsides. Variable rental conversion and FOCO expansion cited as right moves but insufficient to justify BUY.</div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #D85A30;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">PL Capital</span>
+        <span class="tag tag-buy" style="font-size:9px">₹1,274</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">9.5x · FY28E · Pre-IndAS</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> Lowest multiple (9.5x) in the BUY group, anchored to FY28E. Previously HOLD — upgraded in Jan 2026. Uses "multiple re-aligned as we roll forward to FY28." The conservative multiple reflects skepticism around ad revenue recovery speed and OTT window compression risk.</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> Focuses on balance sheet and capital-light model as earnings quality improvers rather than growth drivers. Key stat cited: 149 screens signed under FOCO/asset-light — "cash preservation ensures balance sheet strength." Footfall CAGR of 7.1% over FY25–28 is the most conservative in the group.</div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #1A1916;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">Investec</span>
+        <span class="tag tag-buy" style="font-size:9px">₹1,248</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">12.5x · Dec-27 (post-IndAS) · Post-IndAS</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> Just upgraded from Hold to Buy this cycle. Uses 12.5x on Dec-27 EBITDA (post-IndAS). Despite using a higher base EBITDA, the inclusion of lease liabilities in net debt brings TP to the lowest in the BUY group. Key upgrade trigger: near net-debt-free balance sheet driving PAT compounding.</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> Upgrade thesis: "4x PAT jump over FY26-28E" from near-zero base. 12% revenue + 13% EBITDA CAGR = earnings compounding story. Key risk flags: OTT threat (longer term) and content volatility. Valuations at 18x FY28E PE and sub-10x EV/EBITDA cited as "very attractive."</div>
+    </div></div>
 
   <!-- Sensitivity table -->
   <div class="sec-label">TP sensitivity — what happens if EBITDA multiple changes (pre-IndAS, FY27E EBITDA ~Rs 10,500mn)</div>
@@ -634,7 +1590,97 @@ function checkPwd() {
       <thead>
         <tr><th>House</th><th>TP</th><th>Anchor year</th><th>Months from Feb-26</th><th>EBITDA used</th><th>Ind AS basis</th><th>P/E at TP</th><th>EV/EBITDA at TP</th></tr>
       </thead>
-      <tbody id="recon-year-body"></tbody>
+      <tbody id="recon-year-body"><tr>
+      <td style="font-weight:600">CLSA</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,920</td>
+      <td>FY27CL</td>
+      <td><span style="background:#D8F3DC;color:#1B4F2A;font-size:10px;padding:2px 7px;border-radius:3px">13M</span></td>
+      <td style="font-size:10px;color:var(--text2)">₹24,714mn (post-IAS)</td>
+      <td><span style="background:#DBEAFE;color:#1B4F8A;font-size:9px;padding:2px 5px;border-radius:3px">Post-IAS</span></td>
+      <td style="">37.2x</td>
+      <td>10.0x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nuvama</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,605</td>
+      <td>FY27E</td>
+      <td><span style="background:#D8F3DC;color:#1B4F2A;font-size:10px;padding:2px 7px;border-radius:3px">13M</span></td>
+      <td style="font-size:10px;color:var(--text2)">₹24,288mn (post-IAS)</td>
+      <td><span style="background:#DBEAFE;color:#1B4F8A;font-size:9px;padding:2px 5px;border-radius:3px">Post-IAS</span></td>
+      <td style="color:#2D6A4F;font-weight:600">20.5x</td>
+      <td>~9.3x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Sec</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,500</td>
+      <td>FY27E</td>
+      <td><span style="background:#D8F3DC;color:#1B4F2A;font-size:10px;padding:2px 7px;border-radius:3px">13M</span></td>
+      <td style="font-size:10px;color:var(--text2)">₹24,588mn (post-IAS)</td>
+      <td><span style="background:#DBEAFE;color:#1B4F8A;font-size:9px;padding:2px 5px;border-radius:3px">Post-IAS</span></td>
+      <td style="">31.7x</td>
+      <td>15.0x</td>
+    </tr><tr>
+      <td style="font-weight:600">Kotak</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,400</td>
+      <td>FY28E</td>
+      <td><span style="background:#DBEAFE;color:#1B4F8A;font-size:10px;padding:2px 7px;border-radius:3px">25M</span></td>
+      <td style="font-size:10px;color:var(--text2)">₹11,456mn (pre-IAS)</td>
+      <td><span style="background:#D8F3DC;color:#2D6A4F;font-size:9px;padding:2px 5px;border-radius:3px">Pre-IAS</span></td>
+      <td style="">26.5x</td>
+      <td>12.0x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nirmal Bang</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,344</td>
+      <td>Dec-27E</td>
+      <td><span style="background:#FFE8A3;color:#7B4F00;font-size:10px;padding:2px 7px;border-radius:3px">22M</span></td>
+      <td style="font-size:10px;color:var(--text2)">₹12,036mn (pre-IAS)</td>
+      <td><span style="background:#D8F3DC;color:#2D6A4F;font-size:9px;padding:2px 5px;border-radius:3px">Pre-IAS</span></td>
+      <td style="">31.7x</td>
+      <td>10.0x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Direct</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,320</td>
+      <td>FY27E</td>
+      <td><span style="background:#D8F3DC;color:#1B4F2A;font-size:10px;padding:2px 7px;border-radius:3px">13M</span></td>
+      <td style="font-size:10px;color:var(--text2)">₹11,210mn (pre-IAS)</td>
+      <td><span style="background:#D8F3DC;color:#2D6A4F;font-size:9px;padding:2px 5px;border-radius:3px">Pre-IAS</span></td>
+      <td style="color:#9B2226">46x</td>
+      <td>11.5x</td>
+    </tr><tr>
+      <td style="font-weight:600">Elara</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,300</td>
+      <td>Sep-27E</td>
+      <td><span style="background:#FFE8A3;color:#7B4F00;font-size:10px;padding:2px 7px;border-radius:3px">19M</span></td>
+      <td style="font-size:10px;color:var(--text2)">₹9,468mn (pre-IAS)</td>
+      <td><span style="background:#D8F3DC;color:#2D6A4F;font-size:9px;padding:2px 5px;border-radius:3px">Pre-IAS</span></td>
+      <td style="color:#9B2226">85x</td>
+      <td>13.0x</td>
+    </tr><tr>
+      <td style="font-weight:600">B&amp;K</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,285</td>
+      <td>FY28E</td>
+      <td><span style="background:#DBEAFE;color:#1B4F8A;font-size:10px;padding:2px 7px;border-radius:3px">25M</span></td>
+      <td style="font-size:10px;color:var(--text2)">₹10,948mn (pre-IAS)</td>
+      <td><span style="background:#D8F3DC;color:#2D6A4F;font-size:9px;padding:2px 5px;border-radius:3px">Pre-IAS</span></td>
+      <td style="color:#2D6A4F;font-weight:600">24.6x</td>
+      <td>~9x</td>
+    </tr><tr>
+      <td style="font-weight:600">PL Capital</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,274</td>
+      <td>FY28E</td>
+      <td><span style="background:#DBEAFE;color:#1B4F8A;font-size:10px;padding:2px 7px;border-radius:3px">25M</span></td>
+      <td style="font-size:10px;color:var(--text2)">₹12,640mn (pre-IAS)</td>
+      <td><span style="background:#D8F3DC;color:#2D6A4F;font-size:9px;padding:2px 5px;border-radius:3px">Pre-IAS</span></td>
+      <td style="color:#2D6A4F;font-weight:600">21.7x</td>
+      <td>9.5x</td>
+    </tr><tr>
+      <td style="font-weight:600">Investec</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,248</td>
+      <td>Dec-27E</td>
+      <td><span style="background:#FFE8A3;color:#7B4F00;font-size:10px;padding:2px 7px;border-radius:3px">22M</span></td>
+      <td style="font-size:10px;color:var(--text2)">₹22,838mn (post-IAS)</td>
+      <td><span style="background:#DBEAFE;color:#1B4F8A;font-size:9px;padding:2px 5px;border-radius:3px">Post-IAS</span></td>
+      <td style="">37.4x</td>
+      <td>12.5x</td>
+    </tr></tbody>
     </table>
   </div>
 
@@ -644,11 +1690,11 @@ function checkPwd() {
     <div class="two-col">
       <div>
         <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Pre-Ind AS EV/EBITDA at CMP (by year)</div>
-        <div class="chart-wrap" style="height:260px"><canvas id="impliedEvChart" role="img" aria-label="Implied EV EBITDA at CMP"></canvas></div>
+        <div class="chart-wrap" style="height:260px"><canvas id="impliedEvChart" role="img" aria-label="Implied EV EBITDA at CMP" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
       </div>
       <div>
         <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Implied P/E at CMP ₹987 (by house)</div>
-        <div class="chart-wrap" style="height:260px"><canvas id="impliedPeChart" role="img" aria-label="Implied PE at CMP"></canvas></div>
+        <div class="chart-wrap" style="height:260px"><canvas id="impliedPeChart" role="img" aria-label="Implied PE at CMP" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
       </div>
     </div>
   </div>
@@ -658,7 +1704,7 @@ function checkPwd() {
     <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #2D6A4F;border-radius:var(--radius-lg);padding:16px">
       <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:#2D6A4F">Nuvama — TP ₹1,605 (DCF)</div>
       <table style="font-size:11px;width:100%">
-        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Method</td><td style="text-align:right;font-weight:500">DCF (multi-year cash flows)</td></tr>
+        <tbody><tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Method</td><td style="text-align:right;font-weight:500">DCF (multi-year cash flows)</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E Revenue</td><td style="text-align:right;font-weight:500">₹80,066mn (highest in group)</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E EBITDA (post-IAS)</td><td style="text-align:right;font-weight:500">₹24,288mn · 30.3% margin</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E PAT / EPS</td><td style="text-align:right;font-weight:500;color:#2D6A4F">₹7,678mn / ₹78.2 (highest)</td></tr>
@@ -666,12 +1712,12 @@ function checkPwd() {
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Implied P/E at TP</td><td style="text-align:right;font-weight:500">20.5x FY27E EPS</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Implied EV/EBITDA at TP</td><td style="text-align:right;font-weight:500">~9.3x FY27E post-Ind AS</td></tr>
         <tr><td style="padding:5px 0;color:var(--text2)">Why TP is lower than CLSA</td><td style="text-align:right;font-weight:500;color:#9B2226">DCF does not apply a spot multiple to peak EBITDA. Discounts cash flows at WACC — penalises near-term earnings drag from high depreciation + interest even if EPS later recovers strongly.</td></tr>
-      </table>
+      </tbody></table>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #1B4F8A;border-radius:var(--radius-lg);padding:16px">
       <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:#1B4F8A">CLSA — TP ₹1,920 (EV/EBITDA)</div>
       <table style="font-size:11px;width:100%">
-        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Method</td><td style="text-align:right;font-weight:500">10x EV/EBITDA (5-yr avg multiple)</td></tr>
+        <tbody><tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Method</td><td style="text-align:right;font-weight:500">10x EV/EBITDA (5-yr avg multiple)</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E Revenue</td><td style="text-align:right;font-weight:500">₹77,086mn</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E EBITDA (post-IAS)</td><td style="text-align:right;font-weight:500">₹24,714mn · 32.1% margin</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E EPS</td><td style="text-align:right;font-weight:500;color:#9B2226">₹51.6 (not the valuation driver)</td></tr>
@@ -680,7 +1726,7 @@ function checkPwd() {
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Equity value</td><td style="text-align:right;font-weight:500;color:#1B4F8A">₹187,097mn ÷ 98mn = ₹1,908 → ₹1,920</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Implied P/E at TP</td><td style="text-align:right;font-weight:500">37.2x FY27E EPS</td></tr>
         <tr><td style="padding:5px 0;color:var(--text2)">Why TP is higher</td><td style="text-align:right;font-weight:500;color:#1B4F8A">Post-IAS EBITDA is 2.5x pre-IAS. 10x × ₹24.7bn = ₹247bn EV. Lease debt deduction of ₹60bn ≠ offsetting the extra ₹140bn EV created by the larger base vs pre-IAS.</td></tr>
-      </table>
+      </tbody></table>
     </div>
   </div>
 
@@ -690,7 +1736,107 @@ function checkPwd() {
       <thead>
         <tr><th>House</th><th>TP</th><th>Year</th><th>Pre-IAS EBITDA</th><th>EV/EBITDA @ CMP (pre-IAS)</th><th>EPS est</th><th>P/E @ CMP</th><th>P/E @ TP</th><th>P/E at TP — cheap or not?</th></tr>
       </thead>
-      <tbody id="implied-mult-body"></tbody>
+      <tbody id="implied-mult-body"><tr>
+      <td style="font-weight:600">CLSA</td>
+      <td style="font-family:var(--font-mono)">₹1,920</td>
+      <td>FY27CL</td>
+      <td>24.7k mn</td>
+      <td class="cell-hi">4.1x</td>
+      <td>51.6</td>
+      <td class="cell-hi">19.1x</td>
+      <td>37.2x</td>
+      <td style="font-size:10px">🔴 Rich at TP</td>
+    </tr><tr>
+      <td style="font-weight:600">Nuvama</td>
+      <td style="font-family:var(--font-mono)">₹1,605</td>
+      <td>FY27E</td>
+      <td>10.3k mn</td>
+      <td class="cell-hi">9.8x</td>
+      <td>78.2</td>
+      <td class="cell-hi">12.6x</td>
+      <td>20.5x</td>
+      <td style="font-size:10px">🟡 Fair at TP</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Sec</td>
+      <td style="font-family:var(--font-mono)">₹1,500</td>
+      <td>FY27E</td>
+      <td>10.3k mn</td>
+      <td class="cell-hi">9.8x</td>
+      <td>47.3</td>
+      <td class="cell-hi">20.9x</td>
+      <td>31.7x</td>
+      <td style="font-size:10px">🔴 Rich at TP</td>
+    </tr><tr>
+      <td style="font-weight:600">Kotak</td>
+      <td style="font-family:var(--font-mono)">₹1,400</td>
+      <td>FY28E</td>
+      <td>11.5k mn</td>
+      <td class="cell-hi">8.8x</td>
+      <td>52.9</td>
+      <td class="cell-hi">18.7x</td>
+      <td>26.5x</td>
+      <td style="font-size:10px">🟡 Fair at TP</td>
+    </tr><tr>
+      <td style="font-weight:600">Nirmal Bang</td>
+      <td style="font-family:var(--font-mono)">₹1,344</td>
+      <td>Dec-27E</td>
+      <td>12.0k mn</td>
+      <td class="cell-hi">8.3x</td>
+      <td>42.4</td>
+      <td class="cell-hi">23.3x</td>
+      <td>31.7x</td>
+      <td style="font-size:10px">🔴 Rich at TP</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Direct</td>
+      <td style="font-family:var(--font-mono)">₹1,320</td>
+      <td>FY27E</td>
+      <td>10.7k mn</td>
+      <td class="cell-hi">9.4x</td>
+      <td>28.7</td>
+      <td class="">34.4x</td>
+      <td>46.0x</td>
+      <td style="font-size:10px">🔴 Rich at TP</td>
+    </tr><tr>
+      <td style="font-weight:600">Elara</td>
+      <td style="font-family:var(--font-mono)">₹1,300</td>
+      <td>Sep-27E</td>
+      <td>9.5k mn</td>
+      <td class="">10.6x</td>
+      <td>15.3</td>
+      <td class="cell-lo">64.5x</td>
+      <td>85.0x</td>
+      <td style="font-size:10px">🔴 Rich at TP</td>
+    </tr><tr>
+      <td style="font-weight:600">B&amp;K</td>
+      <td style="font-family:var(--font-mono)">₹1,285</td>
+      <td>FY28E</td>
+      <td>10.9k mn</td>
+      <td class="cell-hi">9.2x</td>
+      <td>52.2</td>
+      <td class="cell-hi">18.9x</td>
+      <td>24.6x</td>
+      <td style="font-size:10px">🟡 Fair at TP</td>
+    </tr><tr>
+      <td style="font-weight:600">PL Capital</td>
+      <td style="font-family:var(--font-mono)">₹1,274</td>
+      <td>FY28E</td>
+      <td>12.6k mn</td>
+      <td class="cell-hi">8.0x</td>
+      <td>58.6</td>
+      <td class="cell-hi">16.8x</td>
+      <td>21.7x</td>
+      <td style="font-size:10px">🟡 Fair at TP</td>
+    </tr><tr>
+      <td style="font-weight:600">Investec</td>
+      <td style="font-family:var(--font-mono)">₹1,248</td>
+      <td>Dec-27E</td>
+      <td>8.7k mn</td>
+      <td class="">11.5x</td>
+      <td>33.4</td>
+      <td class="">29.6x</td>
+      <td>37.4x</td>
+      <td style="font-size:10px">🔴 Rich at TP</td>
+    </tr></tbody>
     </table>
   </div>
   <div style="font-size:10px;color:var(--text3);margin-bottom:24px">Pre-Ind AS EV at CMP = ₹100.5bn. Figures shown for the TP anchor year. P/E at TP = TP ÷ EPS estimate for that year.</div>
@@ -704,7 +1850,7 @@ function checkPwd() {
 
   <!-- sub-tabs -->
   <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap" id="val-subtabs">
-    <button class="kpi-tab active" onclick="showValTab('evebitda',this)">EV / EBITDA (pre-IAS)</button>
+    <button class="kpi-tab" onclick="showValTab('evebitda',this)">EV / EBITDA (pre-IAS)</button>
     <button class="kpi-tab" onclick="showValTab('evsales',this)">EV / Sales</button>
     <button class="kpi-tab" onclick="showValTab('pe',this)">P / E</button>
     <button class="kpi-tab" onclick="showValTab('pb',this)">P / Book</button>
@@ -728,12 +1874,132 @@ function checkPwd() {
             <th>FY28E EBITDA (mn)</th><th>EV/EBITDA FY28E @ CMP</th><th>EV/EBITDA FY28E @ TP</th>
           </tr>
         </thead>
-        <tbody id="ev-ebitda-body"></tbody>
+        <tbody id="ev-ebitda-body"><tr>
+      <td style="font-weight:600">CLSA</td>
+      <td>26.8x</td>
+      <td>8.2k</td>
+      <td class="cell-amber">12.3x</td>
+      <td class="cell-lo">23.4x</td>
+      <td>10.3k</td>
+      <td class="cell-amber">9.8x</td>
+      <td class="cell-lo">18.7x</td>
+      <td>11.5k</td>
+      <td class="cell-amber">8.8x</td>
+      <td class="cell-lo">16.8x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nuvama</td>
+      <td>26.8x</td>
+      <td>8.2k</td>
+      <td class="cell-amber">12.3x</td>
+      <td class="cell-lo">19.6x</td>
+      <td>10.3k</td>
+      <td class="cell-amber">9.8x</td>
+      <td class="cell-lo">15.7x</td>
+      <td>11.5k</td>
+      <td class="cell-amber">8.8x</td>
+      <td class="cell-lo">14.1x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Sec</td>
+      <td>26.8x</td>
+      <td>8.2k</td>
+      <td class="cell-amber">12.3x</td>
+      <td class="cell-lo">18.4x</td>
+      <td>10.3k</td>
+      <td class="cell-amber">9.8x</td>
+      <td class="cell-lo">14.7x</td>
+      <td>11.5k</td>
+      <td class="cell-amber">8.8x</td>
+      <td class="cell-lo">13.2x</td>
+    </tr><tr>
+      <td style="font-weight:600">Kotak</td>
+      <td>26.8x</td>
+      <td>8.2k</td>
+      <td class="cell-amber">12.2x</td>
+      <td class="cell-lo">17.2x</td>
+      <td>10.3k</td>
+      <td class="cell-amber">9.8x</td>
+      <td class="cell-lo">13.7x</td>
+      <td>11.5k</td>
+      <td class="cell-amber">8.8x</td>
+      <td class="cell-lo">12.3x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nirmal Bang</td>
+      <td>26.9x</td>
+      <td>9.1k</td>
+      <td class="cell-amber">11.2x</td>
+      <td class="cell-lo">15x</td>
+      <td>12.0k</td>
+      <td class="cell-amber">8.4x</td>
+      <td class="cell-amber">11.3x</td>
+      <td>13.9k</td>
+      <td class="cell-amber">7.3x</td>
+      <td class="cell-amber">9.8x</td>
+    </tr><tr>
+      <td style="font-weight:600">Elara</td>
+      <td>26.8x</td>
+      <td>7.5k</td>
+      <td class="cell-amber">13.5x</td>
+      <td class="cell-lo">17.6x</td>
+      <td>9.5k</td>
+      <td class="cell-amber">10.6x</td>
+      <td class="cell-lo">13.9x</td>
+      <td>11.0k</td>
+      <td class="cell-amber">9.1x</td>
+      <td class="cell-lo">11.9x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Direct</td>
+      <td>26.8x</td>
+      <td>8.9k</td>
+      <td class="cell-amber">11.3x</td>
+      <td class="cell-lo">14.9x</td>
+      <td>11.2k</td>
+      <td class="cell-amber">9x</td>
+      <td class="cell-amber">11.9x</td>
+      <td>13.0k</td>
+      <td class="cell-amber">7.8x</td>
+      <td class="cell-lo">10.3x</td>
+    </tr><tr>
+      <td style="font-weight:600">B&amp;K</td>
+      <td>26.8x</td>
+      <td>9.3k</td>
+      <td class="cell-amber">10.8x</td>
+      <td class="cell-lo">14x</td>
+      <td>9.6k</td>
+      <td class="cell-amber">10.5x</td>
+      <td class="cell-lo">13.6x</td>
+      <td>10.9k</td>
+      <td class="cell-amber">9.2x</td>
+      <td class="cell-lo">11.8x</td>
+    </tr><tr>
+      <td style="font-weight:600">PL Capital</td>
+      <td>27x</td>
+      <td>8.0k</td>
+      <td class="cell-amber">12.7x</td>
+      <td class="cell-lo">16.2x</td>
+      <td>10.6k</td>
+      <td class="cell-amber">9.6x</td>
+      <td class="cell-lo">12.3x</td>
+      <td>12.6k</td>
+      <td class="cell-amber">8x</td>
+      <td class="cell-lo">10.3x</td>
+    </tr><tr>
+      <td style="font-weight:600">Investec</td>
+      <td>26.8x</td>
+      <td>7.5k</td>
+      <td class="cell-amber">13.5x</td>
+      <td class="cell-lo">16.9x</td>
+      <td>8.7k</td>
+      <td class="cell-amber">11.5x</td>
+      <td class="cell-lo">14.5x</td>
+      <td>10.4k</td>
+      <td class="cell-amber">9.7x</td>
+      <td class="cell-lo">12.1x</td>
+    </tr></tbody>
       </table>
     </div>
     <div class="chart-box">
       <div class="chart-title">EV/EBITDA at CMP ₹987 — pre-Ind AS, by house &amp; year</div>
-      <div class="chart-wrap" style="height:300px"><canvas id="evEbitdaChart" role="img" aria-label="Grouped bar chart EV EBITDA by house and year"></canvas></div>
+      <div class="chart-wrap" style="height:300px"><canvas id="evEbitdaChart" role="img" aria-label="Grouped bar chart EV EBITDA by house and year" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
       <div class="legend-row" style="margin-top:10px">
         <span class="leg-item"><span class="leg-swatch" style="background:#B5D4F4"></span>FY26E</span>
         <span class="leg-item"><span class="leg-swatch" style="background:#378ADD"></span>FY27E</span>
@@ -744,7 +2010,7 @@ function checkPwd() {
     <div style="margin-top:16px">
       <div class="sec-label">Historical EV/EBITDA context — FY19 to FY26E (pre-Ind AS)</div>
       <div class="chart-box">
-        <div class="chart-wrap" style="height:240px"><canvas id="evHistChart" role="img" aria-label="Historical EV EBITDA line chart"></canvas></div>
+        <div class="chart-wrap" style="height:240px"><canvas id="evHistChart" role="img" aria-label="Historical EV EBITDA line chart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
       </div>
     </div>
   </div>
@@ -765,12 +2031,122 @@ function checkPwd() {
             <th>FY28E Rev (mn)</th><th>EV/Sales FY28E @ CMP</th><th>EV/Sales FY28E @ TP</th>
           </tr>
         </thead>
-        <tbody id="ev-sales-body"></tbody>
+        <tbody id="ev-sales-body"><tr>
+      <td style="font-weight:600">CLSA</td>
+      <td>68k</td>
+      <td class="cell-amber">1.48x</td>
+      <td class="cell-lo">2.82x</td>
+      <td>77k</td>
+      <td class="cell-amber">1.3x</td>
+      <td class="cell-lo">2.49x</td>
+      <td>84k</td>
+      <td class="cell-amber">1.19x</td>
+      <td class="cell-lo">2.28x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nuvama</td>
+      <td>68k</td>
+      <td class="cell-amber">1.47x</td>
+      <td class="cell-lo">2.36x</td>
+      <td>80k</td>
+      <td class="cell-amber">1.26x</td>
+      <td class="cell-lo">2.01x</td>
+      <td>93k</td>
+      <td class="cell-amber">1.09x</td>
+      <td class="cell-lo">1.74x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Sec</td>
+      <td>70k</td>
+      <td class="cell-amber">1.44x</td>
+      <td class="cell-lo">2.17x</td>
+      <td>77k</td>
+      <td class="cell-amber">1.31x</td>
+      <td class="cell-lo">1.97x</td>
+      <td>85k</td>
+      <td class="cell-amber">1.18x</td>
+      <td class="cell-lo">1.77x</td>
+    </tr><tr>
+      <td style="font-weight:600">Kotak</td>
+      <td>67k</td>
+      <td class="cell-amber">1.51x</td>
+      <td class="cell-lo">2.12x</td>
+      <td>71k</td>
+      <td class="cell-amber">1.41x</td>
+      <td class="cell-lo">1.99x</td>
+      <td>76k</td>
+      <td class="cell-amber">1.32x</td>
+      <td class="cell-lo">1.85x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nirmal Bang</td>
+      <td>68k</td>
+      <td class="cell-amber">1.48x</td>
+      <td class="cell-lo">2x</td>
+      <td>76k</td>
+      <td class="cell-amber">1.33x</td>
+      <td class="cell-lo">1.8x</td>
+      <td>82k</td>
+      <td class="cell-amber">1.24x</td>
+      <td class="cell-lo">1.67x</td>
+    </tr><tr>
+      <td style="font-weight:600">Elara</td>
+      <td>74k</td>
+      <td class="cell-amber">1.36x</td>
+      <td class="cell-amber">1.78x</td>
+      <td>77k</td>
+      <td class="cell-amber">1.31x</td>
+      <td class="cell-amber">1.71x</td>
+      <td>81k</td>
+      <td class="cell-amber">1.23x</td>
+      <td class="cell-lo">1.61x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Direct</td>
+      <td>68k</td>
+      <td class="cell-amber">1.49x</td>
+      <td class="cell-amber">1.97x</td>
+      <td>76k</td>
+      <td class="cell-amber">1.33x</td>
+      <td class="cell-amber">1.76x</td>
+      <td>82k</td>
+      <td class="cell-amber">1.22x</td>
+      <td class="cell-lo">1.62x</td>
+    </tr><tr>
+      <td style="font-weight:600">B&amp;K</td>
+      <td>69k</td>
+      <td class="cell-amber">1.47x</td>
+      <td class="cell-amber">1.89x</td>
+      <td>75k</td>
+      <td class="cell-amber">1.35x</td>
+      <td class="cell-amber">1.74x</td>
+      <td>82k</td>
+      <td class="cell-amber">1.23x</td>
+      <td class="cell-lo">1.58x</td>
+    </tr><tr>
+      <td style="font-weight:600">PL Capital</td>
+      <td>68k</td>
+      <td class="cell-amber">1.49x</td>
+      <td class="cell-amber">1.91x</td>
+      <td>74k</td>
+      <td class="cell-amber">1.38x</td>
+      <td class="cell-amber">1.76x</td>
+      <td>81k</td>
+      <td class="cell-amber">1.25x</td>
+      <td class="cell-lo">1.59x</td>
+    </tr><tr>
+      <td style="font-weight:600">Investec</td>
+      <td>66k</td>
+      <td class="cell-amber">1.52x</td>
+      <td class="cell-amber">1.9x</td>
+      <td>74k</td>
+      <td class="cell-amber">1.35x</td>
+      <td class="cell-amber">1.7x</td>
+      <td>82k</td>
+      <td class="cell-amber">1.23x</td>
+      <td class="cell-lo">1.55x</td>
+    </tr></tbody>
       </table>
     </div>
     <div class="chart-box">
       <div class="chart-title">EV/Sales at CMP ₹987 — by house &amp; year</div>
-      <div class="chart-wrap" style="height:300px"><canvas id="evSalesChart" role="img" aria-label="Grouped bar chart EV Sales by house and year"></canvas></div>
+      <div class="chart-wrap" style="height:300px"><canvas id="evSalesChart" role="img" aria-label="Grouped bar chart EV Sales by house and year" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
       <div class="legend-row" style="margin-top:10px">
         <span class="leg-item"><span class="leg-swatch" style="background:#9FE1CB"></span>FY26E</span>
         <span class="leg-item"><span class="leg-swatch" style="background:#1D9E75"></span>FY27E</span>
@@ -795,12 +2171,122 @@ function checkPwd() {
             <th>FY28E EPS</th><th>P/E FY28E @ CMP</th><th>P/E FY28E @ TP</th>
           </tr>
         </thead>
-        <tbody id="pe-body"></tbody>
+        <tbody id="pe-body"><tr>
+      <td style="font-weight:600">CLSA</td>
+      <td style="font-family:var(--font-mono)">₹23.4</td>
+      <td class="cell-amber">42.2x</td>
+      <td class="cell-lo">82.1x</td>
+      <td style="font-family:var(--font-mono)">₹51.6</td>
+      <td class="cell-hi">19.1x</td>
+      <td class="cell-lo">37.2x</td>
+      <td style="font-family:var(--font-mono)">₹75.2</td>
+      <td class="cell-hi">13.1x</td>
+      <td class="cell-lo">25.5x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nuvama</td>
+      <td style="font-family:var(--font-mono)">₹45.5</td>
+      <td class="cell-hi">21.7x</td>
+      <td class="cell-amber">35.3x</td>
+      <td style="font-family:var(--font-mono)">₹78.2</td>
+      <td class="cell-hi">12.6x</td>
+      <td class="cell-amber">20.5x</td>
+      <td style="font-family:var(--font-mono)">₹96.7</td>
+      <td class="cell-hi">10.2x</td>
+      <td class="cell-amber">16.6x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Sec</td>
+      <td style="font-family:var(--font-mono)">₹33.5</td>
+      <td class="cell-hi">29.5x</td>
+      <td class="cell-lo">44.8x</td>
+      <td style="font-family:var(--font-mono)">₹47.3</td>
+      <td class="cell-amber">20.9x</td>
+      <td class="cell-lo">31.7x</td>
+      <td style="font-family:var(--font-mono)">₹62.1</td>
+      <td class="cell-amber">15.9x</td>
+      <td class="cell-lo">24.2x</td>
+    </tr><tr>
+      <td style="font-weight:600">Kotak</td>
+      <td style="font-family:var(--font-mono)">₹45.4</td>
+      <td class="cell-hi">21.7x</td>
+      <td class="cell-amber">30.8x</td>
+      <td style="font-family:var(--font-mono)">₹41.9</td>
+      <td class="cell-amber">23.6x</td>
+      <td class="cell-lo">33.4x</td>
+      <td style="font-family:var(--font-mono)">₹52.9</td>
+      <td class="cell-amber">18.7x</td>
+      <td class="cell-lo">26.5x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nirmal Bang</td>
+      <td style="font-family:var(--font-mono)">₹25</td>
+      <td class="cell-amber">39.5x</td>
+      <td class="cell-lo">53.8x</td>
+      <td style="font-family:var(--font-mono)">₹42.4</td>
+      <td class="cell-amber">23.3x</td>
+      <td class="cell-lo">31.7x</td>
+      <td style="font-family:var(--font-mono)">₹56.8</td>
+      <td class="cell-amber">17.4x</td>
+      <td class="cell-lo">23.7x</td>
+    </tr><tr>
+      <td style="font-weight:600">Elara</td>
+      <td style="font-family:var(--font-mono)">₹33.8</td>
+      <td class="cell-hi">29.2x</td>
+      <td class="cell-amber">38.5x</td>
+      <td style="font-family:var(--font-mono)">₹13.2</td>
+      <td class="cell-lo">74.8x</td>
+      <td class="cell-lo">98.5x</td>
+      <td style="font-family:var(--font-mono)">₹15.3</td>
+      <td class="cell-lo">64.5x</td>
+      <td class="cell-lo">85x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Direct</td>
+      <td style="font-family:var(--font-mono)">₹17.9</td>
+      <td class="cell-amber">55.1x</td>
+      <td class="cell-lo">73.7x</td>
+      <td style="font-family:var(--font-mono)">₹28.7</td>
+      <td class="cell-amber">34.4x</td>
+      <td class="cell-lo">46x</td>
+      <td style="font-family:var(--font-mono)">₹41.6</td>
+      <td class="cell-amber">23.7x</td>
+      <td class="cell-lo">31.7x</td>
+    </tr><tr>
+      <td style="font-weight:600">B&amp;K</td>
+      <td style="font-family:var(--font-mono)">₹33.4</td>
+      <td class="cell-hi">29.6x</td>
+      <td class="cell-amber">38.5x</td>
+      <td style="font-family:var(--font-mono)">₹38.4</td>
+      <td class="cell-amber">25.7x</td>
+      <td class="cell-lo">33.5x</td>
+      <td style="font-family:var(--font-mono)">₹52.2</td>
+      <td class="cell-amber">18.9x</td>
+      <td class="cell-lo">24.6x</td>
+    </tr><tr>
+      <td style="font-weight:600">PL Capital</td>
+      <td style="font-family:var(--font-mono)">₹13.4</td>
+      <td class="cell-lo">73.7x</td>
+      <td class="cell-lo">95.1x</td>
+      <td style="font-family:var(--font-mono)">₹35.1</td>
+      <td class="cell-amber">28.1x</td>
+      <td class="cell-lo">36.3x</td>
+      <td style="font-family:var(--font-mono)">₹58.6</td>
+      <td class="cell-amber">16.8x</td>
+      <td class="cell-lo">21.7x</td>
+    </tr><tr>
+      <td style="font-weight:600">Investec</td>
+      <td style="font-family:var(--font-mono)">₹13.2</td>
+      <td class="cell-lo">74.8x</td>
+      <td class="cell-lo">94.5x</td>
+      <td style="font-family:var(--font-mono)">₹33.4</td>
+      <td class="cell-amber">29.6x</td>
+      <td class="cell-lo">37.4x</td>
+      <td style="font-family:var(--font-mono)">₹54.2</td>
+      <td class="cell-amber">18.2x</td>
+      <td class="cell-lo">23x</td>
+    </tr></tbody>
       </table>
     </div>
     <div class="chart-box">
       <div class="chart-title">P/E at CMP ₹987 — by house &amp; year</div>
-      <div class="chart-wrap" style="height:300px"><canvas id="peChart" role="img" aria-label="Grouped bar chart PE ratio by house and year"></canvas></div>
+      <div class="chart-wrap" style="height:300px"><canvas id="peChart" role="img" aria-label="Grouped bar chart PE ratio by house and year" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
       <div class="legend-row" style="margin-top:10px">
         <span class="leg-item"><span class="leg-swatch" style="background:#FAC775"></span>FY26E</span>
         <span class="leg-item"><span class="leg-swatch" style="background:#BA7517"></span>FY27E</span>
@@ -826,12 +2312,72 @@ function checkPwd() {
             <th>FY28E BV/sh</th><th>P/BV FY28E</th>
           </tr>
         </thead>
-        <tbody id="pb-body"></tbody>
+        <tbody id="pb-body"><tr>
+      <td style="font-weight:600">CLSA</td>
+      <td>₹694</td><td class="cell-amber">1.42x</td>
+      <td>₹717</td><td class="cell-amber">1.38x</td>
+      <td>₹768</td><td class="cell-amber">1.29x</td>
+      <td>₹844</td><td class="cell-amber">1.17x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nuvama</td>
+      <td>₹718</td><td class="cell-amber">1.37x</td>
+      <td>₹757</td><td class="cell-amber">1.3x</td>
+      <td>₹836</td><td class="cell-amber">1.18x</td>
+      <td>₹936</td><td class="cell-amber">1.05x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Sec</td>
+      <td>₹718</td><td class="cell-amber">1.37x</td>
+      <td>₹799</td><td class="cell-amber">1.24x</td>
+      <td>₹899</td><td class="cell-amber">1.1x</td>
+      <td>₹1032</td><td class="cell-amber">0.96x</td>
+    </tr><tr>
+      <td style="font-weight:600">Kotak</td>
+      <td>₹718</td><td class="cell-amber">1.37x</td>
+      <td>₹895</td><td class="cell-amber">1.1x</td>
+      <td>₹938</td><td class="cell-amber">1.05x</td>
+      <td>₹990</td><td class="cell-amber">1x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nirmal Bang</td>
+      <td>₹719</td><td class="cell-amber">1.37x</td>
+      <td>₹740</td><td class="cell-amber">1.33x</td>
+      <td>₹782</td><td class="cell-amber">1.26x</td>
+      <td>₹839</td><td class="cell-amber">1.18x</td>
+    </tr><tr>
+      <td style="font-weight:600">Elara</td>
+      <td>₹719</td><td class="cell-amber">1.37x</td>
+      <td>₹776</td><td class="cell-amber">1.27x</td>
+      <td>₹789</td><td class="cell-amber">1.25x</td>
+      <td>₹804</td><td class="cell-lo">1.23x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Direct</td>
+      <td>₹718</td><td class="cell-amber">1.37x</td>
+      <td>₹734</td><td class="cell-amber">1.34x</td>
+      <td>₹760</td><td class="cell-amber">1.3x</td>
+      <td>₹799</td><td class="cell-lo">1.24x</td>
+    </tr><tr>
+      <td style="font-weight:600">B&amp;K</td>
+      <td>₹718</td><td class="cell-amber">1.37x</td>
+      <td>₹771</td><td class="cell-amber">1.28x</td>
+      <td>₹809</td><td class="cell-amber">1.22x</td>
+      <td>₹861</td><td class="cell-amber">1.15x</td>
+    </tr><tr>
+      <td style="font-weight:600">PL Capital</td>
+      <td>₹720</td><td class="cell-amber">1.37x</td>
+      <td>₹729</td><td class="cell-amber">1.35x</td>
+      <td>₹764</td><td class="cell-amber">1.29x</td>
+      <td>₹823</td><td class="cell-lo">1.2x</td>
+    </tr><tr>
+      <td style="font-weight:600">Investec</td>
+      <td>₹718</td><td class="cell-amber">1.37x</td>
+      <td>₹732</td><td class="cell-amber">1.35x</td>
+      <td>₹765</td><td class="cell-amber">1.29x</td>
+      <td>₹819</td><td class="cell-lo">1.21x</td>
+    </tr></tbody>
       </table>
     </div>
     <div class="chart-box">
       <div class="chart-title">P/BV at CMP ₹987 — by house &amp; year</div>
-      <div class="chart-wrap" style="height:260px"><canvas id="pbChart" role="img" aria-label="P/B ratio bar chart by house"></canvas></div>
+      <div class="chart-wrap" style="height:260px"><canvas id="pbChart" role="img" aria-label="P/B ratio bar chart by house" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
     </div>
   </div>
 
@@ -857,7 +2403,137 @@ function checkPwd() {
             <th>FY26E</th><th>FY27E</th><th>FY28E</th>
           </tr>
         </thead>
-        <tbody id="all-mult-body"></tbody>
+        <tbody id="all-mult-body"><tr>
+      <td style="font-weight:600">CLSA</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,920</td>
+      <td class="cell-amber">12.3x</td>
+      <td class="cell-amber">9.8x</td>
+      <td class="cell-amber">8.8x</td>
+      <td class="cell-amber">1.48x</td>
+      <td class="cell-amber">1.3x</td>
+      <td class="cell-amber">1.19x</td>
+      <td class="cell-amber">42.2x</td>
+      <td class="cell-hi">19.1x</td>
+      <td class="cell-hi">13.1x</td>
+      <td class="cell-amber">1.29x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nuvama</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,605</td>
+      <td class="cell-amber">12.3x</td>
+      <td class="cell-amber">9.8x</td>
+      <td class="cell-amber">8.8x</td>
+      <td class="cell-amber">1.47x</td>
+      <td class="cell-amber">1.26x</td>
+      <td class="cell-amber">1.09x</td>
+      <td class="cell-hi">21.7x</td>
+      <td class="cell-hi">12.6x</td>
+      <td class="cell-hi">10.2x</td>
+      <td class="cell-amber">1.18x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Sec</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,500</td>
+      <td class="cell-amber">12.3x</td>
+      <td class="cell-amber">9.8x</td>
+      <td class="cell-amber">8.8x</td>
+      <td class="cell-amber">1.44x</td>
+      <td class="cell-amber">1.31x</td>
+      <td class="cell-amber">1.18x</td>
+      <td class="cell-hi">29.5x</td>
+      <td class="cell-amber">20.9x</td>
+      <td class="cell-amber">15.9x</td>
+      <td class="cell-amber">1.1x</td>
+    </tr><tr>
+      <td style="font-weight:600">Kotak</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,400</td>
+      <td class="cell-amber">12.2x</td>
+      <td class="cell-amber">9.8x</td>
+      <td class="cell-amber">8.8x</td>
+      <td class="cell-amber">1.51x</td>
+      <td class="cell-amber">1.41x</td>
+      <td class="cell-amber">1.32x</td>
+      <td class="cell-hi">21.7x</td>
+      <td class="cell-amber">23.6x</td>
+      <td class="cell-amber">18.7x</td>
+      <td class="cell-amber">1.05x</td>
+    </tr><tr>
+      <td style="font-weight:600">Nirmal Bang</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,344</td>
+      <td class="cell-amber">11.2x</td>
+      <td class="cell-amber">8.4x</td>
+      <td class="cell-amber">7.3x</td>
+      <td class="cell-amber">1.48x</td>
+      <td class="cell-amber">1.33x</td>
+      <td class="cell-amber">1.24x</td>
+      <td class="cell-amber">39.5x</td>
+      <td class="cell-amber">23.3x</td>
+      <td class="cell-amber">17.4x</td>
+      <td class="cell-amber">1.26x</td>
+    </tr><tr>
+      <td style="font-weight:600">Elara</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,300</td>
+      <td class="cell-amber">13.5x</td>
+      <td class="cell-amber">10.6x</td>
+      <td class="cell-amber">9.1x</td>
+      <td class="cell-amber">1.36x</td>
+      <td class="cell-amber">1.31x</td>
+      <td class="cell-amber">1.23x</td>
+      <td class="cell-hi">29.2x</td>
+      <td class="cell-lo">74.8x</td>
+      <td class="cell-lo">64.5x</td>
+      <td class="cell-amber">1.25x</td>
+    </tr><tr>
+      <td style="font-weight:600">ICICI Direct</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,320</td>
+      <td class="cell-amber">11.3x</td>
+      <td class="cell-amber">9x</td>
+      <td class="cell-amber">7.8x</td>
+      <td class="cell-amber">1.49x</td>
+      <td class="cell-amber">1.33x</td>
+      <td class="cell-amber">1.22x</td>
+      <td class="cell-amber">55.1x</td>
+      <td class="cell-amber">34.4x</td>
+      <td class="cell-amber">23.7x</td>
+      <td class="cell-amber">1.3x</td>
+    </tr><tr>
+      <td style="font-weight:600">B&amp;K</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,285</td>
+      <td class="cell-amber">10.8x</td>
+      <td class="cell-amber">10.5x</td>
+      <td class="cell-amber">9.2x</td>
+      <td class="cell-amber">1.47x</td>
+      <td class="cell-amber">1.35x</td>
+      <td class="cell-amber">1.23x</td>
+      <td class="cell-hi">29.6x</td>
+      <td class="cell-amber">25.7x</td>
+      <td class="cell-amber">18.9x</td>
+      <td class="cell-amber">1.22x</td>
+    </tr><tr>
+      <td style="font-weight:600">PL Capital</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,274</td>
+      <td class="cell-amber">12.7x</td>
+      <td class="cell-amber">9.6x</td>
+      <td class="cell-amber">8x</td>
+      <td class="cell-amber">1.49x</td>
+      <td class="cell-amber">1.38x</td>
+      <td class="cell-amber">1.25x</td>
+      <td class="cell-lo">73.7x</td>
+      <td class="cell-amber">28.1x</td>
+      <td class="cell-amber">16.8x</td>
+      <td class="cell-amber">1.29x</td>
+    </tr><tr>
+      <td style="font-weight:600">Investec</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹1,248</td>
+      <td class="cell-amber">13.5x</td>
+      <td class="cell-amber">11.5x</td>
+      <td class="cell-amber">9.7x</td>
+      <td class="cell-amber">1.52x</td>
+      <td class="cell-amber">1.35x</td>
+      <td class="cell-amber">1.23x</td>
+      <td class="cell-lo">74.8x</td>
+      <td class="cell-amber">29.6x</td>
+      <td class="cell-amber">18.2x</td>
+      <td class="cell-amber">1.29x</td>
+    </tr></tbody>
       </table>
     </div>
 
@@ -865,7 +2541,7 @@ function checkPwd() {
     <div class="sec-label">EV/EBITDA (FY27E) vs Target Price — the conviction map</div>
     <div style="font-size:11px;color:var(--text2);margin-bottom:10px">Houses bottom-left are being most conservative (low multiple + low TP). Top-right = high conviction.</div>
     <div class="chart-box">
-      <div class="chart-wrap" style="height:300px"><canvas id="scatterChart" role="img" aria-label="Scatter plot EV EBITDA vs target price by house"></canvas></div>
+      <div class="chart-wrap" style="height:300px"><canvas id="scatterChart" role="img" aria-label="Scatter plot EV EBITDA vs target price by house" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
     </div>
   </div>
 
@@ -878,7 +2554,252 @@ function checkPwd() {
 
   <div class="sec-label">Research coverage team — all houses</div>
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:28px" id="analyst-cards"></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:28px" id="analyst-cards"><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #C62D1F;border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">Kotak Institutional Equities</div>
+        <span class="tag tag-buy">₹1,400</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">06 Feb 2026 &nbsp;·&nbsp; 1 lead, 3 associates</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#C62D1F22;border-left:2px solid #C62D1F;border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#C62D1F33;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#C62D1F;flex-shrink:0">UM</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Umang Mehta <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#C62D1F22;color:#C62D1F">Lead</span></div>
+          <div style="font-size:10px;color:#C62D1F;margin-bottom:3px">Lead Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:umang.mehta@kotak.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">umang.mehta@kotak.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-4336-0881</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#C62D1F33;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#C62D1F;flex-shrink:0">JD</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Jaykumar Doshi </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:jaykumar.doshi@kotak.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">jaykumar.doshi@kotak.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-4336-0885</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#C62D1F33;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#C62D1F;flex-shrink:0">EM</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Eesha Mohanty </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:eesha.mohanty@kotak.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">eesha.mohanty@kotak.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-4336-0877</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#C62D1F33;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#C62D1F;flex-shrink:0">PR</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Praneeth Reddy </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Research Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:praneethkumar.reddy@kotak.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">praneethkumar.reddy@kotak.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-4336-0882</span></div>
+        </div>
+      </div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #003366;border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">Prabhudas Lilladher (PL Capital)</div>
+        <span class="tag tag-buy">₹1,274</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">06 Feb 2026 &nbsp;·&nbsp; 1 lead, 2 associates</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#00336622;border-left:2px solid #003366;border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#00336633;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#003366;flex-shrink:0">JJ</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Jinesh Joshi <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#00336622;color:#003366">Lead</span></div>
+          <div style="font-size:10px;color:#003366;margin-bottom:3px">Lead Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:jineshjoshi@plindia.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">jineshjoshi@plindia.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-6632-2238</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#00336633;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#003366;flex-shrink:0">SB</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Stuti Beria </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:stutiberia@plindia.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">stutiberia@plindia.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-6632-2246</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#00336633;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#003366;flex-shrink:0">DS</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Dhvanit Shah </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Research Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:dhvanitshah@plindia.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">dhvanitshah@plindia.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-6632-2258</span></div>
+        </div>
+      </div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #F36F21;border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">ICICI Securities (Institutional)</div>
+        <span class="tag tag-buy">₹1,500</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">06 Feb 2026 &nbsp;·&nbsp; 1 lead, 2 associates</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#F36F2122;border-left:2px solid #F36F21;border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#F36F2133;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#F36F21;flex-shrink:0">AB</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Abhisek Banerjee <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#F36F2122;color:#F36F21">Lead</span></div>
+          <div style="font-size:10px;color:#F36F21;margin-bottom:3px">Lead Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:abhisek.banerjee@icicisecurities.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">abhisek.banerjee@icicisecurities.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-6807-7574</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#F36F2133;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#F36F21;flex-shrink:0">JS</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Jayram Shetty </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:jayram.shetty@icicisecurities.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">jayram.shetty@icicisecurities.com</a> </div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#F36F2133;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#F36F21;flex-shrink:0">ND</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Nirant Dhumal </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Research Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:nirant.dhumal@icicisecurities.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">nirant.dhumal@icicisecurities.com</a> </div>
+        </div>
+      </div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #E31837;border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">CLSA India</div>
+        <span class="tag tag-buy">₹1,920</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">06 Feb 2026 &nbsp;·&nbsp; 1 lead, 1 associate</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#E3183722;border-left:2px solid #E31837;border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#E3183733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#E31837;flex-shrink:0">DC</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Deepti Chaturvedi <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#E3183722;color:#E31837">Lead</span></div>
+          <div style="font-size:10px;color:#E31837;margin-bottom:3px">Lead Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:deepti.chaturvedi@clsa.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">deepti.chaturvedi@clsa.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-6650-5066</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#E3183733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#E31837;flex-shrink:0">SM</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Saurabh Mehrotra </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:saurabh.mehrotra@clsa.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">saurabh.mehrotra@clsa.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-6650-5064</span></div>
+        </div>
+      </div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #004B87;border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">Investec Capital Services (India)</div>
+        <span class="tag tag-buy">₹1,248</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">06 Feb 2026 &nbsp;·&nbsp; 1 lead, 1 associate</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#004B8722;border-left:2px solid #004B87;border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#004B8733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#004B87;flex-shrink:0">HK</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Harit Kapoor <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#004B8722;color:#004B87">Lead</span></div>
+          <div style="font-size:10px;color:#004B87;margin-bottom:3px">Lead Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:harit.kapoor@investec.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">harit.kapoor@investec.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-6849-7493</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#004B8733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#004B87;flex-shrink:0">AL</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Anurag Lodha </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:Anurag.lodha@investec.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">Anurag.lodha@investec.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-6849-7423</span></div>
+        </div>
+      </div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #F36F21;border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">ICICI Securities (Retail / ICICI Direct)</div>
+        <span class="tag tag-buy">₹1,320</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">09 Feb 2026 &nbsp;·&nbsp; 1 lead, 1 associate</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#F36F2122;border-left:2px solid #F36F21;border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#F36F2133;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#F36F21;flex-shrink:0">BT</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Bhupendra Tiwary <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#F36F2122;color:#F36F21">Lead</span></div>
+          <div style="font-size:10px;color:#F36F21;margin-bottom:3px">Lead Analyst (CFA)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:bhupendra.tiwary@icicisecurities.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">bhupendra.tiwary@icicisecurities.com</a> </div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#F36F2133;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#F36F21;flex-shrink:0">AS</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Anjini Sharma </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Research Analyst (CA)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:anjini.sharma@icicisecurities.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">anjini.sharma@icicisecurities.com</a> </div>
+        </div>
+      </div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #1C3557;border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">B&amp;K Securities (Batlivala &amp; Karani)</div>
+        <span class="tag tag-hold">₹1,285</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">05 Feb 2026 &nbsp;·&nbsp; 1 lead, 2 associates</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#1C355722;border-left:2px solid #1C3557;border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#1C355733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#1C3557;flex-shrink:0">KP</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Kavish Parekh <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#1C355722;color:#1C3557">Lead</span></div>
+          <div style="font-size:10px;color:#1C3557;margin-bottom:3px">Lead Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:kavish.parekh@bksec.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">kavish.parekh@bksec.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-4031-7260</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#1C355733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#1C3557;flex-shrink:0">KM</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Kartik Mediratta </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Research Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:kartik.mediratta@bksec.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">kartik.mediratta@bksec.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-4031-7107</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#1C355733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#1C3557;flex-shrink:0">YS</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Yash Sharma </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Research Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:yash.sharma@bksec.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">yash.sharma@bksec.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-4031-7107</span></div>
+        </div>
+      </div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #00A79D;border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">Elara Securities (India)</div>
+        <span class="tag tag-buy">₹1,300</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">06 Feb 2026 &nbsp;·&nbsp; 1 lead, 1 associate</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#00A79D22;border-left:2px solid #00A79D;border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#00A79D33;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#00A79D;flex-shrink:0">KT</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Karan Taurani <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#00A79D22;color:#00A79D">Lead</span></div>
+          <div style="font-size:10px;color:#00A79D;margin-bottom:3px">Lead Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:karan.taurani@elaracapital.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">karan.taurani@elaracapital.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-6164-8513</span></div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#00A79D33;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#00A79D;flex-shrink:0">HG</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Harshad Gadekar </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Associate</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:harshad.gadekar@elaracapital.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">harshad.gadekar@elaracapital.com</a> </div>
+        </div>
+      </div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #E31837;border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">Nirmal Bang Institutional Equities</div>
+        <span class="tag tag-buy">₹1,344</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">05 Feb 2026 &nbsp;·&nbsp; 1 lead, 0 associates</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#E3183722;border-left:2px solid #E31837;border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#E3183733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#E31837;flex-shrink:0">SK</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Suket Kothari <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#E3183722;color:#E31837">Lead</span></div>
+          <div style="font-size:10px;color:#E31837;margin-bottom:3px">Research Associate</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:suket.kothari@nirmalbang.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">suket.kothari@nirmalbang.com</a> &nbsp;·&nbsp;<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">+91-22-6273-8280</span></div>
+        </div>
+      </div>
+    </div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #6D2077;border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">Nuvama Institutional Equities</div>
+        <span class="tag tag-buy">₹1,605</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">05 Feb 2026 &nbsp;·&nbsp; 1 lead, 2 associates</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#6D207722;border-left:2px solid #6D2077;border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#6D207733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#6D2077;flex-shrink:0">AR</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Abneesh Roy <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#6D207722;color:#6D2077">Lead</span></div>
+          <div style="font-size:10px;color:#6D2077;margin-bottom:3px">Head of Research / Lead</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:Abneesh.Roy@nuvama.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">Abneesh.Roy@nuvama.com</a> </div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#6D207733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#6D2077;flex-shrink:0">JG</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Jainam Gosar </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:Jainam.Gosar@nuvama.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">Jainam.Gosar@nuvama.com</a> </div>
+        </div>
+      </div><div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--surface2);border-left:2px solid var(--border);border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#6D207733;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#6D2077;flex-shrink:0">SM</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Shlok Mehta </div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Research Analyst</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><a href="mailto:Shlok.Mehta@nuvama.com" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">Shlok.Mehta@nuvama.com</a> </div>
+        </div>
+      </div>
+    </div></div>
 
   <div class="sec-label">Quick reference — all analysts flat list</div>
   <div class="tbl-wrap">
@@ -886,7 +2807,207 @@ function checkPwd() {
       <thead>
         <tr><th>House</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Rating</th><th>TP</th></tr>
       </thead>
-      <tbody id="analyst-tbl-body"></tbody>
+      <tbody id="analyst-tbl-body"><tr>
+        <td style="font-weight:600">Kotak Institutional Equities</td>
+        <td style="font-weight:600;color:var(--text)">Umang Mehta</td>
+        <td style="font-size:11px;color:var(--text3)">Lead Analyst ★</td>
+        <td><a href="mailto:umang.mehta@kotak.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">umang.mehta@kotak.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-4336-0881</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,400</td>
+      </tr><tr>
+        <td style="font-weight:600">Kotak Institutional Equities</td>
+        <td style="color:var(--text2)">Jaykumar Doshi</td>
+        <td style="font-size:11px;color:var(--text3)">Analyst</td>
+        <td><a href="mailto:jaykumar.doshi@kotak.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">jaykumar.doshi@kotak.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-4336-0885</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,400</td>
+      </tr><tr>
+        <td style="font-weight:600">Kotak Institutional Equities</td>
+        <td style="color:var(--text2)">Eesha Mohanty</td>
+        <td style="font-size:11px;color:var(--text3)">Analyst</td>
+        <td><a href="mailto:eesha.mohanty@kotak.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">eesha.mohanty@kotak.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-4336-0877</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,400</td>
+      </tr><tr>
+        <td style="font-weight:600">Kotak Institutional Equities</td>
+        <td style="color:var(--text2)">Praneeth Reddy</td>
+        <td style="font-size:11px;color:var(--text3)">Research Analyst</td>
+        <td><a href="mailto:praneethkumar.reddy@kotak.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">praneethkumar.reddy@kotak.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-4336-0882</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,400</td>
+      </tr><tr>
+        <td style="font-weight:600">Prabhudas Lilladher (PL Capital)</td>
+        <td style="font-weight:600;color:var(--text)">Jinesh Joshi</td>
+        <td style="font-size:11px;color:var(--text3)">Lead Analyst ★</td>
+        <td><a href="mailto:jineshjoshi@plindia.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">jineshjoshi@plindia.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-6632-2238</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,274</td>
+      </tr><tr>
+        <td style="font-weight:600">Prabhudas Lilladher (PL Capital)</td>
+        <td style="color:var(--text2)">Stuti Beria</td>
+        <td style="font-size:11px;color:var(--text3)">Analyst</td>
+        <td><a href="mailto:stutiberia@plindia.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">stutiberia@plindia.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-6632-2246</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,274</td>
+      </tr><tr>
+        <td style="font-weight:600">Prabhudas Lilladher (PL Capital)</td>
+        <td style="color:var(--text2)">Dhvanit Shah</td>
+        <td style="font-size:11px;color:var(--text3)">Research Analyst</td>
+        <td><a href="mailto:dhvanitshah@plindia.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">dhvanitshah@plindia.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-6632-2258</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,274</td>
+      </tr><tr>
+        <td style="font-weight:600">ICICI Securities (Institutional)</td>
+        <td style="font-weight:600;color:var(--text)">Abhisek Banerjee</td>
+        <td style="font-size:11px;color:var(--text3)">Lead Analyst ★</td>
+        <td><a href="mailto:abhisek.banerjee@icicisecurities.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">abhisek.banerjee@icicisecurities.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-6807-7574</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,500</td>
+      </tr><tr>
+        <td style="font-weight:600">ICICI Securities (Institutional)</td>
+        <td style="color:var(--text2)">Jayram Shetty</td>
+        <td style="font-size:11px;color:var(--text3)">Analyst</td>
+        <td><a href="mailto:jayram.shetty@icicisecurities.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">jayram.shetty@icicisecurities.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">—</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,500</td>
+      </tr><tr>
+        <td style="font-weight:600">ICICI Securities (Institutional)</td>
+        <td style="color:var(--text2)">Nirant Dhumal</td>
+        <td style="font-size:11px;color:var(--text3)">Research Analyst</td>
+        <td><a href="mailto:nirant.dhumal@icicisecurities.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">nirant.dhumal@icicisecurities.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">—</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,500</td>
+      </tr><tr>
+        <td style="font-weight:600">CLSA India</td>
+        <td style="font-weight:600;color:var(--text)">Deepti Chaturvedi</td>
+        <td style="font-size:11px;color:var(--text3)">Lead Analyst ★</td>
+        <td><a href="mailto:deepti.chaturvedi@clsa.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">deepti.chaturvedi@clsa.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-6650-5066</td>
+        <td><span class="tag tag-buy">O-PF</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,920</td>
+      </tr><tr>
+        <td style="font-weight:600">CLSA India</td>
+        <td style="color:var(--text2)">Saurabh Mehrotra</td>
+        <td style="font-size:11px;color:var(--text3)">Analyst</td>
+        <td><a href="mailto:saurabh.mehrotra@clsa.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">saurabh.mehrotra@clsa.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-6650-5064</td>
+        <td><span class="tag tag-buy">O-PF</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,920</td>
+      </tr><tr>
+        <td style="font-weight:600">Investec Capital Services (India)</td>
+        <td style="font-weight:600;color:var(--text)">Harit Kapoor</td>
+        <td style="font-size:11px;color:var(--text3)">Lead Analyst ★</td>
+        <td><a href="mailto:harit.kapoor@investec.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">harit.kapoor@investec.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-6849-7493</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,248</td>
+      </tr><tr>
+        <td style="font-weight:600">Investec Capital Services (India)</td>
+        <td style="color:var(--text2)">Anurag Lodha</td>
+        <td style="font-size:11px;color:var(--text3)">Analyst</td>
+        <td><a href="mailto:Anurag.lodha@investec.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">Anurag.lodha@investec.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-6849-7423</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,248</td>
+      </tr><tr>
+        <td style="font-weight:600">ICICI Securities (Retail / ICICI Direct)</td>
+        <td style="font-weight:600;color:var(--text)">Bhupendra Tiwary</td>
+        <td style="font-size:11px;color:var(--text3)">Lead Analyst (CFA) ★</td>
+        <td><a href="mailto:bhupendra.tiwary@icicisecurities.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">bhupendra.tiwary@icicisecurities.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">—</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,320</td>
+      </tr><tr>
+        <td style="font-weight:600">ICICI Securities (Retail / ICICI Direct)</td>
+        <td style="color:var(--text2)">Anjini Sharma</td>
+        <td style="font-size:11px;color:var(--text3)">Research Analyst (CA)</td>
+        <td><a href="mailto:anjini.sharma@icicisecurities.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">anjini.sharma@icicisecurities.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">—</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,320</td>
+      </tr><tr>
+        <td style="font-weight:600">B&amp;K Securities (Batlivala &amp; Karani)</td>
+        <td style="font-weight:600;color:var(--text)">Kavish Parekh</td>
+        <td style="font-size:11px;color:var(--text3)">Lead Analyst ★</td>
+        <td><a href="mailto:kavish.parekh@bksec.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">kavish.parekh@bksec.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-4031-7260</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,285</td>
+      </tr><tr>
+        <td style="font-weight:600">B&amp;K Securities (Batlivala &amp; Karani)</td>
+        <td style="color:var(--text2)">Kartik Mediratta</td>
+        <td style="font-size:11px;color:var(--text3)">Research Analyst</td>
+        <td><a href="mailto:kartik.mediratta@bksec.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">kartik.mediratta@bksec.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-4031-7107</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,285</td>
+      </tr><tr>
+        <td style="font-weight:600">B&amp;K Securities (Batlivala &amp; Karani)</td>
+        <td style="color:var(--text2)">Yash Sharma</td>
+        <td style="font-size:11px;color:var(--text3)">Research Analyst</td>
+        <td><a href="mailto:yash.sharma@bksec.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">yash.sharma@bksec.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-4031-7107</td>
+        <td><span class="tag tag-hold">HOLD</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,285</td>
+      </tr><tr>
+        <td style="font-weight:600">Elara Securities (India)</td>
+        <td style="font-weight:600;color:var(--text)">Karan Taurani</td>
+        <td style="font-size:11px;color:var(--text3)">Lead Analyst ★</td>
+        <td><a href="mailto:karan.taurani@elaracapital.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">karan.taurani@elaracapital.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-6164-8513</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,300</td>
+      </tr><tr>
+        <td style="font-weight:600">Elara Securities (India)</td>
+        <td style="color:var(--text2)">Harshad Gadekar</td>
+        <td style="font-size:11px;color:var(--text3)">Associate</td>
+        <td><a href="mailto:harshad.gadekar@elaracapital.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">harshad.gadekar@elaracapital.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">—</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,300</td>
+      </tr><tr>
+        <td style="font-weight:600">Nirmal Bang Institutional Equities</td>
+        <td style="font-weight:600;color:var(--text)">Suket Kothari</td>
+        <td style="font-size:11px;color:var(--text3)">Research Associate ★</td>
+        <td><a href="mailto:suket.kothari@nirmalbang.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">suket.kothari@nirmalbang.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">+91-22-6273-8280</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,344</td>
+      </tr><tr>
+        <td style="font-weight:600">Nuvama Institutional Equities</td>
+        <td style="font-weight:600;color:var(--text)">Abneesh Roy</td>
+        <td style="font-size:11px;color:var(--text3)">Head of Research / Lead ★</td>
+        <td><a href="mailto:Abneesh.Roy@nuvama.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">Abneesh.Roy@nuvama.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">—</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,605</td>
+      </tr><tr>
+        <td style="font-weight:600">Nuvama Institutional Equities</td>
+        <td style="color:var(--text2)">Jainam Gosar</td>
+        <td style="font-size:11px;color:var(--text3)">Analyst</td>
+        <td><a href="mailto:Jainam.Gosar@nuvama.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">Jainam.Gosar@nuvama.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">—</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,605</td>
+      </tr><tr>
+        <td style="font-weight:600">Nuvama Institutional Equities</td>
+        <td style="color:var(--text2)">Shlok Mehta</td>
+        <td style="font-size:11px;color:var(--text3)">Research Analyst</td>
+        <td><a href="mailto:Shlok.Mehta@nuvama.com" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">Shlok.Mehta@nuvama.com</a></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">—</td>
+        <td><span class="tag tag-buy">BUY</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹1,605</td>
+      </tr></tbody>
     </table>
   </div>
 
@@ -899,7 +3020,7 @@ function checkPwd() {
 
   <!-- sub-tabs -->
   <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap" id="ind-subtabs">
-    <button class="kpi-tab active" onclick="showIndTab('screens',this)">Screen Landscape</button>
+    <button class="kpi-tab" onclick="showIndTab('screens',this)">Screen Landscape</button>
     <button class="kpi-tab" onclick="showIndTab('kpibench',this)">KPI Benchmarks</button>
     <button class="kpi-tab" onclick="showIndTab('content',this)">Content &amp; GBO</button>
     <button class="kpi-tab" onclick="showIndTab('mktstructure',this)">Market Structure</button>
@@ -993,11 +3114,11 @@ function checkPwd() {
     <div class="two-col" style="margin-bottom:24px">
       <div>
         <div class="sec-label">ATP quarterly trend — PVR INOX</div>
-        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indAtpChart" role="img" aria-label="ATP quarterly trend"></canvas></div></div>
+        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indAtpChart" role="img" aria-label="ATP quarterly trend" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div></div>
       </div>
       <div>
         <div class="sec-label">SPH quarterly trend — PVR INOX</div>
-        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indSphChart" role="img" aria-label="SPH quarterly trend"></canvas></div></div>
+        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indSphChart" role="img" aria-label="SPH quarterly trend" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div></div>
       </div>
     </div>
 
@@ -1051,12 +3172,12 @@ function checkPwd() {
     <div class="two-col" style="margin-bottom:24px">
       <div>
         <div class="sec-label">Content language mix — Q3FY26 GBO contribution</div>
-        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indGboMixChart" role="img" aria-label="GBO language mix donut"></canvas></div></div>
+        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indGboMixChart" role="img" aria-label="GBO language mix donut" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div></div>
         <div style="font-size:10px;color:var(--text3);margin-top:6px">Q3FY26 was a strong Hindi + Hollywood quarter. Pushpa 2 (Hindi/Telugu) and Game Changer drove 9M footfalls highest post-pandemic.</div>
       </div>
       <div>
         <div class="sec-label">Historical India GBO trend (Rs bn)</div>
-        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indGboTrendChart" role="img" aria-label="India GBO trend bar chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indGboTrendChart" role="img" aria-label="India GBO trend bar chart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div></div>
       </div>
     </div>
 
@@ -1090,7 +3211,7 @@ function checkPwd() {
       </div>
       <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #9B2226;border-radius:var(--radius);padding:12px 14px">
         <div style="font-size:11px;font-weight:600;color:#9B2226;margin-bottom:4px">Key risk: OTT windows</div>
-        <div style="font-size:11px;color:var(--text2);line-height:1.7">OTT release window has stabilised at 6–8 weeks post-theatrical. Netflix/Amazon/JioCinema now prefer theatrical window as it boosts streaming numbers. Not a near-term threat — but window compression back to 4 weeks is the risk B&K flags.</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.7">OTT release window has stabilised at 6–8 weeks post-theatrical. Netflix/Amazon/JioCinema now prefer theatrical window as it boosts streaming numbers. Not a near-term threat — but window compression back to 4 weeks is the risk B&amp;K flags.</div>
       </div>
     </div>
 
@@ -1104,12 +3225,12 @@ function checkPwd() {
       <table>
         <thead><tr><th>Player</th><th>Screens</th><th>Market share (screens)</th><th>Cities</th><th>Listed?</th><th>Key strength</th><th>Key weakness</th></tr></thead>
         <tbody>
-          <tr style="background:var(--surface2)"><td><strong>PVR INOX</strong></td><td style="font-weight:600;color:#1B4F8A">1,791</td><td style="font-weight:600;color:#1B4F8A">~40% of organised</td><td>112</td><td>Yes (NSE/BSE)</td><td>Scale, premium formats, F&B, brand recognition</td><td>High leverage (Ind AS leases), content dependency</td></tr>
+          <tr style="background:var(--surface2)"><td><strong>PVR INOX</strong></td><td style="font-weight:600;color:#1B4F8A">1,791</td><td style="font-weight:600;color:#1B4F8A">~40% of organised</td><td>112</td><td>Yes (NSE/BSE)</td><td>Scale, premium formats, F&amp;B, brand recognition</td><td>High leverage (Ind AS leases), content dependency</td></tr>
           <tr><td><strong>Cinepolis India</strong></td><td>~450</td><td>~10%</td><td>~85</td><td>No (Mexican parent)</td><td>Tier 2/3 city penetration, loyalty programme</td><td>Smaller scale, no premium format depth</td></tr>
           <tr><td><strong>Carnival Cinemas</strong></td><td>~400</td><td>~9%</td><td>~100</td><td>No</td><td>Budget pricing, mass market reach</td><td>Financially stressed, underinvested screens</td></tr>
-          <tr><td><strong>Miraj Cinemas</strong></td><td>~150</td><td>~3%</td><td>~60</td><td>No</td><td>Tier 2/3 operator, low cost model</td><td>No premium formats, limited F&B</td></tr>
+          <tr><td><strong>Miraj Cinemas</strong></td><td>~150</td><td>~3%</td><td>~60</td><td>No</td><td>Tier 2/3 operator, low cost model</td><td>No premium formats, limited F&amp;B</td></tr>
           <tr><td><strong>SPI Cinemas (acquired by PVR)</strong></td><td>Merged</td><td>—</td><td>—</td><td>—</td><td>South India stronghold now part of PVR INOX</td><td>—</td></tr>
-          <tr><td><strong>Single screens (fragmented)</strong></td><td>~5,500</td><td>~55% of total</td><td>Pan-India</td><td>No</td><td>Lowest ticket prices, Tier 3–4 reach</td><td>Declining; no F&B, poor infrastructure</td></tr>
+          <tr><td><strong>Single screens (fragmented)</strong></td><td>~5,500</td><td>~55% of total</td><td>Pan-India</td><td>No</td><td>Lowest ticket prices, Tier 3–4 reach</td><td>Declining; no F&amp;B, poor infrastructure</td></tr>
         </tbody>
       </table>
     </div>
@@ -1117,7 +3238,7 @@ function checkPwd() {
     <div class="two-col" style="margin-bottom:24px">
       <div>
         <div class="sec-label">Screen share — organised multiplex market</div>
-        <div class="chart-box"><div class="chart-wrap" style="height:240px"><canvas id="indMktShareChart" role="img" aria-label="Multiplex market share donut"></canvas></div></div>
+        <div class="chart-box"><div class="chart-wrap" style="height:240px"><canvas id="indMktShareChart" role="img" aria-label="Multiplex market share donut" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div></div>
       </div>
       <div>
         <div class="sec-label">Structural tailwinds analysts cite</div>
@@ -1125,7 +3246,7 @@ function checkPwd() {
           <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #1D9E75;border-radius:var(--radius);padding:10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">Screen density massively underpenetrated</div><div style="font-size:11px;color:var(--text2)">India has ~8 screens per million population vs China 85, USA 125. Long runway to add screens in Tier 2/3 cities without cannibalising existing screens.</div></div>
           <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #1B4F8A;border-radius:var(--radius);padding:10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">Rising income + aspirational spending</div><div style="font-size:11px;color:var(--text2)">Out-of-home entertainment spending growing at 12–15% pa. Multiplex cinema has premiumised into an experience category — Rs 293 ATP still affordable vs Rs 500+ restaurants.</div></div>
           <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #B07D00;border-radius:var(--radius);padding:10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">Single screen to multiplex conversion</div><div style="font-size:11px;color:var(--text2)">~200–300 single screens close every year. Most audiences upgrade to multiplex — Carnival/Miraj weakness benefits PVR INOX. No new entrant can replicate PVR INOX's 1,791-screen network economics.</div></div>
-          <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #534AB7;border-radius:var(--radius);padding:10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">F&B as a separate growth engine</div><div style="font-size:11px;color:var(--text2)">SPH growing from Rs 146 towards Rs 200. Food courts, in-seat delivery, alcohol in select states. F&B margins ~70% gross — higher than ticketing. Nuvama and ICICI Sec model this as the key margin expansion lever.</div></div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #534AB7;border-radius:var(--radius);padding:10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">F&amp;B as a separate growth engine</div><div style="font-size:11px;color:var(--text2)">SPH growing from Rs 146 towards Rs 200. Food courts, in-seat delivery, alcohol in select states. F&amp;B margins ~70% gross — higher than ticketing. Nuvama and ICICI Sec model this as the key margin expansion lever.</div></div>
         </div>
       </div>
     </div>
@@ -1155,7 +3276,7 @@ function checkPwd() {
 <div id="tab-update" class="section">
 
   <!-- ── Setup section (shown until worker URL is saved) ── -->
-  <div id="setup-section">
+  <div id="setup-section" style="display: none;">
     <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #1B4F8A;border-radius:var(--radius-lg);padding:24px;margin-bottom:20px">
       <div style="font-size:15px;font-weight:600;margin-bottom:6px">One-time setup — takes 10 minutes, free forever</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:20px;line-height:1.7">The browser cannot call Anthropic's API directly due to security restrictions. The fix is a free Cloudflare Worker — a tiny middleman that sits in the cloud and passes requests through. You set it up once, and the dashboard works fully automated forever after.</div>
@@ -1243,7 +3364,7 @@ function checkPwd() {
         <div style="flex:1">
           <div style="font-size:13px;font-weight:600;margin-bottom:8px">Paste your Worker URL here and save</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <input id="worker-url-input" placeholder="https://pvr-proxy.yourname.workers.dev" style="flex:1;min-width:280px;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:var(--font-mono);background:var(--surface);color:var(--text)" />
+            <input id="worker-url-input" placeholder="https://pvr-proxy.yourname.workers.dev" style="flex:1;min-width:280px;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:var(--font-mono);background:var(--surface);color:var(--text)">
             <button onclick="saveWorkerUrl()" class="btn" style="white-space:nowrap">Save &amp; Activate</button>
           </div>
           <div id="worker-url-status" style="font-size:11px;margin-top:6px;color:var(--text3)"></div>
@@ -1254,22 +3375,22 @@ function checkPwd() {
   </div>
 
   <!-- ── Active upload section (shown after worker URL saved) ── -->
-  <div id="upload-section" style="display:none">
+  <div id="upload-section" style="display: block;">
 
     <div style="background:#D8F3DC;border:1px solid #95D5A8;border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center">
       <div>
         <div style="font-size:12px;font-weight:600;color:#1B4F2A">Cloudflare Worker connected</div>
-        <div id="worker-url-display" style="font-size:10px;color:#2D6A4F;font-family:var(--font-mono);margin-top:2px"></div>
+        <div id="worker-url-display" style="font-size:10px;color:#2D6A4F;font-family:var(--font-mono);margin-top:2px">https://eo2qap52892owtv.m.pipedream.net</div>
       </div>
       <button onclick="resetWorkerUrl()" style="font-size:10px;padding:4px 10px;background:transparent;border:1px solid #2D6A4F;border-radius:4px;color:#2D6A4F;cursor:pointer">Change</button>
     </div>
 
     <div class="sec-label">Anthropic API key</div>
     <div class="api-key-row" style="margin-bottom:20px">
-      <input type="password" id="api-key-input" placeholder="sk-ant-..." />
+      <input type="password" id="api-key-input" placeholder="sk-ant-...">
       <button onclick="saveApiKey()" class="btn btn-outline">Save</button>
     </div>
-    <div id="api-key-status" style="font-size:11px;color:var(--text3);margin-top:-14px;margin-bottom:16px"></div>
+    <div id="api-key-status" style="font-size:11px;color:var(--text3);margin-top:-14px;margin-bottom:16px">API key saved.</div>
 
     <div class="sec-label">Upload analyst report PDF</div>
     <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="this.classList.remove('drag')">
@@ -1277,14 +3398,13 @@ function checkPwd() {
       <div class="uz-title">Drop PDF here or click to browse</div>
       <div class="uz-sub">Claude will auto-extract rating, TP, estimates, and analyst data</div>
     </div>
-    <input type="file" id="file-input" accept=".pdf" onchange="handleFileUpload(event)" />
+    <input type="file" id="file-input" accept=".pdf" onchange="handleFileUpload(event)">
 
-    <div id="upload-status" style="display:none;margin-top:12px" class="upload-status"></div>
+    <div id="upload-status" style="display: block; margin-top: 12px;" class="upload-status done">Dashboard updated with data from Avendus Spark Research!</div>
 
-    <div id="parsed-output" style="display:none;margin-top:16px">
+    <div id="parsed-output" style="display: none; margin-top: 16px;">
       <div class="sec-label">Extracted data — review before applying</div>
-      <ul id="parsed-list" style="list-style:none;padding:0;margin:0 0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
-      </ul>
+      <ul id="parsed-list" style="list-style:none;padding:0;margin:0 0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden"><li><span>Research house</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">Avendus Spark Research</span></li><li><span>Report date</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">2026-02-06</span></li><li><span>Rating</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">BUY</span></li><li><span>Target price</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">₹1,100</span></li><li><span>Previous TP</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">₹1,100</span></li><li><span>FY26E Revenue</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">66.8k mn</span></li><li><span>FY26E EBITDA</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">8.3k mn</span></li><li><span>FY27E Revenue</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">70.3k mn</span></li><li><span>FY27E EBITDA</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">9.6k mn</span></li><li><span>FY26E EPS</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">24.9</span></li><li><span>FY27E EPS</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">38.1</span></li><li><span>Valuation basis</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">10x Sep'FY27E Adj. EBITDA</span></li><li><span>Key positives</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">Growth story intact with opportunity to add &gt;1500 screens and increase multiplex pie by 40% to Rs. 100-120bn | Strong operating leverage demonstrated - EBITDA/screen improved to Rs. 4.0mn (26.3% occupancy) in 9MFY26 vs Rs. 2.2mn (23.9% occupancy) in 9MFY25 | F&amp;B contribution rising with SPH/ATP expected to exceed 60% from current ~50% due to premiumization | Asset-light model gaining traction with 11 properties (54 screens) under management fee model and 13 properties (95 screens) under developer partnership, reducing capex intensity | OTT window extension beyond 3 months helping maximize footfalls for exceptional content and improving unit economics | Content consistency improving across segments - Regional box office at Rs. 55bn+ vs Rs. 45bn pre-COVID, Bollywood delivering highest collections, Hollywood nearing pre-pandemic Rs. 15bn</span></li><li><span>Key risks</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">Content consistency risk - performance heavily dependent on film quality and release pipeline | Occupancy still below pre-COVID levels at 26.3% in 9MFY26, requiring further improvement to reach historical EBITDA/screen targets | High competitive intensity in multiplex space with ongoing screen additions | Low RoCE of 2.8% in FY26E despite operating leverage due to past costly acquisitions | OTT competition risk impacting theatrical window and footfalls</span></li></ul>
       <button onclick="applyUpdate()" class="btn">Apply to dashboard</button>
       <button onclick="document.getElementById('parsed-output').style.display='none'" class="btn btn-outline" style="margin-left:8px">Discard</button>
     </div>
@@ -1297,29 +3417,237 @@ function checkPwd() {
 <script>
 // ══════════════════════ DATA ══════════════════════
 const HOUSES = [
-  {name:'CLSA',date:'6 Feb 2026',rating:'O-PF',tp:1920,prev:1920,chg:0,basis:'10x FY27 EV/EBITDA',note:'Unchanged'},
-  {name:'Nuvama',date:'5 Feb 2026',rating:'BUY',tp:1605,prev:1605,chg:0,basis:'DCF-based',note:'Unchanged'},
-  {name:'ICICI Sec',date:'6 Feb 2026',rating:'BUY',tp:1500,prev:1500,chg:0,basis:'15x adj FY27 EBITDA',note:'Maintained'},
-  {name:'Kotak',date:'6 Feb 2026',rating:'BUY',tp:1400,prev:1380,chg:20,basis:'12x FY28E EV/EBITDA',note:'Raised from 1,380'},
-  {name:'Nirmal Bang',date:'5 Feb 2026',rating:'BUY',tp:1344,prev:1358,chg:-14,basis:'10x Dec-27E EBITDA',note:'Slightly cut from 1,358'},
-  {name:'Elara',date:'6 Feb 2026',rating:'BUY',tp:1300,prev:1225,chg:75,basis:'13x Sep-27 pre-IndAS EBITDA',note:'Upgraded from Accum; TP raised'},
-  {name:'ICICI Direct',date:'9 Feb 2026',rating:'BUY',tp:1320,prev:1320,chg:0,basis:'11.5x FY27 ex-IndAS EBITDA',note:'Unchanged'},
-  {name:'B&K',date:'5 Feb 2026',rating:'HOLD',tp:1285,prev:1285,chg:0,basis:'DCF-based',note:'Maintained Hold'},
-  {name:'PL Capital',date:'6 Feb 2026',rating:'BUY',tp:1274,prev:1261,chg:13,basis:'9.5x FY28E pre-IndAS EBITDA',note:'Raised from 1,261'},
-  {name:'Investec',date:'6 Feb 2026',rating:'BUY',tp:1248,prev:1238,chg:10,basis:'12.5x Dec-27 EV/EBITDA',note:'Upgraded from HOLD'},
+  {
+    "name": "CLSA",
+    "date": "6 Feb 2026",
+    "rating": "O-PF",
+    "tp": 1920,
+    "prev": 1920,
+    "chg": 0,
+    "basis": "10x FY27 EV/EBITDA",
+    "note": "Unchanged"
+  },
+  {
+    "name": "Nuvama",
+    "date": "5 Feb 2026",
+    "rating": "BUY",
+    "tp": 1605,
+    "prev": 1605,
+    "chg": 0,
+    "basis": "DCF-based",
+    "note": "Unchanged"
+  },
+  {
+    "name": "ICICI Sec",
+    "date": "6 Feb 2026",
+    "rating": "BUY",
+    "tp": 1500,
+    "prev": 1500,
+    "chg": 0,
+    "basis": "15x adj FY27 EBITDA",
+    "note": "Maintained"
+  },
+  {
+    "name": "Kotak",
+    "date": "6 Feb 2026",
+    "rating": "BUY",
+    "tp": 1400,
+    "prev": 1380,
+    "chg": 20,
+    "basis": "12x FY28E EV/EBITDA",
+    "note": "Raised from 1,380"
+  },
+  {
+    "name": "Nirmal Bang",
+    "date": "5 Feb 2026",
+    "rating": "BUY",
+    "tp": 1344,
+    "prev": 1358,
+    "chg": -14,
+    "basis": "10x Dec-27E EBITDA",
+    "note": "Slightly cut from 1,358"
+  },
+  {
+    "name": "Elara",
+    "date": "6 Feb 2026",
+    "rating": "BUY",
+    "tp": 1300,
+    "prev": 1225,
+    "chg": 75,
+    "basis": "13x Sep-27 pre-IndAS EBITDA",
+    "note": "Upgraded from Accum; TP raised"
+  },
+  {
+    "name": "ICICI Direct",
+    "date": "9 Feb 2026",
+    "rating": "BUY",
+    "tp": 1320,
+    "prev": 1320,
+    "chg": 0,
+    "basis": "11.5x FY27 ex-IndAS EBITDA",
+    "note": "Unchanged"
+  },
+  {
+    "name": "B&K",
+    "date": "5 Feb 2026",
+    "rating": "HOLD",
+    "tp": 1285,
+    "prev": 1285,
+    "chg": 0,
+    "basis": "DCF-based",
+    "note": "Maintained Hold"
+  },
+  {
+    "name": "PL Capital",
+    "date": "6 Feb 2026",
+    "rating": "BUY",
+    "tp": 1274,
+    "prev": 1261,
+    "chg": 13,
+    "basis": "9.5x FY28E pre-IndAS EBITDA",
+    "note": "Raised from 1,261"
+  },
+  {
+    "name": "Investec",
+    "date": "6 Feb 2026",
+    "rating": "BUY",
+    "tp": 1248,
+    "prev": 1238,
+    "chg": 10,
+    "basis": "12.5x Dec-27 EV/EBITDA",
+    "note": "Upgraded from HOLD"
+  },
+  {
+    "name": "IIFL Capital",
+    "date": "2026-04-16",
+    "rating": "BUY",
+    "tp": 1350,
+    "prev": 1350,
+    "chg": 0,
+    "basis": "12x FY27 EV/Ebitda",
+    "note": "Updated"
+  },
+  {
+    "name": "Avendus Spark Research",
+    "date": "2026-02-06",
+    "rating": "BUY",
+    "tp": 1100,
+    "prev": 1100,
+    "chg": 0,
+    "basis": "10x Sep'FY27E Adj. EBITDA",
+    "note": "Updated"
+  }
 ];
 
 const ESTIMATES = [
-  {house:'Kotak',fy26r:66625,fy26e:8213,fy27r:71032,fy27e:10258,fy28r:76184,fy28e:11456},
-  {house:'B&K',fy26r:68535,fy26e:9298,fy27r:74612,fy27e:9562,fy28r:81973,fy28e:10948},
-  {house:'Nirmal Bang',fy26r:68180,fy26e:9069,fy27r:75819,fy27e:12036,fy28r:81637,fy28e:13855},
-  {house:'Investec',fy26r:66302,fy26e:20093,fy27r:74255,fy27e:22838,fy28r:81613,fy28e:25568},
-  {house:'CLSA',fy26r:68092,fy26e:21153,fy27r:77086,fy27e:24714,fy28r:84279,fy28e:27964},
-  {house:'Elara',fy26r:73900,fy26e:23202,fy27r:76909,fy27e:23457,fy28r:81408,fy28e:25236},
-  {house:'Nuvama',fy26r:68318,fy26e:20644,fy27r:80066,fy27e:24288,fy28r:92603,fy28e:28129},
-  {house:'PL Capital',fy26r:67923,fy26e:20153,fy27r:73759,fy27e:23286,fy28r:81275,fy28e:26063},
-  {house:'ICICI Sec',fy26r:69587,fy26e:22551,fy27r:76578,fy27e:24588,fy28r:85275,fy28e:28182},
-  {house:'ICICI Direct',fy26r:67608,fy26e:21154,fy27r:75636,fy27e:24107,fy28r:82200,fy28e:26477},
+  {
+    "house": "Kotak",
+    "fy26r": 66625,
+    "fy26e": 8213,
+    "fy27r": 71032,
+    "fy27e": 10258,
+    "fy28r": 76184,
+    "fy28e": 11456
+  },
+  {
+    "house": "B&K",
+    "fy26r": 68535,
+    "fy26e": 9298,
+    "fy27r": 74612,
+    "fy27e": 9562,
+    "fy28r": 81973,
+    "fy28e": 10948
+  },
+  {
+    "house": "Nirmal Bang",
+    "fy26r": 68180,
+    "fy26e": 9069,
+    "fy27r": 75819,
+    "fy27e": 12036,
+    "fy28r": 81637,
+    "fy28e": 13855
+  },
+  {
+    "house": "Investec",
+    "fy26r": 66302,
+    "fy26e": 20093,
+    "fy27r": 74255,
+    "fy27e": 22838,
+    "fy28r": 81613,
+    "fy28e": 25568
+  },
+  {
+    "house": "CLSA",
+    "fy26r": 68092,
+    "fy26e": 21153,
+    "fy27r": 77086,
+    "fy27e": 24714,
+    "fy28r": 84279,
+    "fy28e": 27964
+  },
+  {
+    "house": "Elara",
+    "fy26r": 73900,
+    "fy26e": 23202,
+    "fy27r": 76909,
+    "fy27e": 23457,
+    "fy28r": 81408,
+    "fy28e": 25236
+  },
+  {
+    "house": "Nuvama",
+    "fy26r": 68318,
+    "fy26e": 20644,
+    "fy27r": 80066,
+    "fy27e": 24288,
+    "fy28r": 92603,
+    "fy28e": 28129
+  },
+  {
+    "house": "PL Capital",
+    "fy26r": 67923,
+    "fy26e": 20153,
+    "fy27r": 73759,
+    "fy27e": 23286,
+    "fy28r": 81275,
+    "fy28e": 26063
+  },
+  {
+    "house": "ICICI Sec",
+    "fy26r": 69587,
+    "fy26e": 22551,
+    "fy27r": 76578,
+    "fy27e": 24588,
+    "fy28r": 85275,
+    "fy28e": 28182
+  },
+  {
+    "house": "ICICI Direct",
+    "fy26r": 67608,
+    "fy26e": 21154,
+    "fy27r": 75636,
+    "fy27e": 24107,
+    "fy28r": 82200,
+    "fy28e": 26477
+  },
+  {
+    "house": "IIFL Capital",
+    "fy26r": 66663,
+    "fy26e": 20398,
+    "fy27r": 71612,
+    "fy27e": 22271,
+    "fy28r": 80288,
+    "fy28e": 26174
+  },
+  {
+    "house": "Avendus Spark Research",
+    "fy26r": 66760,
+    "fy26e": 8290,
+    "fy27r": 70345,
+    "fy27e": 9626,
+    "fy28r": 77808,
+    "fy28e": 11670
+  }
 ];
 
 const EPS_DATA = [
@@ -3070,5 +5398,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (saved) document.getElementById('api-key-input').value = saved;
 });
 </script>
-</body>
-</html>
+
+
+</body></html>
