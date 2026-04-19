@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PVR INOX — Treasury Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F4F3EF;
+  --surface: #FFFFFF;
+  --surface2: #F0EFE9;
+  --border: #E2E0D8;
+  --border2: #D0CEC4;
+  --text: #1A1916;
+  --text2: #6B6960;
+  --text3: #9B9A92;
+  --blue: #1B4F8A;
+  --blue-bg: #E6F1FB;
+  --amber: #633806;
+  --amber-bg: #FAEEDA;
+  --green: #27500A;
+  --green-bg: #EAF3DE;
+  --purple: #3C3489;
+  --purple-bg: #EEEDFE;
+  --red: #9B2226;
+  --red-bg: #FCEBEB;
+  --font-sans: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); font-family: var(--font-sans); color: var(--text); font-size: 14px; line-height: 1.5; }
+
+.page { max-width: 1280px; margin: 0 auto; padding: 24px 20px; }
+
+/* Header */
+.hdr { border-bottom: 0.5px solid var(--border); padding-bottom: 14px; margin-bottom: 20px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.hdr-left h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; color: var(--text); }
+.hdr-left .sub { font-size: 12px; color: var(--text2); margin-top: 3px; display: flex; align-items: center; gap: 6px; }
+.hdr-left .sub input { font-size: 12px; border: none; background: transparent; color: var(--text2); font-family: var(--font-sans); width: 100px; cursor: pointer; outline: none; }
+.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 4px; }
+.badge-draft { background: #FAEEDA; color: #633806; }
+.badge-live { background: #EAF3DE; color: #27500A; }
+
+/* KPI grid */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.kpi { background: var(--surface2); border-radius: var(--radius); padding: 12px 14px; }
+.kpi-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+.kpi-val { font-size: 20px; font-weight: 500; color: var(--text); font-family: var(--font-mono); }
+.kpi-val.danger { color: var(--red); }
+.kpi-val.success { color: #2D6A4F; }
+.kpi-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.kpi-sub input { font-size: 11px; border: 0.5px solid var(--border); border-radius: 4px; padding: 2px 6px; width: 110px; font-family: var(--font-mono); background: var(--surface); color: var(--text); outline: none; }
+
+/* Tabs */
+.tabs { display: flex; border-bottom: 0.5px solid var(--border); margin-bottom: 20px; gap: 0; }
+.tab { font-size: 13px; padding: 8px 16px; cursor: pointer; color: var(--text2); border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; font-family: var(--font-sans); }
+.tab.active { color: var(--text); border-bottom: 2px solid var(--text); font-weight: 500; }
+.tab:hover:not(.active) { color: var(--text); }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Section */
+.sec { margin-bottom: 28px; }
+.sec-title { font-size: 11px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
+.edit-hint { font-size: 11px; color: var(--text3); font-style: italic; margin-bottom: 8px; }
+.section-note { font-size: 11px; color: var(--text3); margin-top: 8px; }
+
+/* Tables */
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; }
+thead tr { border-bottom: 0.5px solid var(--border2); }
+th { font-size: 10px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; padding: 6px 10px; text-align: left; white-space: nowrap; background: var(--surface2); }
+th.r { text-align: right; }
+td { padding: 9px 10px; border-bottom: 0.5px solid var(--border); color: var(--text); vertical-align: top; }
+td.r { text-align: right; font-family: var(--font-mono); font-size: 12px; }
+td.muted { color: var(--text3); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #F9F8F4; }
+[contenteditable]:focus { outline: 1.5px solid #378ADD; border-radius: 3px; background: #fff; }
+
+/* Pills */
+.pill { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 500; white-space: nowrap; }
+.pill-tl { background: var(--blue-bg); color: var(--blue); }
+.pill-ncd { background: var(--amber-bg); color: var(--amber); }
+.pill-wc { background: var(--green-bg); color: var(--green); }
+.pill-lease { background: var(--purple-bg); color: var(--purple); }
+.pill-ok { background: #EAF3DE; color: #27500A; }
+.pill-watch { background: #FAEEDA; color: #633806; }
+.pill-breach { background: var(--red-bg); color: var(--red); }
+.pill-pending { background: var(--surface2); color: var(--text2); }
+
+/* Add row btn */
+.add-btn { font-size: 12px; color: var(--blue); background: none; border: none; cursor: pointer; padding: 6px 10px; margin-top: 4px; font-family: var(--font-sans); }
+.add-btn:hover { text-decoration: underline; }
+
+/* Bank cards */
+.bank-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; }
+.bank-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
+.bank-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 0.5px solid var(--border); }
+.bank-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+.bank-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.bank-type { font-size: 11px; color: var(--text2); margin-top: 2px; display: flex; gap: 4px; flex-wrap: wrap; }
+.crow { display: flex; align-items: baseline; gap: 8px; padding: 5px 0; border-bottom: 0.5px solid var(--border); }
+.crow:last-child { border-bottom: none; }
+.crow-label { font-size: 12px; color: var(--text2); min-width: 80px; flex-shrink: 0; }
+.crow-val { font-size: 12px; color: var(--text); word-break: break-all; }
+.crow-val[contenteditable] { flex: 1; }
+
+/* Total row */
+.total-row td { font-weight: 500; background: var(--surface2); border-top: 0.5px solid var(--border2); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hdr">
+  <div class="hdr-left">
+    <h1>Treasury Dashboard</h1>
+    <div class="sub">
+      PVR INOX Limited &nbsp;·&nbsp; As at:
+      <input type="text" id="asAtDate" value="31 Mar 2026" />
+      &nbsp;·&nbsp; <span id="status-text">Draft — awaiting data</span>
+    </div>
+  </div>
+  <span class="badge badge-draft" id="status-badge">Draft</span>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi">
+    <div class="kpi-label">Total gross debt (₹ Cr)</div>
+    <div class="kpi-val" id="kpi-gross">—</div>
+    <div class="kpi-sub">Excl. lease liabilities</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Lease liabilities (₹ Cr)</div>
+    <div class="kpi-val" id="kpi-lease">—</div>
+    <div class="kpi-sub">Ind AS 116</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Cash & equivalents (₹ Cr)</div>
+    <div class="kpi-val" id="kpi-cash">—</div>
+    <div class="kpi-sub"><input type="number" id="cashInput" placeholder="Enter amount" /></div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Net debt (₹ Cr)</div>
+    <div class="kpi-val" id="kpi-net">—</div>
+    <div class="kpi-sub">Gross + lease − cash</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Nearest maturity</div>
+    <div class="kpi-val" style="font-size:14px" id="kpi-maturity">—</div>
+    <div class="kpi-sub" id="kpi-maturity-sub">Enter maturity dates above</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Covenants breached</div>
+    <div class="kpi-val success" id="kpi-breach">0</div>
+    <div class="kpi-sub">of <span id="kpi-total-cov">8</span> tracked</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab(this,'debt')">Debt schedule</button>
+  <button class="tab" onclick="switchTab(this,'covenants')">Key covenants</button>
+  <button class="tab" onclick="switchTab(this,'banks')">Bank contacts</button>
+  <button class="tab" onclick="switchTab(this,'repayment')">Repayment profile</button>
+  <button class="tab" onclick="switchTab(this,'cashforecast')">Cash forecast</button>
+  <button class="tab" onclick="switchTab(this,'irisk')">Interest rate risk</button>
+  <button class="tab" onclick="switchTab(this,'wc')">Working capital</button>
+</div>
+
+<!-- DEBT SCHEDULE -->
+<div id="panel-debt" class="panel active">
+
+  <div class="sec">
+    <div class="sec-title">Term loans</div>
+    <div class="edit-hint">Click any cell to edit directly.</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Lender</th><th class="r">Sanction (₹ Cr)</th><th class="r">Outstanding</th><th class="r">Rate (%)</th><th>Type</th><th>Disbursed</th><th>Maturity</th><th>Repayment</th><th>Security</th>
+      </tr></thead>
+      <tbody id="tbody-tl">
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td><span class="pill pill-tl">TL</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td><span class="pill pill-tl">TL</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td><span class="pill pill-tl">TL</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addTL()">+ Add term loan</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">NCDs / Debentures</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Trustee / Holder</th><th>Series</th><th class="r">Face value (₹ Cr)</th><th class="r">Outstanding</th><th class="r">Coupon (%)</th><th>Issue date</th><th>Maturity</th><th>Listed</th><th>Security</th>
+      </tr></thead>
+      <tbody id="tbody-ncd">
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addNCD()">+ Add NCD</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Working capital / CC limits</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Bank</th><th class="r">Limit (₹ Cr)</th><th class="r">Utilised</th><th class="r">Available</th><th class="r">Rate (%)</th><th>Type</th><th>Renewal due</th><th>Security</th>
+      </tr></thead>
+      <tbody id="tbody-wc">
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">CC / OD</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">CC / OD</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addWC()">+ Add WC facility</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Lease liabilities — Ind AS 116</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Category</th><th class="r">Current (₹ Cr)</th><th class="r">Non-current (₹ Cr)</th><th class="r">Total</th><th class="r">Avg IBR (%)</th><th>Notes</th>
+      </tr></thead>
+      <tbody id="tbody-lease">
+        <tr><td contenteditable>Property leases</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">Cinema properties</td></tr>
+        <tr><td contenteditable>Equipment leases</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addLease()">+ Add category</button>
+    <div class="section-note">Lease liabilities are excluded from the gross debt KPI but included in net debt. Ind AS 116 IBR (incremental borrowing rate) to be used for discounting.</div>
+  </div>
+
+</div>
+
+<!-- COVENANTS -->
+<div id="panel-covenants" class="panel">
+
+  <div class="sec">
+    <div class="sec-title">Financial covenants</div>
+    <div class="edit-hint">Fill in threshold and actual values. Click the status pill to cycle through states.</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Covenant</th><th>Lender</th><th class="r">Threshold</th><th class="r">Actual</th><th>Frequency</th><th>Status</th><th>Next test date</th><th>Notes</th>
+      </tr></thead>
+      <tbody id="tbody-fin-cov">
+        <tr><td contenteditable>DSCR (Debt service coverage ratio)</td><td contenteditable class="muted">—</td><td contenteditable class="r">≥ —x</td><td contenteditable class="r muted">—x</td><td contenteditable class="muted">Half-yearly</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>Net leverage (Net debt / EBITDA)</td><td contenteditable class="muted">—</td><td contenteditable class="r">≤ —x</td><td contenteditable class="r muted">—x</td><td contenteditable class="muted">Annual</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>Interest coverage (EBITDA / Interest)</td><td contenteditable class="muted">—</td><td contenteditable class="r">≥ —x</td><td contenteditable class="r muted">—x</td><td contenteditable class="muted">Annual</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>Debt / equity ratio</td><td contenteditable class="muted">—</td><td contenteditable class="r">≤ —x</td><td contenteditable class="r muted">—x</td><td contenteditable class="muted">Annual</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addFinCov()">+ Add covenant</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Operational covenants</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Covenant description</th><th>Lender</th><th>Status</th><th>Due date</th><th>Notes</th></tr></thead>
+      <tbody id="tbody-op-cov">
+        <tr><td contenteditable>Minimum screen count to be maintained</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>No dividend / distribution without lender consent</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>No disposal of core assets without lender consent</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>Maintain minimum promoter shareholding</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addOpCov()">+ Add covenant</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Reporting obligations</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Report / certificate</th><th>To whom</th><th>Frequency</th><th>Last submitted</th><th>Next due</th><th>Status</th></tr></thead>
+      <tbody id="tbody-rep-cov">
+        <tr><td contenteditable>Audited financial statements</td><td contenteditable class="muted">All lenders</td><td contenteditable class="muted">Annual</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td></tr>
+        <tr><td contenteditable>Quarterly management accounts</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Quarterly</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td></tr>
+        <tr><td contenteditable>Covenant compliance certificate</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Half-yearly</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td></tr>
+        <tr><td contenteditable>Stock / collateral audit report</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Annual</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td></tr>
+        <tr><td contenteditable>Insurance renewal confirmation</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Annual</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addRepOb()">+ Add obligation</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Security / collateral register</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Lender</th><th>Facility</th><th>Security type</th><th>Asset description</th><th class="r">Value (₹ Cr)</th><th>Charge</th><th>ROC filing date</th><th>Charge ID</th></tr></thead>
+      <tbody id="tbody-sec">
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Hypothecation</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">First charge</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Mortgage</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">First charge</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addSec()">+ Add security</button>
+  </div>
+
+</div>
+
+<!-- BANK CONTACTS -->
+<div id="panel-banks" class="panel">
+  <div class="sec">
+    <div class="sec-title">Banking relationships</div>
+    <div class="edit-hint">Click any field to edit. All fields are editable.</div>
+    <div class="bank-grid" id="bank-grid">
+
+      <div class="bank-card">
+        <div class="bank-hdr">
+          <div class="bank-avatar" style="background:#DBEAFE;color:#1E40AF">SBI</div>
+          <div>
+            <div class="bank-name" contenteditable>State Bank of India</div>
+            <div class="bank-type"><span class="pill pill-tl">Term loan</span> <span class="pill pill-wc">WC</span></div>
+          </div>
+        </div>
+        <div class="crow"><span class="crow-label">RM name</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Designation</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Mobile</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Email</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Branch</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Exposure (₹ Cr)</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Role</span><span class="crow-val" contenteditable>Lead bank</span></div>
+        <div class="crow"><span class="crow-label">Next review</span><span class="crow-val" contenteditable>—</span></div>
+      </div>
+
+      <div class="bank-card">
+        <div class="bank-hdr">
+          <div class="bank-avatar" style="background:#FEF3C7;color:#92400E">HDFC</div>
+          <div>
+            <div class="bank-name" contenteditable>HDFC Bank</div>
+            <div class="bank-type"><span class="pill pill-tl">Term loan</span></div>
+          </div>
+        </div>
+        <div class="crow"><span class="crow-label">RM name</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Designation</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Mobile</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Email</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Branch</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Exposure (₹ Cr)</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Role</span><span class="crow-val" contenteditable>Member</span></div>
+        <div class="crow"><span class="crow-label">Next review</span><span class="crow-val" contenteditable>—</span></div>
+      </div>
+
+      <div class="bank-card">
+        <div class="bank-hdr">
+          <div class="bank-avatar" style="background:#D1FAE5;color:#065F46">ICICI</div>
+          <div>
+            <div class="bank-name" contenteditable>ICICI Bank</div>
+            <div class="bank-type"><span class="pill pill-tl">Term loan</span> <span class="pill pill-wc">WC</span></div>
+          </div>
+        </div>
+        <div class="crow"><span class="crow-label">RM name</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Designation</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Mobile</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Email</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Branch</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Exposure (₹ Cr)</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Role</span><span class="crow-val" contenteditable>Member</span></div>
+        <div class="crow"><span class="crow-label">Next review</span><span class="crow-val" contenteditable>—</span></div>
+      </div>
+
+      <div class="bank-card">
+        <div class="bank-hdr">
+          <div class="bank-avatar" style="background:#EDE9FE;color:#4C1D95">NCD</div>
+          <div>
+            <div class="bank-name" contenteditable>NCD Trustee</div>
+            <div class="bank-type"><span class="pill pill-ncd">Debentures</span></div>
+          </div>
+        </div>
+        <div class="crow"><span class="crow-label">Trustee name</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Contact person</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Mobile</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Email</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Outstanding (₹ Cr)</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Next coupon</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Maturity</span><span class="crow-val" contenteditable>—</span></div>
+        <div class="crow"><span class="crow-label">Listed on</span><span class="crow-val" contenteditable>BSE / NSE</span></div>
+      </div>
+
+    </div>
+    <button class="add-btn" onclick="addBankCard()" style="margin-top:12px">+ Add bank / lender</button>
+  </div>
+</div>
+
+<!-- REPAYMENT PROFILE -->
+<div id="panel-repayment" class="panel">
+
+  <div class="sec">
+    <div class="sec-title">Principal repayment schedule (₹ Cr)</div>
+    <div class="edit-hint">Enter scheduled principal outflows by fiscal year.</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Year</th><th class="r">Term loans</th><th class="r">NCDs</th><th class="r">WC (renewal)</th><th class="r">Lease payments</th><th class="r">Total</th><th>Notes</th>
+      </tr></thead>
+      <tbody id="tbody-repay">
+        <tr><td contenteditable>FY26 (current)</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="muted">Current year</td></tr>
+        <tr><td contenteditable>FY27</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>FY28</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>FY29</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>FY30+</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="muted">Beyond 4 years</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addRepayRow()">+ Add year</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Interest rate profile</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Facility</th><th>Lender</th><th>Benchmark</th><th class="r">Spread (%)</th><th class="r">Effective rate (%)</th><th>Reset frequency</th><th>Fixed / floating</th><th>Next reset date</th></tr></thead>
+      <tbody id="tbody-rate">
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">MCLR / Repo rate</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">Annual</td><td contenteditable class="muted">Floating</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Fixed</td><td contenteditable class="r muted">N/A</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Fixed</td><td contenteditable class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addRateRow()">+ Add facility</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Liquidity buffer</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Item</th><th class="r">Amount (₹ Cr)</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td contenteditable>Cash and bank balances</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">As per last balance sheet</td></tr>
+        <tr><td contenteditable>Undrawn WC limits</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">Available headroom</td></tr>
+        <tr><td contenteditable>Short-term FDs / liquid investments</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr class="total-row"><td>Total liquidity buffer</td><td class="r muted">—</td><td class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+function switchTab(el, name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+const PILL_CYCLE = [
+  { cls: 'pill-pending', text: 'Pending' },
+  { cls: 'pill-ok', text: 'Compliant' },
+  { cls: 'pill-watch', text: 'Watch' },
+  { cls: 'pill-breach', text: 'Breach' }
+];
+
+function cyclePill(el) {
+  const cur = PILL_CYCLE.findIndex(p => el.classList.contains(p.cls));
+  const next = (cur + 1) % PILL_CYCLE.length;
+  PILL_CYCLE.forEach(p => el.classList.remove(p.cls));
+  el.classList.add(PILL_CYCLE[next].cls);
+  el.textContent = PILL_CYCLE[next].text;
+  updateBreachCount();
+}
+
+function updateBreachCount() {
+  const pills = document.querySelectorAll('.status-pill');
+  const breaches = [...pills].filter(p => p.classList.contains('pill-breach')).length;
+  const kpi = document.getElementById('kpi-breach');
+  kpi.textContent = breaches;
+  kpi.className = 'kpi-val ' + (breaches > 0 ? 'danger' : 'success');
+  document.getElementById('kpi-total-cov').textContent = pills.length;
+}
+
+document.getElementById('cashInput').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  if (!isNaN(v)) {
+    document.getElementById('kpi-cash').textContent = v.toFixed(0);
+  }
+});
+
+function addTL() {
+  const tbody = document.getElementById('tbody-tl');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td><span class="pill pill-tl">TL</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td>';
+  tbody.appendChild(tr);
+}
+function addNCD() {
+  const tbody = document.getElementById('tbody-ncd');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td>';
+  tbody.appendChild(tr);
+}
+function addWC() {
+  const tbody = document.getElementById('tbody-wc');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">CC / OD</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td>';
+  tbody.appendChild(tr);
+}
+function addLease() {
+  const tbody = document.getElementById('tbody-lease');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td>';
+  tbody.appendChild(tr);
+}
+function addFinCov() {
+  const tbody = document.getElementById('tbody-fin-cov');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">Annual</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td>';
+  tbody.appendChild(tr);
+  updateBreachCount();
+}
+function addOpCov() {
+  const tbody = document.getElementById('tbody-op-cov');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td>';
+  tbody.appendChild(tr);
+  updateBreachCount();
+}
+function addRepOb() {
+  const tbody = document.getElementById('tbody-rep-cov');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td>';
+  tbody.appendChild(tr);
+  updateBreachCount();
+}
+function addSec() {
+  const tbody = document.getElementById('tbody-sec');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td>';
+  tbody.appendChild(tr);
+}
+function addRepayRow() {
+  const tbody = document.getElementById('tbody-repay');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="muted">—</td>';
+  tbody.appendChild(tr);
+}
+function addRateRow() {
+  const tbody = document.getElementById('tbody-rate');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td>';
+  tbody.appendChild(tr);
+}
+
+const BANK_COLORS = [
+  { bg: '#FEE2E2', color: '#991B1B', init: '—' },
+  { bg: '#E0F2FE', color: '#075985', init: '—' },
+  { bg: '#F3F4F6', color: '#374151', init: '—' },
+  { bg: '#FEF9C3', color: '#854D0E', init: '—' },
+];
+let bankCount = 4;
+function addBankCard() {
+  const c = BANK_COLORS[bankCount % BANK_COLORS.length];
+  bankCount++;
+  const div = document.createElement('div');
+  div.className = 'bank-card';
+  div.innerHTML = `<div class="bank-hdr">
+    <div class="bank-avatar" style="background:${c.bg};color:${c.color}" contenteditable>—</div>
+    <div>
+      <div class="bank-name" contenteditable>New lender / bank</div>
+      <div class="bank-type"><span class="pill pill-tl">—</span></div>
+    </div>
+  </div>
+  <div class="crow"><span class="crow-label">RM name</span><span class="crow-val" contenteditable>—</span></div>
+  <div class="crow"><span class="crow-label">Designation</span><span class="crow-val" contenteditable>—</span></div>
+  <div class="crow"><span class="crow-label">Mobile</span><span class="crow-val" contenteditable>—</span></div>
+  <div class="crow"><span class="crow-label">Email</span><span class="crow-val" contenteditable>—</span></div>
+  <div class="crow"><span class="crow-label">Branch</span><span class="crow-val" contenteditable>—</span></div>
+  <div class="crow"><span class="crow-label">Exposure (₹ Cr)</span><span class="crow-val" contenteditable>—</span></div>
+  <div class="crow"><span class="crow-label">Role</span><span class="crow-val" contenteditable>Member</span></div>
+  <div class="crow"><span class="crow-label">Next review</span><span class="crow-val" contenteditable>—</span></div>`;
+  document.getElementById('bank-grid').appendChild(div);
+}
+
+updateBreachCount();
+</script>
+
+<!-- CASH FORECAST PANEL -->
+<div id="panel-cashforecast" class="panel">
+
+  <div class="sec">
+    <div class="sec-title">13-week rolling cash forecast</div>
+    <div class="edit-hint">Enter actuals for past weeks and projections for future weeks. Variance auto-calculates once both fields are filled.</div>
+    <div class="tbl-wrap">
+      <table id="tbl-cashforecast" style="min-width:900px">
+        <thead><tr>
+          <th>Week</th><th>Period</th><th class="r">Opening cash</th>
+          <th class="r">Collections</th><th class="r">Advance bookings</th><th class="r">F&amp;B cash</th><th class="r">Other inflows</th>
+          <th class="r">Debt service</th><th class="r">Opex / lease</th><th class="r">Capex</th><th class="r">Other outflows</th>
+          <th class="r">Net movement</th><th class="r">Closing cash (fcst)</th><th class="r">Closing cash (actual)</th><th class="r">Variance</th>
+        </tr></thead>
+        <tbody id="tbody-cashforecast">
+        </tbody>
+      </table>
+    </div>
+    <div class="section-note">All amounts in ₹ Cr. Advance bookings and F&amp;B cash shown separately as these are structurally negative working capital — a float advantage unique to exhibition businesses.</div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Cash forecast summary — weekly closing balance (₹ Cr)</div>
+    <div id="cf-chart-legend" style="display:flex;gap:16px;margin-bottom:8px;font-size:12px;color:var(--text2)">
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#378ADD;display:inline-block;border-radius:2px"></span>Forecast</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#639922;display:inline-block;border-radius:2px"></span>Actual</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#E2E0D8;display:inline-block;border-radius:2px;border:1px dashed #9B9A92"></span>Min liquidity buffer</span>
+    </div>
+    <div style="position:relative;width:100%;height:220px">
+      <canvas id="cfChart" role="img" aria-label="13-week cash forecast chart showing forecast and actual closing cash balances">Enter week data above to populate this chart.</canvas>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Liquidity headroom tracker</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">
+      <div class="kpi">
+        <div class="kpi-label">Min projected cash (13w)</div>
+        <div class="kpi-val" id="cf-min">—</div>
+        <div class="kpi-sub">₹ Cr</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Min liquidity buffer (₹ Cr)</div>
+        <div class="kpi-val" id="cf-buffer">—</div>
+        <div class="kpi-sub"><input type="number" id="bufferInput" placeholder="Set buffer" style="font-size:11px;border:0.5px solid var(--border);border-radius:4px;padding:2px 6px;width:100px;font-family:var(--font-mono);background:var(--surface);color:var(--text);outline:none" /></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Headroom above buffer</div>
+        <div class="kpi-val" id="cf-headroom">—</div>
+        <div class="kpi-sub">₹ Cr</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Weeks below buffer</div>
+        <div class="kpi-val" id="cf-weeks-below">0</div>
+        <div class="kpi-sub">Alert if &gt; 0</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Avg weekly net movement</div>
+        <div class="kpi-val" id="cf-avg-net">—</div>
+        <div class="kpi-sub">₹ Cr / week</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTEREST RATE RISK PANEL -->
+<div id="panel-irisk" class="panel">
+
+  <div class="sec">
+    <div class="sec-title">Floating rate debt exposure</div>
+    <div class="edit-hint">Enter outstanding amounts and rates. Sensitivity analysis auto-calculates below.</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Facility</th><th>Lender</th><th class="r">Outstanding (₹ Cr)</th><th>Benchmark</th><th class="r">Current benchmark (%)</th><th class="r">Spread (%)</th><th class="r">All-in rate (%)</th><th>Reset date</th><th>Fixed / floating</th>
+      </tr></thead>
+      <tbody id="tbody-float">
+        <tr><td contenteditable class="muted">Term loan A</td><td contenteditable class="muted">—</td><td contenteditable class="r muted" id="fl1-amt">—</td><td contenteditable class="muted">MCLR 1Y</td><td contenteditable class="r muted" id="fl1-bench">—</td><td contenteditable class="r muted" id="fl1-spread">—</td><td class="r muted" id="fl1-allin">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-wc">Floating</span></td></tr>
+        <tr><td contenteditable class="muted">Term loan B</td><td contenteditable class="muted">—</td><td contenteditable class="r muted" id="fl2-amt">—</td><td contenteditable class="muted">Repo rate</td><td contenteditable class="r muted" id="fl2-bench">—</td><td contenteditable class="r muted" id="fl2-spread">—</td><td class="r muted" id="fl2-allin">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-wc">Floating</span></td></tr>
+        <tr><td contenteditable class="muted">NCD / Fixed</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">Fixed coupon</td><td contenteditable class="r muted">N/A</td><td contenteditable class="r muted">N/A</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-ncd">Fixed</span></td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addFloatRow()">+ Add facility</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Interest rate sensitivity analysis</div>
+    <div class="edit-hint">Adjust the rate shock slider to see annual interest cost impact on floating rate debt.</div>
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+      <label style="font-size:13px;color:var(--text2)">Rate shock (bps):</label>
+      <input type="range" min="-200" max="200" step="25" value="50" id="rateShock" style="width:200px" oninput="updateIR()" />
+      <span style="font-size:16px;font-weight:500;font-family:var(--font-mono);min-width:60px" id="shockLabel">+50 bps</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px">
+      <div class="kpi">
+        <div class="kpi-label">Total floating debt (₹ Cr)</div>
+        <div class="kpi-val" id="ir-float-total">—</div>
+        <div class="kpi-sub">Enter amounts above</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Annual interest impact (₹ Cr)</div>
+        <div class="kpi-val" id="ir-impact">—</div>
+        <div class="kpi-sub">At selected shock</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">EBITDA impact (%)</div>
+        <div class="kpi-val" id="ir-ebitda-pct">—</div>
+        <div class="kpi-sub"><input type="number" id="ebitdaInput" placeholder="Enter EBITDA" style="font-size:11px;border:0.5px solid var(--border);border-radius:4px;padding:2px 6px;width:110px;font-family:var(--font-mono);background:var(--surface);color:var(--text);outline:none" /></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">ICR impact (turns)</div>
+        <div class="kpi-val" id="ir-icr-impact">—</div>
+        <div class="kpi-sub">Change in interest coverage</div>
+      </div>
+    </div>
+
+    <div style="position:relative;width:100%;height:220px">
+      <div id="ir-chart-legend" style="display:flex;gap:16px;margin-bottom:8px;font-size:12px;color:var(--text2)">
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#E24B4A;display:inline-block;border-radius:2px"></span>Higher rate scenarios</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#639922;display:inline-block;border-radius:2px"></span>Lower rate scenarios</span>
+      </div>
+      <canvas id="irChart" role="img" aria-label="Interest rate sensitivity chart showing annual interest cost across rate scenarios from -200bps to +200bps">Enter floating debt amounts above to populate this chart.</canvas>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Fixed vs floating mix &amp; hedging policy</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Category</th><th class="r">Amount (₹ Cr)</th><th class="r">% of total debt</th><th>Policy limit</th><th>Status</th><th>Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Fixed rate (NCD / fixed TL)</td><td contenteditable class="r muted">—</td><td class="r muted" id="fixed-pct">—</td><td contenteditable class="muted">Min 30%</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">NCDs and fixed-rate facilities</td></tr>
+        <tr><td>Floating rate (MCLR / repo-linked)</td><td contenteditable class="r muted">—</td><td class="r muted" id="float-pct">—</td><td contenteditable class="muted">Max 70%</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">Subject to rate reset risk</td></tr>
+        <tr><td>Interest rate swaps (IRS)</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="muted">As approved</td><td><span class="pill pill-pending status-pill" onclick="cyclePill(this)">Pending</span></td><td contenteditable class="muted">If any hedging instruments in place</td></tr>
+      </tbody>
+    </table></div>
+    <div class="section-note">Policy limits are illustrative — update to reflect actual treasury policy approved by the board. IRS to be used only if board-approved hedging framework is in place.</div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Upcoming rate reset calendar</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Facility</th><th>Lender</th><th class="r">Outstanding (₹ Cr)</th><th>Current rate (%)</th><th>Reset date</th><th>Benchmark at reset</th><th>Estimated new rate (%)</th><th>Action required</th></tr></thead>
+      <tbody id="tbody-reset">
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Review &amp; confirm</td></tr>
+        <tr><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Review &amp; confirm</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addResetRow()">+ Add rate reset</button>
+  </div>
+</div>
+
+<!-- WORKING CAPITAL PANEL -->
+<div id="panel-wc" class="panel">
+
+  <div class="sec">
+    <div class="sec-title">Working capital KPIs</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:4px">
+      <div class="kpi">
+        <div class="kpi-label">DSO (days)</div>
+        <div class="kpi-val" id="wck-dso">—</div>
+        <div class="kpi-sub">Debtors / revenue × 365</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">DPO (days)</div>
+        <div class="kpi-val" id="wck-dpo">—</div>
+        <div class="kpi-sub">Creditors / COGS × 365</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Inventory days</div>
+        <div class="kpi-val" id="wck-inv">—</div>
+        <div class="kpi-sub">Inventory / COGS × 365</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">CCC (days)</div>
+        <div class="kpi-val" id="wck-ccc">—</div>
+        <div class="kpi-sub">DSO + Inv − DPO</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Advance booking float (₹ Cr)</div>
+        <div class="kpi-val" id="wck-float">—</div>
+        <div class="kpi-sub">Structural negative WC</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Net working capital (₹ Cr)</div>
+        <div class="kpi-val" id="wck-nwc">—</div>
+        <div class="kpi-sub">CA − CL (excl. cash &amp; debt)</div>
+      </div>
+    </div>
+    <div class="section-note">For PVR INOX, CCC is structurally negative — advance ticket sales and F&amp;B cash collected before film content cost is paid. This is a treasury strength: the business is partly self-funded by customer float. Track this advantage quantitatively.</div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Working capital inputs — quarterly trend</div>
+    <div class="edit-hint">Enter balance sheet items for each quarter to auto-calculate KPIs above.</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Item</th><th class="r">Q1 FY26</th><th class="r">Q2 FY26</th><th class="r">Q3 FY26</th><th class="r">Q4 FY26 / FY26E</th><th>Notes</th>
+      </tr></thead>
+      <tbody id="tbody-wc-inputs">
+        <tr><td>Trade receivables (₹ Cr)</td><td contenteditable class="r muted" id="wc-rec-q1">—</td><td contenteditable class="r muted" id="wc-rec-q2">—</td><td contenteditable class="r muted" id="wc-rec-q3">—</td><td contenteditable class="r muted" id="wc-rec-q4">—</td><td contenteditable class="muted">Primarily B2B / corporate</td></tr>
+        <tr><td>Inventories (₹ Cr)</td><td contenteditable class="r muted" id="wc-inv-q1">—</td><td contenteditable class="r muted" id="wc-inv-q2">—</td><td contenteditable class="r muted" id="wc-inv-q3">—</td><td contenteditable class="r muted" id="wc-inv-q4">—</td><td contenteditable class="muted">F&amp;B stock, merchandise</td></tr>
+        <tr><td>Trade payables (₹ Cr)</td><td contenteditable class="r muted" id="wc-pay-q1">—</td><td contenteditable class="r muted" id="wc-pay-q2">—</td><td contenteditable class="r muted" id="wc-pay-q3">—</td><td contenteditable class="r muted" id="wc-pay-q4">—</td><td contenteditable class="muted">Distributors, F&amp;B vendors</td></tr>
+        <tr><td>Advance bookings / deferred revenue (₹ Cr)</td><td contenteditable class="r muted" id="wc-adv-q1">—</td><td contenteditable class="r muted" id="wc-adv-q2">—</td><td contenteditable class="r muted" id="wc-adv-q3">—</td><td contenteditable class="r muted" id="wc-adv-q4">—</td><td contenteditable class="muted">Key float advantage — negative WC</td></tr>
+        <tr><td>Other current liabilities (₹ Cr)</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">Accruals, GST payable, etc.</td></tr>
+        <tr><td>Revenue (annualised, ₹ Cr)</td><td contenteditable class="r muted" id="wc-rev-q1">—</td><td contenteditable class="r muted" id="wc-rev-q2">—</td><td contenteditable class="r muted" id="wc-rev-q3">—</td><td contenteditable class="r muted" id="wc-rev-q4">—</td><td contenteditable class="muted">For DSO calculation</td></tr>
+        <tr><td>COGS (annualised, ₹ Cr)</td><td contenteditable class="r muted" id="wc-cogs-q1">—</td><td contenteditable class="r muted" id="wc-cogs-q2">—</td><td contenteditable class="r muted" id="wc-cogs-q3">—</td><td contenteditable class="r muted" id="wc-cogs-q4">—</td><td contenteditable class="muted">For DPO &amp; inventory days</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">AR / AP aging — latest quarter</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:11px;font-weight:500;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Accounts receivable aging (₹ Cr)</div>
+        <div class="tbl-wrap"><table style="min-width:0">
+          <thead><tr><th>Bucket</th><th class="r">Amount</th><th class="r">% of total</th></tr></thead>
+          <tbody>
+            <tr><td>0–30 days</td><td contenteditable class="r muted">—</td><td class="r muted">—</td></tr>
+            <tr><td>31–60 days</td><td contenteditable class="r muted">—</td><td class="r muted">—</td></tr>
+            <tr><td>61–90 days</td><td contenteditable class="r muted">—</td><td class="r muted">—</td></tr>
+            <tr><td>91–180 days</td><td contenteditable class="r muted" style="color:var(--amber)">—</td><td class="r muted">—</td></tr>
+            <tr><td>&gt; 180 days (overdue)</td><td contenteditable class="r muted" style="color:var(--red)">—</td><td class="r muted">—</td></tr>
+            <tr class="total-row"><td>Total AR</td><td contenteditable class="r">—</td><td class="r">100%</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:500;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Accounts payable aging (₹ Cr)</div>
+        <div class="tbl-wrap"><table style="min-width:0">
+          <thead><tr><th>Bucket</th><th class="r">Amount</th><th class="r">% of total</th></tr></thead>
+          <tbody>
+            <tr><td>0–30 days</td><td contenteditable class="r muted">—</td><td class="r muted">—</td></tr>
+            <tr><td>31–60 days</td><td contenteditable class="r muted">—</td><td class="r muted">—</td></tr>
+            <tr><td>61–90 days</td><td contenteditable class="r muted">—</td><td class="r muted">—</td></tr>
+            <tr><td>&gt; 90 days</td><td contenteditable class="r muted" style="color:var(--amber)">—</td><td class="r muted">—</td></tr>
+            <tr class="total-row"><td>Total AP</td><td contenteditable class="r">—</td><td class="r">100%</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">PVR INOX float advantage — advance booking analysis</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Quarter</th><th class="r">Advance bookings received (₹ Cr)</th><th class="r">Content cost paid (₹ Cr)</th><th class="r">Net float (₹ Cr)</th><th class="r">Float as % of revenue</th><th class="r">Avg days float held</th><th>Notes</th>
+      </tr></thead>
+      <tbody id="tbody-float-adv">
+        <tr><td contenteditable>Q1 FY26</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">Box office advance + OTA</td></tr>
+        <tr><td contenteditable>Q2 FY26</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>Q3 FY26</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td></tr>
+        <tr><td contenteditable>Q4 FY26 / FY26E</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+    <button class="add-btn" onclick="addFloatAdvRow()">+ Add quarter</button>
+    <div class="section-note">Float advantage = advance ticket proceeds held before content cost is settled with distributors (typically 7–21 days post-release). This is a structurally superior position vs most industries where cash is collected after goods/services delivered. Quantify and present this in investor conversations as evidence of negative WC as a business model feature, not a problem.</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+
+/* ── Cash forecast table population ── */
+const CF_WEEKS = 13;
+const cfTbody = document.getElementById('tbody-cashforecast');
+for (let w = 1; w <= CF_WEEKS; w++) {
+  const isPast = w <= 4;
+  const tr = document.createElement('tr');
+  tr.id = 'cf-week-' + w;
+  tr.innerHTML = `
+    <td style="font-weight:500;color:var(--text2)">W${w}</td>
+    <td contenteditable class="muted">—</td>
+    <td contenteditable class="r muted">—</td>
+    <td contenteditable class="r muted" data-cf="inflow1" data-w="${w}">—</td>
+    <td contenteditable class="r muted" data-cf="inflow2" data-w="${w}">—</td>
+    <td contenteditable class="r muted" data-cf="inflow3" data-w="${w}">—</td>
+    <td contenteditable class="r muted" data-cf="inflow4" data-w="${w}">—</td>
+    <td contenteditable class="r muted" data-cf="out1" data-w="${w}">—</td>
+    <td contenteditable class="r muted" data-cf="out2" data-w="${w}">—</td>
+    <td contenteditable class="r muted" data-cf="out3" data-w="${w}">—</td>
+    <td contenteditable class="r muted" data-cf="out4" data-w="${w}">—</td>
+    <td class="r muted" id="cf-net-${w}">—</td>
+    <td contenteditable class="r muted" id="cf-fcst-${w}" data-cf="fcst" data-w="${w}">—</td>
+    <td contenteditable class="r muted" id="cf-actual-${w}" style="${isPast?'':'color:var(--text3)'}">—</td>
+    <td class="r muted" id="cf-var-${w}">—</td>`;
+  cfTbody.appendChild(tr);
+}
+
+/* ── Chart instances ── */
+let cfChart = null, irChart = null;
+
+function initCFChart() {
+  const ctx = document.getElementById('cfChart').getContext('2d');
+  const labels = Array.from({length:13},(_,i)=>'W'+(i+1));
+  cfChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label:'Forecast', data: Array(13).fill(null), borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.08)', tension:0.3, pointRadius:4, borderWidth:2, fill:true },
+        { label:'Actual', data: Array(13).fill(null), borderColor:'#639922', backgroundColor:'transparent', tension:0.3, pointRadius:5, borderWidth:2, borderDash:[] },
+        { label:'Min buffer', data: Array(13).fill(null), borderColor:'#D0CEC4', borderDash:[5,4], pointRadius:0, borderWidth:1.5, fill:false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { font:{size:11}, callback: v=>v+'Cr' }, grid: { color:'#F0EFE9' } },
+        x: { ticks: { font:{size:11} }, grid: { display:false } }
+      }
+    }
+  });
+}
+
+function initIRChart() {
+  const ctx = document.getElementById('irChart').getContext('2d');
+  const labels = ['-200','-150','-100','-50','0','+50','+100','+150','+200'];
+  irChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels.map(l=>l+' bps'),
+      datasets: [{
+        label:'Annual interest cost impact (₹ Cr)',
+        data: Array(9).fill(0),
+        backgroundColor: labels.map(l=>parseFloat(l)<=0?'#97C459':'#F09595'),
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false} },
+      scales: {
+        y: { ticks:{font:{size:11}, callback:v=>'₹'+v+'Cr'}, grid:{color:'#F0EFE9'} },
+        x: { ticks:{font:{size:11}}, grid:{display:false} }
+      }
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initCFChart();
+  initIRChart();
+});
+setTimeout(()=>{ if(!cfChart) initCFChart(); if(!irChart) initIRChart(); }, 800);
+
+/* ── IR sensitivity ── */
+function updateIR() {
+  const shock = parseInt(document.getElementById('rateShock').value);
+  const label = document.getElementById('shockLabel');
+  label.textContent = (shock >= 0 ? '+' : '') + shock + ' bps';
+  label.style.color = shock > 0 ? 'var(--red)' : shock < 0 ? '#2D6A4F' : 'var(--text)';
+
+  const floatAmts = ['fl1-amt','fl2-amt'].map(id => parseFloat(document.getElementById(id).textContent)||0);
+  const totalFloat = floatAmts.reduce((a,b)=>a+b,0);
+  document.getElementById('ir-float-total').textContent = totalFloat > 0 ? totalFloat.toFixed(0) : '—';
+
+  const impact = totalFloat * (shock / 10000);
+  document.getElementById('ir-impact').textContent = totalFloat > 0 ? (impact >= 0?'+':'')+impact.toFixed(1) : '—';
+  const ebitda = parseFloat(document.getElementById('ebitdaInput').value)||0;
+  if (ebitda > 0 && totalFloat > 0) {
+    document.getElementById('ir-ebitda-pct').textContent = ((impact/ebitda)*100).toFixed(1)+'%';
+    const curInterest = totalFloat * 0.1;
+    const newInterest = curInterest + impact;
+    document.getElementById('ir-icr-impact').textContent = newInterest > 0 ? ((ebitda/newInterest) - (ebitda/curInterest)).toFixed(2)+'x' : '—';
+  }
+
+  if (irChart) {
+    const shocks = [-200,-150,-100,-50,0,50,100,150,200];
+    irChart.data.datasets[0].data = shocks.map(s => totalFloat > 0 ? parseFloat((totalFloat*(s/10000)).toFixed(1)) : 0);
+    irChart.data.datasets[0].backgroundColor = shocks.map(s => s <= 0 ? '#97C459' : '#F09595');
+    irChart.update();
+  }
+}
+
+document.getElementById('ebitdaInput').addEventListener('input', updateIR);
+
+/* ── Buffer KPI ── */
+document.getElementById('bufferInput').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  if (!isNaN(v)) {
+    document.getElementById('cf-buffer').textContent = v.toFixed(0);
+    updateCFKPIs();
+    if (cfChart) { cfChart.data.datasets[2].data = Array(13).fill(v); cfChart.update(); }
+  }
+});
+
+function updateCFKPIs() {
+  const fcsts = Array.from({length:13},(_,i)=>parseFloat(document.getElementById('cf-fcst-'+(i+1))?.textContent)||null).filter(v=>v!==null);
+  if (fcsts.length === 0) return;
+  const minFcst = Math.min(...fcsts);
+  const buffer = parseFloat(document.getElementById('cf-buffer').textContent)||0;
+  document.getElementById('cf-min').textContent = minFcst.toFixed(0);
+  if (buffer) {
+    const headroom = minFcst - buffer;
+    const hw = document.getElementById('cf-headroom');
+    hw.textContent = headroom.toFixed(0);
+    hw.className = 'kpi-val ' + (headroom >= 0 ? 'success' : 'danger');
+    document.getElementById('cf-weeks-below').textContent = fcsts.filter(v=>v<buffer).length;
+  }
+  const nets = Array.from({length:13},(_,i)=>parseFloat(document.getElementById('cf-net-'+(i+1))?.textContent)||null).filter(v=>v!==null);
+  if (nets.length) document.getElementById('cf-avg-net').textContent = (nets.reduce((a,b)=>a+b,0)/nets.length).toFixed(1);
+}
+
+/* ── Row adders for new panels ── */
+function addFloatRow() {
+  const tbody = document.getElementById('tbody-float');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">MCLR</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td contenteditable class="muted">—</td><td><span class="pill pill-wc">Floating</span></td>';
+  tbody.appendChild(tr);
+}
+function addResetRow() {
+  const tbody = document.getElementById('tbody-reset');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">—</td><td contenteditable class="muted">Review &amp; confirm</td>';
+  tbody.appendChild(tr);
+}
+function addFloatAdvRow() {
+  const tbody = document.getElementById('tbody-float-adv');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable class="muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="r muted">—</td><td class="r muted">—</td><td class="r muted">—</td><td contenteditable class="r muted">—</td><td contenteditable class="muted">—</td>';
+  tbody.appendChild(tr);
+}
+
+updateBreachCount();
+</script>
+</body>
+</html>
