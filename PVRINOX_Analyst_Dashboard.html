@@ -1,0 +1,3025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>PVR INOX — Analyst Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #F4F3EF;
+  --surface: #FFFFFF;
+  --surface2: #F0EFE9;
+  --border: #E2E0D8;
+  --border2: #D0CEC4;
+  --text: #1A1916;
+  --text2: #6B6960;
+  --text3: #9B9A92;
+  --accent: #1A1916;
+  --buy: #2D6A4F;
+  --buy-bg: #D8F3DC;
+  --hold: #7B4F00;
+  --hold-bg: #FFE8A3;
+  --red: #9B2226;
+  --red-bg: #FFD6D6;
+  --blue: #1B4F8A;
+  --blue-bg: #DBEAFE;
+  --gold: #B07D00;
+  --font-sans: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); font-family: var(--font-sans); color: var(--text); font-size: 14px; line-height: 1.5; overflow-x: hidden; }
+html { overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+
+/* ── Layout ── */
+.page { max-width: 1280px; margin: 0 auto; padding: 24px 20px; }
+.topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.ticker-block { }
+.ticker-block .name { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
+.ticker-block .code { font-size: 12px; color: var(--text3); font-family: var(--font-mono); margin-top: 1px; }
+.price-block { text-align: right; }
+.price-block .cmp { font-size: 26px; font-weight: 600; font-family: var(--font-mono); }
+.price-block .range { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.tag { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: .05em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+.tag-buy { background: var(--buy-bg); color: var(--buy); }
+.tag-hold { background: var(--hold-bg); color: var(--hold); }
+.tag-sell { background: var(--red-bg); color: var(--red); }
+.tag-info { background: var(--blue-bg); color: var(--blue); }
+
+/* ── Tabs nav ── */
+.nav { display: flex; gap: 2px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px; margin-bottom: 24px; flex-wrap: wrap; }
+.nav-tab { font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 6px; cursor: pointer; color: var(--text2); transition: all .15s; border: none; background: transparent; }
+.nav-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.nav-tab:hover:not(.active) { color: var(--text); }
+
+/* ── Sections ── */
+.section { display: none; }
+.section.active { display: block; }
+.sec-label { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; }
+
+/* ── Metric cards ── */
+.metric-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 24px; }
+.metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
+.metric .lbl { font-size: 10px; color: var(--text3); font-weight: 500; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+.metric .val { font-size: 20px; font-weight: 600; font-family: var(--font-mono); color: var(--text); }
+.metric .sub { font-size: 10px; margin-top: 3px; color: var(--text3); }
+.metric .up { color: var(--buy); }
+.metric .dn { color: var(--red); }
+
+/* ── Cards grid ── */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-bottom: 24px; }
+.house-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
+.house-card.buy-card { border-left: 3px solid var(--buy); }
+.house-card.hold-card { border-left: 3px solid var(--gold); }
+.house-card .hname { font-size: 13px; font-weight: 600; }
+.house-card .hdate { font-size: 10px; color: var(--text3); font-family: var(--font-mono); }
+.house-card .htp { font-size: 22px; font-weight: 600; font-family: var(--font-mono); margin-top: 6px; }
+.house-card .hup { font-size: 11px; color: var(--buy); }
+.house-card .hbasis { font-size: 10px; color: var(--text3); margin-top: 4px; }
+.house-card .divider { height: 1px; background: var(--border); margin: 8px 0; }
+.tp-chg { font-size: 10px; }
+.tp-up { color: var(--buy); } .tp-dn { color: var(--red); } .tp-nc { color: var(--text3); }
+
+/* ── TP bars ── */
+.tp-bars { margin-bottom: 24px; }
+.tp-bar-row { display: grid; grid-template-columns: 100px 1fr 70px; align-items: center; gap: 10px; margin-bottom: 7px; }
+.tp-house-lbl { font-size: 11px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-mono); }
+.tp-track { background: var(--surface2); border-radius: 3px; height: 14px; position: relative; border: 1px solid var(--border); }
+.tp-fill { height: 100%; border-radius: 2px; min-width: 4px; }
+.tp-cmp-line { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--red); border-radius: 1px; }
+.tp-val-lbl { font-size: 11px; font-weight: 500; font-family: var(--font-mono); text-align: right; }
+
+/* ── Tables ── */
+.tbl-wrap { overflow-x: auto; margin-bottom: 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead th { font-size: 10px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--text3); padding: 6px 10px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+thead th:first-child { text-align: left; }
+tbody td { padding: 7px 10px; border-bottom: 1px solid var(--border); color: var(--text); text-align: right; font-family: var(--font-mono); font-size: 11px; white-space: nowrap; }
+tbody td:first-child { text-align: left; font-family: var(--font-sans); font-size: 12px; font-weight: 500; color: var(--text2); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface2); }
+.cell-hi { background: #D8F3DC !important; color: #1B4F2A; }
+.cell-lo { background: #FFD6D6 !important; color: #6B1010; }
+.cell-bold { font-weight: 600 !important; color: var(--text) !important; }
+
+/* ── KPI chart tabs ── */
+.kpi-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.kpi-tab { font-size: 11px; padding: 4px 12px; border-radius: 4px; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text2); transition: all .1s; }
+.kpi-tab.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+/* ── Chart containers ── */
+.chart-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 20px; }
+.chart-box .chart-title { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; }
+.chart-wrap { position: relative; width: 100%; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.legend-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.leg-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text2); }
+.leg-swatch { width: 10px; height: 10px; border-radius: 2px; }
+
+/* ── Bull/Bear ── */
+.bb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.bb-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; }
+.bb-card .bb-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 12px; }
+.bb-card.bull .bb-title { background: var(--buy-bg); color: var(--buy); }
+.bb-card.bear .bb-title { background: var(--red-bg); color: var(--red); }
+.bb-item { display: flex; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text); line-height: 1.5; }
+.bb-item:last-child { border-bottom: none; }
+.bb-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── History tables ── */
+.hist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.hist-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
+.hist-card .hc-title { font-size: 12px; font-weight: 600; margin-bottom: 10px; }
+.hist-card table { font-size: 11px; }
+.hist-card thead th { font-size: 9px; }
+.hist-card tbody td { padding: 4px 6px; font-size: 10px; }
+.hist-card tbody td:first-child { font-family: var(--font-mono); font-size: 10px; }
+
+/* ── Upload section ── */
+.upload-zone { background: var(--surface); border: 2px dashed var(--border2); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 24px; transition: all .2s; cursor: pointer; }
+.upload-zone:hover, .upload-zone.drag { border-color: var(--text); background: var(--surface2); }
+.upload-zone .uz-icon { font-size: 28px; margin-bottom: 8px; }
+.upload-zone .uz-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.upload-zone .uz-sub { font-size: 11px; color: var(--text3); }
+#file-input { display: none; }
+.upload-status { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 16px; font-size: 12px; }
+.upload-status.processing { border-color: var(--gold); background: #FFF8E1; color: var(--hold); }
+.upload-status.done { border-color: var(--buy); background: var(--buy-bg); color: var(--buy); }
+.upload-status.error { border-color: var(--red); background: var(--red-bg); color: var(--red); }
+.parsed-list { list-style: none; }
+.parsed-list li { font-size: 11px; padding: 4px 0; border-bottom: 1px solid var(--border); color: var(--text2); display: flex; justify-content: space-between; }
+.parsed-list li:last-child { border-bottom: none; }
+.api-key-row { display: flex; gap: 8px; margin-bottom: 16px; }
+.api-key-row input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 12px; font-family: var(--font-mono); background: var(--surface); color: var(--text); }
+.api-key-row button, .btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 12px; font-weight: 500; cursor: pointer; background: var(--text); color: #fff; font-family: var(--font-sans); transition: opacity .15s; }
+.btn:hover { opacity: .85; }
+.btn-outline { background: var(--surface); color: var(--text); }
+.note-box { background: var(--blue-bg); border: 1px solid #BFDBFE; border-radius: var(--radius); padding: 10px 14px; font-size: 11px; color: var(--blue); margin-bottom: 16px; }
+
+/* ── Responsive ── */
+@media(max-width:768px) {
+  .page { padding: 12px 12px; }
+  .topbar { flex-direction: column; gap: 10px; }
+  .price-block { text-align: left; }
+  .two-col, .bb-grid { grid-template-columns: 1fr; }
+  .tp-bar-row { grid-template-columns: 70px 1fr 52px; gap: 6px; font-size: 12px; }
+  .metric-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .metric { padding: 10px 10px; }
+  .metric .val { font-size: 18px; }
+  .nav { gap: 2px; padding: 3px; }
+  .nav-tab { font-size: 11px; padding: 5px 9px; cursor: pointer; -webkit-tap-highlight-color: rgba(0,0,0,0.1); }
+  .chart-box { padding: 12px 10px; overflow: hidden; }
+  .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .sec-label { font-size: 10px; }
+  .chart-wrap { overflow: hidden; width: 100% !important; max-width: 100% !important; }
+  .chart-wrap canvas { display: block; width: 100% !important; }
+  .chart-box .two-col > div:last-child { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  img, svg { max-width: 100% !important; }
+  .price-block > div:last-child { flex-wrap: wrap; }
+}
+@media(max-width:400px) {
+  .nav-tab { font-size: 10px; padding: 4px 7px; }
+  .metric .val { font-size: 16px; }
+  .tp-bar-row { grid-template-columns: 60px 1fr 48px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="ticker-block">
+    <div class="name">PVR INOX <span class="tag tag-info" style="font-size:11px;vertical-align:middle">PVRINOX IN</span></div>
+    <div class="code">BSE: 532281 &nbsp;|&nbsp; NSE: PVRINOX &nbsp;|&nbsp; Media &amp; Entertainment</div>
+  </div>
+  <div class="price-block">
+    <div class="cmp" id="cmp-display">₹<span id="cmp-value">987</span></div>
+    <div class="range">Mcap: <span id="mcap-display">₹97bn</span> &nbsp;|&nbsp; 3QFY26 results cycle</div>
+    <div style="margin-top:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+      <input id="cmp-input" type="number" placeholder="Update CMP e.g. 1085" style="width:170px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;font-family:var(--font-mono);background:var(--surface);color:var(--text)" />
+      <button onclick="updateCMP()" class="btn btn-outline" style="font-size:11px;padding:6px 14px">Update CMP</button>
+      <button onclick="exportDashboard()" class="btn btn-outline" style="font-size:11px;padding:6px 14px">⬇ Export HTML</button>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <button class="nav-tab active" onclick="showTab('consensus',this)">Consensus</button>
+  <button class="nav-tab" onclick="showTab('ratings',this)">Ratings &amp; TPs</button>
+  <button class="nav-tab" onclick="showTab('estimates',this)">Estimates</button>
+  <button class="nav-tab" onclick="showTab('kpis',this)">KPI Trends</button>
+  <button class="nav-tab" onclick="showTab('revenue',this)">Revenue Mix</button>
+  <button class="nav-tab" onclick="showTab('history',this)">Rating History</button>
+  <button class="nav-tab" onclick="showTab('bull',this)">Bull / Bear</button>
+  <button class="nav-tab" onclick="showTab('tpassum',this)">TP Assumptions</button>
+  <button class="nav-tab" onclick="showTab('tprecon',this)">TP Reconciliation</button>
+  <button class="nav-tab" onclick="showTab('valuation',this)">Valuation Matrix</button>
+  <button class="nav-tab" onclick="showTab('analysts',this)">Analyst Contacts</button>
+  <button class="nav-tab" onclick="showTab('industry',this)">Industry Data</button>
+  <button class="nav-tab" onclick="showTab('update',this)">&#8593; Update</button>
+</nav>
+
+<!-- ══════════════════════════════════
+     TAB 1 — CONSENSUS
+══════════════════════════════════ -->
+<div id="tab-consensus" class="section active">
+  <div class="sec-label">Snapshot — 3QFY26 post-results</div>
+  <div class="metric-row">
+    <div class="metric"><div class="lbl">Houses</div><div class="val" id="snap-houses">10</div><div class="sub" id="snap-ratings">9 BUY/OP · 1 HOLD</div></div>
+    <div class="metric"><div class="lbl">Avg TP</div><div class="val" id="snap-avg-tp">₹1,380</div><div class="sub up" id="snap-upside">+40% upside</div></div>
+    <div class="metric"><div class="lbl">TP range</div><div class="val" id="snap-tp-low">₹1,248</div><div class="sub" id="snap-tp-high">to ₹1,920</div></div>
+    <div class="metric"><div class="lbl">Revenue 3Q</div><div class="val">18,798</div><div class="sub up">+9.5% YoY</div></div>
+    <div class="metric"><div class="lbl">EBITDA 3Q</div><div class="val">3,156</div><div class="sub up">+33% YoY · 16.8%</div></div>
+    <div class="metric"><div class="lbl">Occupancy</div><div class="val">28.5%</div><div class="sub up">+280 bps YoY</div></div>
+    <div class="metric"><div class="lbl">ATP (all-time high)</div><div class="val">₹293</div><div class="sub up">+4.3% YoY</div></div>
+    <div class="metric"><div class="lbl">SPH</div><div class="val">₹146</div><div class="sub up">+4.3% YoY</div></div>
+    <div class="metric"><div class="lbl">Net debt</div><div class="val">₹3.7bn</div><div class="sub up">-74% since merger</div></div>
+    <div class="metric"><div class="lbl">Screens</div><div class="val">1,791</div><div class="sub">112 cities</div></div>
+    <div class="metric"><div class="lbl">Footfalls 3Q</div><div class="val">40.5mn</div><div class="sub up">+8.6% YoY</div></div>
+    <div class="metric"><div class="lbl">F&amp;B revenue 3Q</div><div class="val">5,938</div><div class="sub up">+14% YoY</div></div>
+  </div>
+
+  <div class="sec-label" style="margin-top:8px">Target price range — all houses vs CMP ₹987</div>
+  <div class="tp-bars" id="tp-bars-consensus"></div>
+
+  <div class="sec-label">Shareholding pattern — Dec 2025</div>
+  <div class="chart-box">
+    <div class="two-col" style="margin-bottom:0">
+      <div>
+        <div class="chart-wrap" style="height:200px;position:relative"><canvas id="shareChart" role="img" aria-label="Shareholding pie chart Dec 2025">Promoters 27.5%, FII 21.2%, MF/DII 34.5%, Others 16.8%</canvas></div>
+        <div class="legend-row">
+          <span class="leg-item"><span class="leg-swatch" style="background:#1A1916"></span>Promoters 27.5%</span>
+          <span class="leg-item"><span class="leg-swatch" style="background:#378ADD"></span>FII 21.2%</span>
+          <span class="leg-item"><span class="leg-swatch" style="background:#1D9E75"></span>DII 34.5%</span>
+          <span class="leg-item"><span class="leg-swatch" style="background:#888780"></span>Others 16.8%</span>
+        </div>
+      </div>
+      <div style="padding-top:8px">
+        <table>
+          <thead><tr><th>Category</th><th>Dec-25</th><th>Sep-25</th><th>Jun-25</th></tr></thead>
+          <tbody>
+            <tr><td>Promoters</td><td>27.5%</td><td>27.5%</td><td>27.5%</td></tr>
+            <tr><td>FII</td><td>21.2%</td><td>19.7%</td><td>20.4%</td></tr>
+            <tr><td>MF &amp; DII</td><td>34.5%</td><td>36.5%</td><td>36.3%</td></tr>
+            <tr><td>Others</td><td>16.8%</td><td>15.3%</td><td>15.8%</td></tr>
+            <tr><td>Promoter pledge</td><td>10.9%</td><td>9.4%</td><td>10.2%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 2 — RATINGS & TPs
+══════════════════════════════════ -->
+<div id="tab-ratings" class="section">
+  <div class="sec-label">All research houses — 3QFY26 result cycle</div>
+  <div class="cards-grid" id="house-cards"></div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 3 — ESTIMATES
+══════════════════════════════════ -->
+<div id="tab-estimates" class="section">
+  <div class="sec-label">Revenue &amp; EBITDA estimates — Rs mn (green = high, red = low per column)</div>
+  <div class="tbl-wrap">
+    <table id="est-table">
+      <thead>
+        <tr>
+          <th>House</th>
+          <th>FY26E Rev</th><th>FY26E EBITDA</th><th>Mgn%</th>
+          <th>FY27E Rev</th><th>FY27E EBITDA</th><th>Mgn%</th>
+          <th>FY28E Rev</th><th>FY28E EBITDA</th><th>Mgn%</th>
+        </tr>
+      </thead>
+      <tbody id="est-body"></tbody>
+    </table>
+  </div>
+
+  <div class="sec-label" style="margin-top:16px">EPS estimates &amp; PAT — Rs/share</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>House</th><th>FY26E EPS</th><th>FY27E EPS</th><th>FY28E EPS</th><th>FY26E PAT (mn)</th><th>FY27E PAT (mn)</th><th>Valuation</th></tr>
+      </thead>
+      <tbody id="eps-body"></tbody>
+    </table>
+  </div>
+
+  <div class="sec-label" style="margin-top:16px">Key operational assumptions</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>House</th><th>FY26E Footfalls</th><th>FY26E Occ%</th><th>FY26E ATP</th><th>FY26E SPH</th><th>FY27E Screens</th><th>Capex FY27 (bn)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Kotak</td><td>155mn</td><td>26.0%</td><td>270</td><td>143</td><td>1,781</td><td>3.5–4.0</td></tr>
+        <tr><td>CLSA</td><td>159mn</td><td>26%</td><td>261</td><td>—</td><td>—</td><td>4.5–5.0</td></tr>
+        <tr><td>Nirmal Bang</td><td>155mn</td><td>25.5%</td><td>269</td><td>144</td><td>1,846</td><td>3.5–4.0</td></tr>
+        <tr><td>Nuvama</td><td>—</td><td>28–29%</td><td>280</td><td>158</td><td>—</td><td>3.5–4.0</td></tr>
+        <tr><td>ICICI Direct</td><td>157mn</td><td>—</td><td>270</td><td>—</td><td>1,889</td><td>3.5–4.0</td></tr>
+        <tr><td>Mgmt guidance</td><td>—</td><td>~28%</td><td>+3.5–4%/yr</td><td>+3.5–4%/yr</td><td>+150 gross</td><td>3.5–4.0</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 4 — KPI TRENDS
+══════════════════════════════════ -->
+<div id="tab-kpis" class="section">
+  <div class="sec-label">Quarterly operating KPIs — Q3FY24 to Q3FY26</div>
+  <div class="kpi-tabs">
+    <div class="kpi-tab active" onclick="showKpi('footfalls',this)">Footfalls (mn)</div>
+    <div class="kpi-tab" onclick="showKpi('occ',this)">Occupancy (%)</div>
+    <div class="kpi-tab" onclick="showKpi('atp',this)">ATP (Rs)</div>
+    <div class="kpi-tab" onclick="showKpi('sph',this)">SPH (Rs)</div>
+    <div class="kpi-tab" onclick="showKpi('rev',this)">Revenue (mn)</div>
+    <div class="kpi-tab" onclick="showKpi('ebitda',this)">Pre-IndAS EBITDA</div>
+    <div class="kpi-tab" onclick="showKpi('nd',this)">Net debt (mn)</div>
+    <div class="kpi-tab" onclick="showKpi('screens',this)">Screens</div>
+  </div>
+  <div class="chart-box">
+    <div class="chart-wrap" style="height:300px"><canvas id="kpiChart" role="img" aria-label="KPI trend chart PVR INOX quarterly"></canvas></div>
+  </div>
+
+  <div class="sec-label" style="margin-top:4px">Full quarterly data table</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Quarter</th><th>Revenue</th><th>Post-IAS EBITDA</th><th>Mgn%</th><th>Pre-IAS EBITDA</th><th>Pre-IAS Mgn%</th><th>Footfalls</th><th>Occupancy</th><th>ATP</th><th>SPH</th><th>Net debt</th></tr>
+      </thead>
+      <tbody id="kpi-tbl-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 5 — REVENUE MIX
+══════════════════════════════════ -->
+<div id="tab-revenue" class="section">
+  <div class="sec-label">Revenue breakdown — 3QFY26</div>
+  <div class="two-col">
+    <div class="chart-box">
+      <div class="chart-title">Revenue mix 3QFY26 (Rs mn)</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="mixChart" role="img" aria-label="Doughnut chart revenue mix 3QFY26">Tickets 53%, F&B 32%, Ad 6%, Other 9%</canvas></div>
+      <div class="legend-row" style="margin-top:12px">
+        <span class="leg-item"><span class="leg-swatch" style="background:#1B4F8A"></span>Tickets 10,056 (53%)</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#1D9E75"></span>F&B 5,938 (32%)</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#B07D00"></span>Advert 1,180 (6%)</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#888780"></span>Other 1,624 (9%)</span>
+      </div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Cost structure 3QFY26 (Rs mn)</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="costsChart" role="img" aria-label="Horizontal bar chart cost structure 3QFY26"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-label">Revenue trend — quarterly YoY growth</div>
+  <div class="chart-box">
+    <div class="chart-wrap" style="height:260px"><canvas id="revTrendChart" role="img" aria-label="Bar chart quarterly revenue trend"></canvas></div>
+  </div>
+
+  <div class="sec-label" style="margin-top:8px">Revenue composition — genre / language mix 3QFY26</div>
+  <div class="metric-row">
+    <div class="metric"><div class="lbl">Hindi</div><div class="val">52%</div><div class="sub">vs 46% in 2QFY26</div></div>
+    <div class="metric"><div class="lbl">Regional</div><div class="val">27%</div><div class="sub">vs 26% in 2QFY26</div></div>
+    <div class="metric"><div class="lbl">English</div><div class="val">12%</div><div class="sub">vs 24% in 2QFY26</div></div>
+    <div class="metric"><div class="lbl">Hindi Dubbed</div><div class="val">8%</div><div class="sub">vs 3% in 2QFY26</div></div>
+    <div class="metric"><div class="lbl">Online ticket share</div><div class="val">>50%</div><div class="sub">app + aggregators</div></div>
+    <div class="metric"><div class="lbl">F&B gross margin</div><div class="val">76.5%</div><div class="sub up">+223 bps YoY</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 6 — RATING HISTORY
+══════════════════════════════════ -->
+<div id="tab-history" class="section">
+  <div class="sec-label">Historical rating &amp; TP track — selected houses</div>
+  <div class="hist-grid" id="hist-grid"></div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 7 — BULL / BEAR
+══════════════════════════════════ -->
+<div id="tab-bull" class="section">
+  <div class="sec-label">Investment thesis — key arguments</div>
+  <div class="bb-grid">
+    <div class="bb-card bull">
+      <div class="bb-title">Bull case</div>
+      <div class="bb-item"><span class="bb-icon">✓</span><span>Two consecutive quarters of 28%+ occupancy and 16%+ pre-IndAS margin; structural cost benefits from merger (synergies vs pre-Covid require 350–400 bps higher occupancy for same margin)</span></div>
+      <div class="bb-item"><span class="bb-icon">✓</span><span>Net debt down 74% to Rs 3.7bn since merger; path to net cash positive by Q4FY26E; 4700BC sale (Rs 2.3bn cash) further accelerates deleveraging</span></div>
+      <div class="bb-item"><span class="bb-icon">✓</span><span>All-time high ATP Rs 293; SPH Rs 146; management guided 3.5–4% annual growth; F&B gross margin 76.5% with in-house brand scaling</span></div>
+      <div class="bb-item"><span class="bb-icon">✓</span><span>CY25 strongest year ever: Rs 134bn industry GBOC, 37 films crossing Rs 1bn; CY26 expected bigger with King, Ramayana, Avengers, Dune 3, Battle of Galwan</span></div>
+      <div class="bb-item"><span class="bb-icon">✓</span><span>149 screens signed capital-light (54 FOCO + 95 asset-light); 150 gross additions guided FY27 at Rs 3.5–4bn capex</span></div>
+      <div class="bb-item"><span class="bb-icon">✓</span><span>~65% multiplex screen share in India; formidable barriers to entry; pricing power vs mall operators, distributors, advertisers</span></div>
+      <div class="bb-item"><span class="bb-icon">✓</span><span>India multiplex penetration very low (~3,700 screens vs >75,000 in China); long compounding runway; rising addressable household base</span></div>
+    </div>
+    <div class="bb-card bear">
+      <div class="bb-title">Bear / risk case (B&K Hold)</div>
+      <div class="bb-item"><span class="bb-icon">✗</span><span>Ad revenue down 21% YoY to Rs 1.18bn in 3Q; still 30–35% below pre-Covid levels; volumes volatile with film slate quality; only 4 marketable films in 3QFY26 vs 8 in 3QFY25</span></div>
+      <div class="bb-item"><span class="bb-icon">✗</span><span>Content concentration risk: ~29% of 3QFY26 BO from single film (Dhurandhar); structural prediction problem persists despite improving content diversity</span></div>
+      <div class="bb-item"><span class="bb-icon">✗</span><span>OTT structural threat: Warner Bros–Netflix matter sub-judice in US; could shorten theatrical windows globally if precedent set</span></div>
+      <div class="bb-item"><span class="bb-icon">✗</span><span>Karnataka ticket price cap under High Court stay but still sub-judice; CCI VPF probe ongoing; regulatory overhangs persist</span></div>
+      <div class="bb-item"><span class="bb-icon">✗</span><span>EBITDA margin expansion structurally capped without ad revenue recovery; significant deferred tax assets reduce PAT quality near-term</span></div>
+      <div class="bb-item"><span class="bb-icon">✗</span><span>Rs 446mn one-time hit from new labour codes; promoter pledge at 10.9%; FII ownership decline from 36% to 21% over 12M is a notable overhang</span></div>
+    </div>
+  </div>
+
+  <div class="sec-label">Management guidance evolution — quarter by quarter</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Topic</th><th>3QFY25</th><th>4QFY25</th><th>1QFY26</th><th>2QFY26</th><th>3QFY26</th></tr></thead>
+      <tbody>
+        <tr><td>Screen additions (gross)</td><td>~110 FY26</td><td>100–110 FY26</td><td>90–100 FY26</td><td>~100 FY26</td><td>96 FY26 / 150 FY27</td></tr>
+        <tr><td>Capex guidance</td><td>Rs 4–5bn</td><td>Rs ~4.25bn</td><td>Rs 4–4.25bn</td><td>Rs 4–4.25bn</td><td>Rs 3.5–4bn FY27</td></tr>
+        <tr><td>Occupancy outlook</td><td>~25%, path to 18% margin</td><td>Strong comeback</td><td>Footfalls to top FY24</td><td>Q3/Q4 strong</td><td>28–29% sustainable</td></tr>
+        <tr><td>ATP/SPH growth</td><td>—</td><td>—</td><td>—</td><td>—</td><td>3.5–4% annually</td></tr>
+        <tr><td>Net debt trajectory</td><td>—</td><td>Reduction via OCF</td><td>Continue reduction</td><td>On track</td><td>Net cash by Q4FY26</td></tr>
+        <tr><td>Ad revenue</td><td>—</td><td>—</td><td>Highest-ever Q1</td><td>Second best post-Covid</td><td>Recovery in CY26; FY26 marginally +YoY</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 8 — TP ASSUMPTIONS
+══════════════════════════════════ -->
+<div id="tab-tpassum" class="section">
+
+  <div class="sec-label">What is driving the gap between CLSA ₹1,920 and PL Capital ₹1,274?</div>
+
+  <!-- Visual TP waterfall / comparison chart -->
+  <div class="chart-box" style="margin-bottom:20px">
+    <div class="chart-title">Target price bridge — key assumption differences by house</div>
+    <div class="chart-wrap" style="height:320px">
+      <canvas id="tpCompChart" role="img" aria-label="Horizontal bar chart comparing target prices by research house"></canvas>
+    </div>
+  </div>
+
+  <!-- 3-factor explanation -->
+  <div class="sec-label">Three factors that explain the TP spread</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:24px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #1B4F8A;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="font-size:11px;font-weight:600;color:#1B4F8A;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">Factor 1 — Valuation multiple</div>
+      <div style="font-size:12px;color:var(--text);line-height:1.6">Range: <strong>9.5x to 13x</strong> pre-IndAS EV/EBITDA. CLSA uses 10x on FY27 (higher base year), Nuvama uses DCF which implicitly values at a premium. PL Capital at 9.5x and Investec at 12.5x reflect different views on structural rerating potential post-deleveraging.</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #1D9E75;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="font-size:11px;font-weight:600;color:#1D9E75;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">Factor 2 — Base year EBITDA</div>
+      <div style="font-size:12px;color:var(--text);line-height:1.6">CLSA uses FY27 EBITDA of <strong>Rs 24.7bn</strong> vs PL Capital's Rs 10.6bn (pre-IndAS) and Kotak's Rs 10.3bn. The gap is entirely the Ind AS 116 treatment — post-IndAS numbers are ~2.5x higher. Houses using post-IndAS base get higher absolute EV, but must use lower multiples to be consistent.</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #B07D00;border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="font-size:11px;font-weight:600;color:#B07D00;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">Factor 3 — Net debt assumption</div>
+      <div style="font-size:12px;color:var(--text);line-height:1.6">CLSA deducts <strong>Rs 60bn net debt</strong> (includes Ind AS 116 lease liabilities of ~Rs 57bn) from EV, which significantly clips equity value. Houses using pre-IndAS net debt of ~Rs 3.5–5bn deduct far less, giving higher equity value per share for same EV.</div>
+    </div>
+  </div>
+
+  <!-- Detailed per-house breakdown table -->
+  <div class="sec-label">Detailed TP derivation — house by house</div>
+  <div class="tbl-wrap" style="margin-bottom:24px">
+    <table id="tp-assump-table">
+      <thead>
+        <tr>
+          <th>House</th>
+          <th>TP</th>
+          <th>Rating</th>
+          <th>Method</th>
+          <th>Multiple</th>
+          <th>Base EBITDA</th>
+          <th>Base year</th>
+          <th>Total EV</th>
+          <th>Less: debt</th>
+          <th>Ind AS 116?</th>
+          <th>Key differentiator</th>
+        </tr>
+      </thead>
+      <tbody id="tp-assump-body"></tbody>
+    </table>
+  </div>
+
+  <!-- Qualitative thesis comparison -->
+  <div class="sec-label">Qualitative thesis — what each house is betting on</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:24px" id="thesis-cards"></div>
+
+  <!-- Sensitivity table -->
+  <div class="sec-label">TP sensitivity — what happens if EBITDA multiple changes (pre-IndAS, FY27E EBITDA ~Rs 10,500mn)</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>EV/EBITDA multiple →</th>
+          <th>8x</th><th>9x</th><th>9.5x</th><th>10x</th><th>11x</th><th>12x</th><th>12.5x</th><th>13x</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Implied EV (Rs mn)</td>
+          <td>84,000</td><td>94,500</td><td>99,750</td><td>105,000</td><td>115,500</td><td>126,000</td><td>131,250</td><td>136,500</td>
+        </tr>
+        <tr>
+          <td>Less: net debt (Rs 3.5bn)</td>
+          <td colspan="8" style="text-align:center;color:var(--text3);font-size:10px">Deducting pre-IndAS net debt of ~Rs 3,500mn (post 4700BC sale)</td>
+        </tr>
+        <tr>
+          <td>Equity value (Rs mn)</td>
+          <td>80,500</td><td>91,000</td><td>96,250</td><td>101,500</td><td>112,000</td><td>122,500</td><td>127,750</td><td>133,000</td>
+        </tr>
+        <tr>
+          <td><strong>Implied TP (98mn shares)</strong></td>
+          <td>821</td><td style="background:#FFE8A3;color:#7B4F00;font-weight:600">929</td><td style="background:#FFE8A3;color:#7B4F00;font-weight:600">982</td>
+          <td style="background:#D8F3DC;color:#1B4F2A;font-weight:600">1,036</td>
+          <td style="background:#D8F3DC;color:#1B4F2A;font-weight:600">1,143</td>
+          <td style="background:#D8F3DC;color:#1B4F2A;font-weight:600">1,250</td>
+          <td style="background:#D8F3DC;color:#1B4F2A;font-weight:600">1,303</td>
+          <td style="background:#DBEAFE;color:#1B4F8A;font-weight:600">1,357</td>
+        </tr>
+        <tr>
+          <td style="font-size:10px;color:var(--text3)">vs CMP ₹987</td>
+          <td style="color:var(--red)">-17%</td><td style="color:var(--red)">-6%</td><td style="color:var(--red)">-1%</td>
+          <td style="color:var(--buy)">+5%</td><td style="color:var(--buy)">+16%</td><td style="color:var(--buy)">+27%</td>
+          <td style="color:var(--buy)">+32%</td><td style="color:var(--buy)">+37%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="font-size:10px;color:var(--text3);margin-top:6px">Note: Sensitivity uses consensus pre-IndAS FY27E EBITDA of ~Rs 10,500mn. CLSA / Nuvama / ICICI Sec use post-IndAS EBITDA base which is materially higher (~Rs 24,000mn) but pair with Ind AS 116 net debt deduction of ~Rs 60bn, arriving at comparable equity values.</div>
+
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 9 — TP RECONCILIATION
+══════════════════════════════════ -->
+<div id="tab-tprecon" class="section">
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:24px">
+    <div style="font-size:15px;font-weight:600;margin-bottom:12px">Why does Nuvama (EPS ₹78–97) get only ₹1,605, while CLSA (EPS ₹51–75) gets ₹1,920?</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:14px">
+      <div style="background:var(--surface2);border-radius:var(--radius);padding:12px 14px">
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Short answer</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.6">Nuvama uses a <strong>DCF</strong> — high EPS × reasonable discount rate = moderate TP. CLSA uses <strong>EV/EBITDA on post-Ind AS numbers</strong> — large EBITDA × 10x = very large EV. The lease debt deduction does not fully cancel the EV gain.</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:var(--radius);padding:12px 14px">
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">The Nuvama EPS paradox</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.6">Nuvama's FY27E EPS of ₹78 implies a <strong>P/E of ~20x at TP ₹1,605</strong>. That is modest. The high EPS comes from aggressive revenue (Rs 80bn), faster debt repayment lowering interest, and lower depreciation — not from a higher EBITDA multiple.</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:var(--radius);padding:12px 14px">
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Why CLSA TP is higher</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.6">CLSA's post-Ind AS EBITDA ₹24.7bn × 10x = <strong>EV of ₹247bn</strong>. Deduct ₹60bn net debt (incl. leases) → ₹187bn equity → <strong>₹1,920/share</strong>. Nuvama DCF arrives lower because it discounts future free cash flows, not a spot multiple on inflated EBITDA.</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);border-top:1px solid var(--border);padding-top:10px">Key insight: <strong>EPS and TP are not directly comparable across houses when valuation methods differ.</strong> An EV/EBITDA house can show lower EPS yet arrive at a higher TP if it uses a post-Ind AS EBITDA base and a spot multiple rather than discounting cash flows.</div>
+  </div>
+
+  <div class="sec-label">What year is each TP anchored to?</div>
+  <div style="overflow-x:auto;margin-bottom:24px">
+    <table>
+      <thead>
+        <tr><th>House</th><th>TP</th><th>Anchor year</th><th>Months from Feb-26</th><th>EBITDA used</th><th>Ind AS basis</th><th>P/E at TP</th><th>EV/EBITDA at TP</th></tr>
+      </thead>
+      <tbody id="recon-year-body"></tbody>
+    </table>
+  </div>
+
+  <div class="sec-label">Intrinsic EV/EBITDA — what the market prices at CMP ₹987</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:20px">
+    <div style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6">At CMP ₹987: pre-Ind AS EV = Mcap ₹96.8bn + net debt ₹3.7bn = <strong>₹100.5bn</strong>. Post-Ind AS EV = Mcap ₹96.8bn + net debt incl. leases ₹66bn = <strong>₹162.8bn</strong>.</div>
+    <div class="two-col">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Pre-Ind AS EV/EBITDA at CMP (by year)</div>
+        <div class="chart-wrap" style="height:260px"><canvas id="impliedEvChart" role="img" aria-label="Implied EV EBITDA at CMP"></canvas></div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Implied P/E at CMP ₹987 (by house)</div>
+        <div class="chart-wrap" style="height:260px"><canvas id="impliedPeChart" role="img" aria-label="Implied PE at CMP"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-label">Nuvama vs CLSA — full numerical walkthrough</div>
+  <div class="two-col" style="margin-bottom:24px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #2D6A4F;border-radius:var(--radius-lg);padding:16px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:#2D6A4F">Nuvama — TP ₹1,605 (DCF)</div>
+      <table style="font-size:11px;width:100%">
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Method</td><td style="text-align:right;font-weight:500">DCF (multi-year cash flows)</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E Revenue</td><td style="text-align:right;font-weight:500">₹80,066mn (highest in group)</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E EBITDA (post-IAS)</td><td style="text-align:right;font-weight:500">₹24,288mn · 30.3% margin</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E PAT / EPS</td><td style="text-align:right;font-weight:500;color:#2D6A4F">₹7,678mn / ₹78.2 (highest)</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Why EPS is highest</td><td style="text-align:right;font-weight:500">Fast debt repay → interest falls sharply; higher revenue base; lower depreciation trajectory</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Implied P/E at TP</td><td style="text-align:right;font-weight:500">20.5x FY27E EPS</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Implied EV/EBITDA at TP</td><td style="text-align:right;font-weight:500">~9.3x FY27E post-Ind AS</td></tr>
+        <tr><td style="padding:5px 0;color:var(--text2)">Why TP is lower than CLSA</td><td style="text-align:right;font-weight:500;color:#9B2226">DCF does not apply a spot multiple to peak EBITDA. Discounts cash flows at WACC — penalises near-term earnings drag from high depreciation + interest even if EPS later recovers strongly.</td></tr>
+      </table>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #1B4F8A;border-radius:var(--radius-lg);padding:16px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:#1B4F8A">CLSA — TP ₹1,920 (EV/EBITDA)</div>
+      <table style="font-size:11px;width:100%">
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Method</td><td style="text-align:right;font-weight:500">10x EV/EBITDA (5-yr avg multiple)</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E Revenue</td><td style="text-align:right;font-weight:500">₹77,086mn</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E EBITDA (post-IAS)</td><td style="text-align:right;font-weight:500">₹24,714mn · 32.1% margin</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">FY27E EPS</td><td style="text-align:right;font-weight:500;color:#9B2226">₹51.6 (not the valuation driver)</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">EV at 10x EBITDA</td><td style="text-align:right;font-weight:500;color:#1B4F8A">₹247,143mn</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Less: Ind AS net debt</td><td style="text-align:right;font-weight:500;color:#9B2226">₹60,046mn (incl. ₹57bn leases)</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Equity value</td><td style="text-align:right;font-weight:500;color:#1B4F8A">₹187,097mn ÷ 98mn = ₹1,908 → ₹1,920</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 0;color:var(--text2)">Implied P/E at TP</td><td style="text-align:right;font-weight:500">37.2x FY27E EPS</td></tr>
+        <tr><td style="padding:5px 0;color:var(--text2)">Why TP is higher</td><td style="text-align:right;font-weight:500;color:#1B4F8A">Post-IAS EBITDA is 2.5x pre-IAS. 10x × ₹24.7bn = ₹247bn EV. Lease debt deduction of ₹60bn ≠ offsetting the extra ₹140bn EV created by the larger base vs pre-IAS.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec-label">Full implied multiples at CMP ₹987 — all houses</div>
+  <div style="overflow-x:auto;margin-bottom:8px">
+    <table>
+      <thead>
+        <tr><th>House</th><th>TP</th><th>Year</th><th>Pre-IAS EBITDA</th><th>EV/EBITDA @ CMP (pre-IAS)</th><th>EPS est</th><th>P/E @ CMP</th><th>P/E @ TP</th><th>P/E at TP — cheap or not?</th></tr>
+      </thead>
+      <tbody id="implied-mult-body"></tbody>
+    </table>
+  </div>
+  <div style="font-size:10px;color:var(--text3);margin-bottom:24px">Pre-Ind AS EV at CMP = ₹100.5bn. Figures shown for the TP anchor year. P/E at TP = TP ÷ EPS estimate for that year.</div>
+
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 10 — VALUATION MATRIX
+══════════════════════════════════ -->
+<div id="tab-valuation" class="section">
+
+  <!-- sub-tabs -->
+  <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap" id="val-subtabs">
+    <button class="kpi-tab active" onclick="showValTab('evebitda',this)">EV / EBITDA (pre-IAS)</button>
+    <button class="kpi-tab" onclick="showValTab('evsales',this)">EV / Sales</button>
+    <button class="kpi-tab" onclick="showValTab('pe',this)">P / E</button>
+    <button class="kpi-tab" onclick="showValTab('pb',this)">P / Book</button>
+    <button class="kpi-tab" onclick="showValTab('all',this)">All multiples — summary</button>
+  </div>
+
+  <!-- ── EV/EBITDA ── -->
+  <div id="vt-evebitda" class="val-pane">
+    <div class="sec-label">EV / EBITDA (pre-Ind AS 116) — by house, by year</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:14px;line-height:1.6">
+      Pre-Ind AS EV = Mcap ₹96.8bn + house's net debt estimate. Green = below 10x (cheap), amber = 10–13x, red = above 13x. All computed at CMP ₹987 unless noted as "at TP."
+    </div>
+    <div class="tbl-wrap" style="margin-bottom:20px">
+      <table id="ev-ebitda-tbl">
+        <thead>
+          <tr>
+            <th>House</th>
+            <th>FY25A</th>
+            <th>FY26E EBITDA (mn)</th><th>EV/EBITDA FY26E @ CMP</th><th>EV/EBITDA FY26E @ TP</th>
+            <th>FY27E EBITDA (mn)</th><th>EV/EBITDA FY27E @ CMP</th><th>EV/EBITDA FY27E @ TP</th>
+            <th>FY28E EBITDA (mn)</th><th>EV/EBITDA FY28E @ CMP</th><th>EV/EBITDA FY28E @ TP</th>
+          </tr>
+        </thead>
+        <tbody id="ev-ebitda-body"></tbody>
+      </table>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">EV/EBITDA at CMP ₹987 — pre-Ind AS, by house &amp; year</div>
+      <div class="chart-wrap" style="height:300px"><canvas id="evEbitdaChart" role="img" aria-label="Grouped bar chart EV EBITDA by house and year"></canvas></div>
+      <div class="legend-row" style="margin-top:10px">
+        <span class="leg-item"><span class="leg-swatch" style="background:#B5D4F4"></span>FY26E</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#378ADD"></span>FY27E</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#0C447C"></span>FY28E</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#E24B4A;height:3px;border-radius:0"></span>10x reference</span>
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <div class="sec-label">Historical EV/EBITDA context — FY19 to FY26E (pre-Ind AS)</div>
+      <div class="chart-box">
+        <div class="chart-wrap" style="height:240px"><canvas id="evHistChart" role="img" aria-label="Historical EV EBITDA line chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EV/Sales ── -->
+  <div id="vt-evsales" class="val-pane" style="display:none">
+    <div class="sec-label">EV / Sales — by house, by year</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:14px;line-height:1.6">
+      EV/Sales uses total enterprise value (Mcap + net debt) divided by revenue estimate. Lower is cheaper. Green = below 1.5x, amber = 1.5–2.5x, red = above 2.5x.
+    </div>
+    <div class="tbl-wrap" style="margin-bottom:20px">
+      <table>
+        <thead>
+          <tr>
+            <th>House</th>
+            <th>FY26E Rev (mn)</th><th>EV/Sales FY26E @ CMP</th><th>EV/Sales FY26E @ TP</th>
+            <th>FY27E Rev (mn)</th><th>EV/Sales FY27E @ CMP</th><th>EV/Sales FY27E @ TP</th>
+            <th>FY28E Rev (mn)</th><th>EV/Sales FY28E @ CMP</th><th>EV/Sales FY28E @ TP</th>
+          </tr>
+        </thead>
+        <tbody id="ev-sales-body"></tbody>
+      </table>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">EV/Sales at CMP ₹987 — by house &amp; year</div>
+      <div class="chart-wrap" style="height:300px"><canvas id="evSalesChart" role="img" aria-label="Grouped bar chart EV Sales by house and year"></canvas></div>
+      <div class="legend-row" style="margin-top:10px">
+        <span class="leg-item"><span class="leg-swatch" style="background:#9FE1CB"></span>FY26E</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#1D9E75"></span>FY27E</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#085041"></span>FY28E</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── P/E ── -->
+  <div id="vt-pe" class="val-pane" style="display:none">
+    <div class="sec-label">Price / Earnings — by house, by year</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:14px;line-height:1.6">
+      P/E = CMP ₹987 ÷ EPS estimate. FY26 is near-term (PAT still recovering); FY27/28 are more meaningful. Green = below 20x, amber = 20–35x, red = above 35x. Note: houses with very low EPS (e.g. Elara FY27 ₹13) reflect conservative PAT assumptions, not operational issues.
+    </div>
+    <div class="tbl-wrap" style="margin-bottom:20px">
+      <table>
+        <thead>
+          <tr>
+            <th>House</th>
+            <th>FY26E EPS</th><th>P/E FY26E @ CMP</th><th>P/E FY26E @ TP</th>
+            <th>FY27E EPS</th><th>P/E FY27E @ CMP</th><th>P/E FY27E @ TP</th>
+            <th>FY28E EPS</th><th>P/E FY28E @ CMP</th><th>P/E FY28E @ TP</th>
+          </tr>
+        </thead>
+        <tbody id="pe-body"></tbody>
+      </table>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">P/E at CMP ₹987 — by house &amp; year</div>
+      <div class="chart-wrap" style="height:300px"><canvas id="peChart" role="img" aria-label="Grouped bar chart PE ratio by house and year"></canvas></div>
+      <div class="legend-row" style="margin-top:10px">
+        <span class="leg-item"><span class="leg-swatch" style="background:#FAC775"></span>FY26E</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#BA7517"></span>FY27E</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:#633806"></span>FY28E</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── P/B ── -->
+  <div id="vt-pb" class="val-pane" style="display:none">
+    <div class="sec-label">Price / Book Value — by house, by year</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:14px;line-height:1.6">
+      P/BV = CMP ₹987 ÷ Book Value per share. Most houses show ~1.1–1.4x across years. Low P/B reflects that goodwill from merger dominates the balance sheet (Rs 57bn+), and retained losses have eroded book value. As PAT accumulates FY26 onwards, book value and hence P/B should improve.
+    </div>
+    <div class="tbl-wrap" style="margin-bottom:20px">
+      <table>
+        <thead>
+          <tr>
+            <th>House</th>
+            <th>FY25A BV/sh</th><th>P/BV FY25A</th>
+            <th>FY26E BV/sh</th><th>P/BV FY26E</th>
+            <th>FY27E BV/sh</th><th>P/BV FY27E</th>
+            <th>FY28E BV/sh</th><th>P/BV FY28E</th>
+          </tr>
+        </thead>
+        <tbody id="pb-body"></tbody>
+      </table>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">P/BV at CMP ₹987 — by house &amp; year</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="pbChart" role="img" aria-label="P/B ratio bar chart by house"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ── All multiples summary ── -->
+  <div id="vt-all" class="val-pane" style="display:none">
+    <div class="sec-label">All multiples — summary matrix at CMP ₹987</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:14px;line-height:1.6">
+      Single-view comparison of all key multiples across houses and years. Colour coding: <span style="background:#D8F3DC;color:#1B4F2A;padding:1px 6px;border-radius:3px;font-size:10px">cheap</span> &nbsp;<span style="background:#FFE8A3;color:#7B4F00;padding:1px 6px;border-radius:3px;font-size:10px">fair</span> &nbsp;<span style="background:#FFD6D6;color:#9B2226;padding:1px 6px;border-radius:3px;font-size:10px">rich</span>
+    </div>
+    <div class="tbl-wrap" style="margin-bottom:24px">
+      <table id="all-mult-tbl">
+        <thead>
+          <tr>
+            <th rowspan="2">House</th><th rowspan="2">TP</th>
+            <th colspan="3" style="text-align:center;border-bottom:1px solid var(--border)">EV/EBITDA (pre-IAS) @ CMP</th>
+            <th colspan="3" style="text-align:center;border-bottom:1px solid var(--border)">EV/Sales @ CMP</th>
+            <th colspan="3" style="text-align:center;border-bottom:1px solid var(--border)">P/E @ CMP</th>
+            <th rowspan="2">P/B FY27E</th>
+          </tr>
+          <tr>
+            <th>FY26E</th><th>FY27E</th><th>FY28E</th>
+            <th>FY26E</th><th>FY27E</th><th>FY28E</th>
+            <th>FY26E</th><th>FY27E</th><th>FY28E</th>
+          </tr>
+        </thead>
+        <tbody id="all-mult-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Scatter: EV/EBITDA vs TP -->
+    <div class="sec-label">EV/EBITDA (FY27E) vs Target Price — the conviction map</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:10px">Houses bottom-left are being most conservative (low multiple + low TP). Top-right = high conviction.</div>
+    <div class="chart-box">
+      <div class="chart-wrap" style="height:300px"><canvas id="scatterChart" role="img" aria-label="Scatter plot EV EBITDA vs target price by house"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 11 — ANALYST CONTACTS
+══════════════════════════════════ -->
+<div id="tab-analysts" class="section">
+
+  <div class="sec-label">Research coverage team — all houses</div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:28px" id="analyst-cards"></div>
+
+  <div class="sec-label">Quick reference — all analysts flat list</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>House</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Rating</th><th>TP</th></tr>
+      </thead>
+      <tbody id="analyst-tbl-body"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 13 — INDUSTRY DATA
+══════════════════════════════════ -->
+<div id="tab-industry" class="section">
+
+  <!-- sub-tabs -->
+  <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap" id="ind-subtabs">
+    <button class="kpi-tab active" onclick="showIndTab('screens',this)">Screen Landscape</button>
+    <button class="kpi-tab" onclick="showIndTab('kpibench',this)">KPI Benchmarks</button>
+    <button class="kpi-tab" onclick="showIndTab('content',this)">Content &amp; GBO</button>
+    <button class="kpi-tab" onclick="showIndTab('mktstructure',this)">Market Structure</button>
+  </div>
+
+  <!-- ══ SCREEN LANDSCAPE ══ -->
+  <div id="ind-screens" class="val-pane">
+
+    <div class="sec-label">India exhibition industry — screen count overview</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px">
+      <div class="metric-card"><div class="metric-label">Total screens India</div><div class="metric-val">~10,000</div><div class="metric-sub">Estimated as of Jan 2026</div></div>
+      <div class="metric-card"><div class="metric-label">Multiplex screens</div><div class="metric-val">~4,500</div><div class="metric-sub">~45% of total</div></div>
+      <div class="metric-card"><div class="metric-label">Single screens</div><div class="metric-val">~5,500</div><div class="metric-sub">~55% of total, declining</div></div>
+      <div class="metric-card"><div class="metric-label">PVR INOX screens</div><div class="metric-val">1,791</div><div class="metric-sub">Q3FY26, 112 cities</div></div>
+      <div class="metric-card"><div class="metric-label">PVR INOX market share</div><div class="metric-val">~40%</div><div class="metric-sub">Of organised multiplex screens</div></div>
+      <div class="metric-card"><div class="metric-label">Cinepolis screens</div><div class="metric-val">~450</div><div class="metric-sub">2nd largest multiplex chain</div></div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:24px">
+      <div>
+        <div class="sec-label">PVR INOX screen addition trajectory</div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Period</th><th>Screens</th><th>Net adds</th><th>Properties</th><th>Cities</th><th>Note</th></tr></thead>
+            <tbody>
+              <tr><td>Pre-merger PVR</td><td>871</td><td>—</td><td>181</td><td>73</td><td>At time of merger announcement</td></tr>
+              <tr><td>Pre-merger INOX</td><td>675</td><td>—</td><td>160</td><td>72</td><td>At time of merger announcement</td></tr>
+              <tr><td>Q1FY24 (merger)</td><td>1,708</td><td>—</td><td>—</td><td>109</td><td>Combined entity starts</td></tr>
+              <tr><td>Q2FY24</td><td>1,748</td><td>+40</td><td>—</td><td>111</td><td></td></tr>
+              <tr><td>Q4FY25</td><td>1,743</td><td>—</td><td>355</td><td>111</td><td>Post rationalisation</td></tr>
+              <tr><td>Q1FY26</td><td>1,745</td><td>+2</td><td>356</td><td>111</td><td></td></tr>
+              <tr><td>Q2FY26</td><td>1,761</td><td>+16</td><td>358</td><td>112</td><td></td></tr>
+              <tr><td>Q3FY26</td><td>1,791</td><td>+30</td><td>361</td><td>112</td><td>Net add acceleration</td></tr>
+              <tr style="font-weight:600;background:var(--surface2)"><td>FY27E (guidance)</td><td>~1,850–1,900</td><td>~60–100</td><td>~380</td><td>~115</td><td>Capital-light FOCO model</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="sec-label">Screen mix — PVR INOX format breakdown</div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Format</th><th>Screens</th><th>% of total</th><th>Premium positioning</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Standard</strong></td><td>~1,480</td><td>~83%</td><td>Base offering</td></tr>
+              <tr><td><strong>IMAX</strong></td><td>~25</td><td>~1.4%</td><td>Premium; highest ATP</td></tr>
+              <tr><td><strong>4DX / ICE</strong></td><td>~30</td><td>~1.7%</td><td>Immersive experience</td></tr>
+              <tr><td><strong>Luxe / Onyx / Gold</strong></td><td>~85</td><td>~4.7%</td><td>Recliner premium</td></tr>
+              <tr><td><strong>PXL (PVR XL)</strong></td><td>~55</td><td>~3.1%</td><td>Large screen premium</td></tr>
+              <tr><td><strong>P[XL] + other</strong></td><td>~116</td><td>~6.5%</td><td>Blended premium</td></tr>
+              <tr style="font-weight:600;background:var(--surface2)"><td>Premium total</td><td>~311</td><td>~17%</td><td>Drives ATP premium vs peers</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:8px">Source: Kotak, CLSA, Elara estimates. Exact format split not disclosed by company; derived from analyst reports.</div>
+      </div>
+    </div>
+
+    <div class="sec-label">Screen addition model — FOCO vs FOFO vs owned</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:16px">
+      <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #1B4F8A;border-radius:var(--radius-lg);padding:14px">
+        <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:#1B4F8A">FOCO — Franchise Owned, Company Operated</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.7">Franchisee builds and owns the property. PVR INOX operates it and takes a revenue share. <strong>Zero capex for PVR INOX.</strong> Preferred model for new screen additions post-merger. Accounts for bulk of FY27 pipeline.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #1D9E75;border-radius:var(--radius-lg);padding:14px">
+        <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:#1D9E75">FOFO — Franchise Owned, Franchise Operated</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.7">Franchisee owns and operates under PVR INOX brand. PVR INOX earns licensing/brand fees. Minimal capex. Used in Tier 2/3 cities where local operators have better ground knowledge.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #B07D00;border-radius:var(--radius-lg);padding:14px">
+        <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:#B07D00">Owned / Leased (legacy model)</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.7">PVR INOX builds, leases, and operates. High capex (Rs 4–6 cr per screen), generates long-term lease liabilities under Ind AS 116. Being phased out as primary growth vehicle. Existing base ~1,540 screens.</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:8px">Capex per new screen: Owned/Leased Rs 4–6 cr | FOCO Rs 0 (franchisee bears) | FOFO Rs 0. PVR INOX guided for Rs 2.5–3bn capex in FY27, almost entirely maintenance + fit-outs for existing screens.</div>
+
+  </div>
+
+  <!-- ══ KPI BENCHMARKS ══ -->
+  <div id="ind-kpibench" class="val-pane" style="display:none">
+
+    <div class="sec-label">ATP — Average Ticket Price (Rs)</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px">
+      <div class="metric-card" style="border-top-color:#1B4F8A"><div class="metric-label">PVR INOX Q3FY26</div><div class="metric-val" style="color:#1B4F8A">₹293</div><div class="metric-sub">All-time high. +4.3% YoY</div></div>
+      <div class="metric-card"><div class="metric-label">PVR INOX Q3FY25</div><div class="metric-val">₹281</div><div class="metric-sub">Prior year comparable</div></div>
+      <div class="metric-card"><div class="metric-label">PVR INOX Q2FY26</div><div class="metric-val">₹262</div><div class="metric-sub">Sequential dip — content mix</div></div>
+      <div class="metric-card"><div class="metric-label">Industry avg ATP est.</div><div class="metric-val">~₹220</div><div class="metric-sub">Blended incl. single screens</div></div>
+      <div class="metric-card"><div class="metric-label">Multiplex avg ATP est.</div><div class="metric-val">~₹240–260</div><div class="metric-sub">Excl. PVR INOX premium</div></div>
+      <div class="metric-card" style="border-top-color:#1D9E75"><div class="metric-label">PVR INOX FY27E ATP</div><div class="metric-val" style="color:#1D9E75">₹295–310</div><div class="metric-sub">Consensus analyst range</div></div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:24px">
+      <div>
+        <div class="sec-label">ATP quarterly trend — PVR INOX</div>
+        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indAtpChart" role="img" aria-label="ATP quarterly trend"></canvas></div></div>
+      </div>
+      <div>
+        <div class="sec-label">SPH quarterly trend — PVR INOX</div>
+        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indSphChart" role="img" aria-label="SPH quarterly trend"></canvas></div></div>
+      </div>
+    </div>
+
+    <div class="sec-label">SPH — Spend Per Head on F&amp;B (Rs)</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px">
+      <div class="metric-card" style="border-top-color:#1D9E75"><div class="metric-label">PVR INOX Q3FY26</div><div class="metric-val" style="color:#1D9E75">₹146</div><div class="metric-sub">+4.3% YoY</div></div>
+      <div class="metric-card"><div class="metric-label">PVR INOX Q3FY25</div><div class="metric-val">₹140</div><div class="metric-sub">Prior year</div></div>
+      <div class="metric-card"><div class="metric-label">SPH as % of ATP</div><div class="metric-val">49.8%</div><div class="metric-sub">Q3FY26; structurally rising</div></div>
+      <div class="metric-card"><div class="metric-label">Industry avg SPH est.</div><div class="metric-val">~₹100–120</div><div class="metric-sub">PVR INOX well ahead</div></div>
+      <div class="metric-card"><div class="metric-label">PVR INOX FY27E SPH</div><div class="metric-val">~₹155–165</div><div class="metric-sub">Consensus analyst range</div></div>
+      <div class="metric-card" style="border-top-color:#B07D00"><div class="metric-label">Long-term SPH target</div><div class="metric-val">₹200+</div><div class="metric-sub">Management aspiration (no timeline)</div></div>
+    </div>
+
+    <div class="sec-label">Occupancy — industry context</div>
+    <div style="overflow-x:auto;margin-bottom:20px">
+      <table>
+        <thead><tr><th>Metric</th><th>Q3FY26</th><th>Q3FY25</th><th>Q2FY26</th><th>Pre-COVID peak</th><th>Structural ceiling est.</th><th>Comment</th></tr></thead>
+        <tbody>
+          <tr><td><strong>PVR INOX occupancy</strong></td><td style="color:#1D9E75;font-weight:600">28.5%</td><td>26.2%</td><td>28.8%</td><td>~34%</td><td>~38–40%</td><td>+280bps YoY. Best quarter since merger</td></tr>
+          <tr><td><strong>Industry multiplex avg</strong></td><td>~24–26%</td><td>~22–24%</td><td>—</td><td>~30%</td><td>~35%</td><td>PVR INOX leads peers on occupancy</td></tr>
+          <tr><td><strong>Single screen avg</strong></td><td>~15–20%</td><td>~14–18%</td><td>—</td><td>~25%</td><td>~28%</td><td>Structurally declining</td></tr>
+          <tr><td><strong>Hollywood content quarter</strong></td><td>~30–32%</td><td>~28%</td><td>—</td><td>—</td><td>—</td><td>Hollywood quarters drive 200–400bps premium</td></tr>
+          <tr><td><strong>Weak content quarter</strong></td><td>~20–22%</td><td>—</td><td>~22%</td><td>—</td><td>—</td><td>Q1 typically weakest (summer school break offset)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec-label">Revenue per screen per month — operating efficiency</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:16px">
+      <div class="metric-card" style="border-top-color:#1B4F8A"><div class="metric-label">PVR INOX Q3FY26</div><div class="metric-val" style="color:#1B4F8A">₹3.50mn</div><div class="metric-sub">Rs 18,798mn ÷ 1,791 ÷ 3 months</div></div>
+      <div class="metric-card"><div class="metric-label">PVR INOX Q3FY25</div><div class="metric-val">₹3.31mn</div><div class="metric-sub">+5.7% YoY</div></div>
+      <div class="metric-card"><div class="metric-label">PVR INOX FY25A full year</div><div class="metric-val">₹2.85mn</div><div class="metric-sub">Incl. weak Q1/Q4</div></div>
+      <div class="metric-card" style="border-top-color:#1D9E75"><div class="metric-label">Analyst FY27E target</div><div class="metric-val">~₹3.6–4.0mn</div><div class="metric-sub">As screens mature post-merger</div></div>
+    </div>
+
+  </div>
+
+  <!-- ══ CONTENT & GBO ══ -->
+  <div id="ind-content" class="val-pane" style="display:none">
+
+    <div class="sec-label">Gross Box Office — India industry overview</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px">
+      <div class="metric-card" style="border-top-color:#1B4F8A"><div class="metric-label">India GBO FY25</div><div class="metric-val">~₹120bn</div><div class="metric-sub">All languages combined</div></div>
+      <div class="metric-card"><div class="metric-label">India GBO FY24</div><div class="metric-val">~₹115bn</div><div class="metric-sub">+4.3% YoY growth</div></div>
+      <div class="metric-card"><div class="metric-label">India GBO pre-COVID (FY20)</div><div class="metric-val">~₹112bn</div><div class="metric-sub">Now surpassed</div></div>
+      <div class="metric-card"><div class="metric-label">PVR INOX GBO share</div><div class="metric-val">~40–42%</div><div class="metric-sub">Of total India GBO</div></div>
+      <div class="metric-card" style="border-top-color:#1D9E75"><div class="metric-label">GBO FY27E consensus</div><div class="metric-val">~₹145–160bn</div><div class="metric-sub">CLSA/Nuvama bull case</div></div>
+      <div class="metric-card"><div class="metric-label">Global box office India rank</div><div class="metric-val">#5</div><div class="metric-sub">Behind US, China, UK, Japan</div></div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:24px">
+      <div>
+        <div class="sec-label">Content language mix — Q3FY26 GBO contribution</div>
+        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indGboMixChart" role="img" aria-label="GBO language mix donut"></canvas></div></div>
+        <div style="font-size:10px;color:var(--text3);margin-top:6px">Q3FY26 was a strong Hindi + Hollywood quarter. Pushpa 2 (Hindi/Telugu) and Game Changer drove 9M footfalls highest post-pandemic.</div>
+      </div>
+      <div>
+        <div class="sec-label">Historical India GBO trend (Rs bn)</div>
+        <div class="chart-box"><div class="chart-wrap" style="height:220px"><canvas id="indGboTrendChart" role="img" aria-label="India GBO trend bar chart"></canvas></div></div>
+      </div>
+    </div>
+
+    <div class="sec-label">Key blockbusters driving Q3FY26 performance</div>
+    <div style="overflow-x:auto;margin-bottom:20px">
+      <table>
+        <thead><tr><th>Film</th><th>Language</th><th>India GBO est.</th><th>Release</th><th>Genre</th><th>Impact on PVR INOX</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Pushpa 2: The Rule</strong></td><td>Telugu/Hindi</td><td style="font-weight:600;color:#1D9E75">₹12,000–13,000 cr</td><td>Dec 2024</td><td>Action</td><td>All-time India GBO record. Extended Dec quarter significantly</td></tr>
+          <tr><td><strong>Singham Returns</strong></td><td>Hindi</td><td>₹250–300 cr</td><td>Aug 2024</td><td>Action</td><td>Supported Q2FY26</td></tr>
+          <tr><td><strong>Stree 2</strong></td><td>Hindi</td><td style="font-weight:600;color:#1D9E75">₹620+ cr</td><td>Aug 2024</td><td>Horror-comedy</td><td>Highest-grossing Hindi film of 2024 at time. Key Q2FY26 driver</td></tr>
+          <tr><td><strong>Game Changer</strong></td><td>Telugu/Hindi</td><td>₹280–320 cr</td><td>Jan 2025</td><td>Action</td><td>Supported Q3FY26 opening</td></tr>
+          <tr><td><strong>Mufasa (Disney)</strong></td><td>English/Hindi</td><td>₹180–200 cr</td><td>Dec 2024</td><td>Animation</td><td>Family audience; premium screen utilisation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec-label">Content pipeline — FY27 analyst expectations</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:16px">
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #1B4F8A;border-radius:var(--radius);padding:12px 14px">
+        <div style="font-size:11px;font-weight:600;color:#1B4F8A;margin-bottom:4px">Hollywood slate (bullish)</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.7">Mission Impossible 8, Avatar 3, Avengers 5, Superman reboot, Jurassic World 4. After a weak 2 years post-COVID strikes, Hollywood studios normalising output in FY27. CLSA and Nuvama explicitly factor this into upside.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #1D9E75;border-radius:var(--radius);padding:12px 14px">
+        <div style="font-size:11px;font-weight:600;color:#1D9E75;margin-bottom:4px">Hindi slate (solid)</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.7">Ramayana (Nitesh Tiwari, Rs 600–800 cr budget), Singham 3, Welcome 3, Housefull 5. Hindi industry recovering with bigger budgets and franchise content replacing star-driven tent poles.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #B07D00;border-radius:var(--radius);padding:12px 14px">
+        <div style="font-size:11px;font-weight:600;color:#B07D00;margin-bottom:4px">South Indian slate</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.7">KGF 3 (most anticipated), Pushpa 3 (Allu Arjun), Thalapathy 70, Rajinikanth's next. Pan-India South content has become structural, not cyclical — each quarter now has at least one crossover title.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #9B2226;border-radius:var(--radius);padding:12px 14px">
+        <div style="font-size:11px;font-weight:600;color:#9B2226;margin-bottom:4px">Key risk: OTT windows</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.7">OTT release window has stabilised at 6–8 weeks post-theatrical. Netflix/Amazon/JioCinema now prefer theatrical window as it boosts streaming numbers. Not a near-term threat — but window compression back to 4 weeks is the risk B&K flags.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ MARKET STRUCTURE ══ -->
+  <div id="ind-mktstructure" class="val-pane" style="display:none">
+
+    <div class="sec-label">Indian exhibition industry — competitive landscape</div>
+    <div style="overflow-x:auto;margin-bottom:20px">
+      <table>
+        <thead><tr><th>Player</th><th>Screens</th><th>Market share (screens)</th><th>Cities</th><th>Listed?</th><th>Key strength</th><th>Key weakness</th></tr></thead>
+        <tbody>
+          <tr style="background:var(--surface2)"><td><strong>PVR INOX</strong></td><td style="font-weight:600;color:#1B4F8A">1,791</td><td style="font-weight:600;color:#1B4F8A">~40% of organised</td><td>112</td><td>Yes (NSE/BSE)</td><td>Scale, premium formats, F&B, brand recognition</td><td>High leverage (Ind AS leases), content dependency</td></tr>
+          <tr><td><strong>Cinepolis India</strong></td><td>~450</td><td>~10%</td><td>~85</td><td>No (Mexican parent)</td><td>Tier 2/3 city penetration, loyalty programme</td><td>Smaller scale, no premium format depth</td></tr>
+          <tr><td><strong>Carnival Cinemas</strong></td><td>~400</td><td>~9%</td><td>~100</td><td>No</td><td>Budget pricing, mass market reach</td><td>Financially stressed, underinvested screens</td></tr>
+          <tr><td><strong>Miraj Cinemas</strong></td><td>~150</td><td>~3%</td><td>~60</td><td>No</td><td>Tier 2/3 operator, low cost model</td><td>No premium formats, limited F&B</td></tr>
+          <tr><td><strong>SPI Cinemas (acquired by PVR)</strong></td><td>Merged</td><td>—</td><td>—</td><td>—</td><td>South India stronghold now part of PVR INOX</td><td>—</td></tr>
+          <tr><td><strong>Single screens (fragmented)</strong></td><td>~5,500</td><td>~55% of total</td><td>Pan-India</td><td>No</td><td>Lowest ticket prices, Tier 3–4 reach</td><td>Declining; no F&B, poor infrastructure</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col" style="margin-bottom:24px">
+      <div>
+        <div class="sec-label">Screen share — organised multiplex market</div>
+        <div class="chart-box"><div class="chart-wrap" style="height:240px"><canvas id="indMktShareChart" role="img" aria-label="Multiplex market share donut"></canvas></div></div>
+      </div>
+      <div>
+        <div class="sec-label">Structural tailwinds analysts cite</div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px">
+          <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #1D9E75;border-radius:var(--radius);padding:10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">Screen density massively underpenetrated</div><div style="font-size:11px;color:var(--text2)">India has ~8 screens per million population vs China 85, USA 125. Long runway to add screens in Tier 2/3 cities without cannibalising existing screens.</div></div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #1B4F8A;border-radius:var(--radius);padding:10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">Rising income + aspirational spending</div><div style="font-size:11px;color:var(--text2)">Out-of-home entertainment spending growing at 12–15% pa. Multiplex cinema has premiumised into an experience category — Rs 293 ATP still affordable vs Rs 500+ restaurants.</div></div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #B07D00;border-radius:var(--radius);padding:10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">Single screen to multiplex conversion</div><div style="font-size:11px;color:var(--text2)">~200–300 single screens close every year. Most audiences upgrade to multiplex — Carnival/Miraj weakness benefits PVR INOX. No new entrant can replicate PVR INOX's 1,791-screen network economics.</div></div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #534AB7;border-radius:var(--radius);padding:10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">F&B as a separate growth engine</div><div style="font-size:11px;color:var(--text2)">SPH growing from Rs 146 towards Rs 200. Food courts, in-seat delivery, alcohol in select states. F&B margins ~70% gross — higher than ticketing. Nuvama and ICICI Sec model this as the key margin expansion lever.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">Per capita cinema visits — India vs global</div>
+    <div style="overflow-x:auto;margin-bottom:16px">
+      <table>
+        <thead><tr><th>Country</th><th>Screens per mn pop.</th><th>Visits per capita/year</th><th>Avg ticket price (USD equiv.)</th><th>GBO as % of GDP</th></tr></thead>
+        <tbody>
+          <tr><td><strong>USA</strong></td><td>125</td><td>3.5x</td><td>~$12–14</td><td>~0.04%</td></tr>
+          <tr><td><strong>China</strong></td><td>85</td><td>1.2x</td><td>~$8–10</td><td>~0.05%</td></tr>
+          <tr><td><strong>South Korea</strong></td><td>45</td><td>3.2x</td><td>~$9–11</td><td>~0.08%</td></tr>
+          <tr style="background:var(--surface2);font-weight:600"><td>India (current)</td><td>8</td><td>0.9x</td><td>~$3.5</td><td>~0.04%</td></tr>
+          <tr style="color:#1D9E75"><td>India (FY30E analyst est.)</td><td>~14–16</td><td>~1.2–1.5x</td><td>~$4.5–5.0</td><td>~0.05–0.06%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:10px;color:var(--text3)">Source: CLSA industry primer, Nuvama sector note, Kotak initiation data. GDP-based figures are estimates.</div>
+
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 14 — UPDATE
+══════════════════════════════════ -->
+<div id="tab-update" class="section">
+
+  <!-- ── Setup section (shown until worker URL is saved) ── -->
+  <div id="setup-section">
+    <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #1B4F8A;border-radius:var(--radius-lg);padding:24px;margin-bottom:20px">
+      <div style="font-size:15px;font-weight:600;margin-bottom:6px">One-time setup — takes 10 minutes, free forever</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:20px;line-height:1.7">The browser cannot call Anthropic's API directly due to security restrictions. The fix is a free Cloudflare Worker — a tiny middleman that sits in the cloud and passes requests through. You set it up once, and the dashboard works fully automated forever after.</div>
+
+      <!-- Step 1 -->
+      <div style="display:flex;gap:14px;margin-bottom:20px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:50%;background:#1B4F8A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">1</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px">Create a free Cloudflare account</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.6">Go to <a href="https://cloudflare.com" target="_blank" style="color:var(--blue)">cloudflare.com</a> and sign up for free. No credit card needed.</div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div style="display:flex;gap:14px;margin-bottom:20px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:50%;background:#1B4F8A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">2</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px">Create a new Worker</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.6">After login: click <strong>Workers &amp; Pages</strong> in the left sidebar → click <strong>Create</strong> → click <strong>Create Worker</strong> → give it any name like <code style="background:var(--surface2);padding:1px 5px;border-radius:3px">pvr-proxy</code> → click <strong>Deploy</strong>.</div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div style="display:flex;gap:14px;margin-bottom:20px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:50%;background:#1B4F8A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">3</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px">Paste the worker code</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.6">After deploying, click <strong>Edit Code</strong>. Delete everything in the editor. Paste the code below. Click <strong>Deploy</strong>.</div>
+          <div style="position:relative">
+            <pre id="worker-code-block" style="background:#1A1916;color:#E8E6E0;font-size:10px;font-family:var(--font-mono);padding:14px;border-radius:var(--radius);overflow-x:auto;line-height:1.6;margin:0">export default {
+  async fetch(request, env) {
+    const cors = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    };
+    if (request.method === 'OPTIONS')
+      return new Response(null, { headers: cors });
+    if (request.method !== 'POST')
+      return new Response('Not allowed', { status: 405 });
+    try {
+      const body = await request.json();
+      const apiKey = body._apiKey;
+      delete body._apiKey;
+      if (!apiKey || !apiKey.startsWith('sk-ant-'))
+        return new Response(JSON.stringify({error:{message:'Bad key'}}),
+          {status:400, headers:{...cors,'Content-Type':'application/json'}});
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await resp.json();
+      return new Response(JSON.stringify(data), {
+        status: resp.status,
+        headers: {...cors, 'Content-Type': 'application/json'}
+      });
+    } catch(err) {
+      return new Response(JSON.stringify({error:{message:err.message}}),
+        {status:500, headers:{...cors,'Content-Type':'application/json'}});
+    }
+  }
+};</pre>
+            <button onclick="copyWorkerCode()" style="position:absolute;top:8px;right:8px;padding:4px 10px;font-size:10px;background:#378ADD;color:#fff;border:none;border-radius:4px;cursor:pointer" id="copy-code-btn">Copy code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div style="display:flex;gap:14px;margin-bottom:20px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:50%;background:#1B4F8A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">4</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px">Copy your Worker URL</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6">After deploying, you'll see a URL at the top that looks like: <code style="background:var(--surface2);padding:1px 5px;border-radius:3px">https://pvr-proxy.yourname.workers.dev</code>. Copy that URL.</div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:50%;background:#1D9E75;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">5</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px">Paste your Worker URL here and save</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <input id="worker-url-input" placeholder="https://pvr-proxy.yourname.workers.dev" style="flex:1;min-width:280px;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:var(--font-mono);background:var(--surface);color:var(--text)" />
+            <button onclick="saveWorkerUrl()" class="btn" style="white-space:nowrap">Save &amp; Activate</button>
+          </div>
+          <div id="worker-url-status" style="font-size:11px;margin-top:6px;color:var(--text3)"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Active upload section (shown after worker URL saved) ── -->
+  <div id="upload-section" style="display:none">
+
+    <div style="background:#D8F3DC;border:1px solid #95D5A8;border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:#1B4F2A">Cloudflare Worker connected</div>
+        <div id="worker-url-display" style="font-size:10px;color:#2D6A4F;font-family:var(--font-mono);margin-top:2px"></div>
+      </div>
+      <button onclick="resetWorkerUrl()" style="font-size:10px;padding:4px 10px;background:transparent;border:1px solid #2D6A4F;border-radius:4px;color:#2D6A4F;cursor:pointer">Change</button>
+    </div>
+
+    <div class="sec-label">Anthropic API key</div>
+    <div class="api-key-row" style="margin-bottom:20px">
+      <input type="password" id="api-key-input" placeholder="sk-ant-..." />
+      <button onclick="saveApiKey()" class="btn btn-outline">Save</button>
+    </div>
+    <div id="api-key-status" style="font-size:11px;color:var(--text3);margin-top:-14px;margin-bottom:16px"></div>
+
+    <div class="sec-label">Upload analyst report PDF</div>
+    <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="this.classList.remove('drag')">
+      <div class="uz-icon">📄</div>
+      <div class="uz-title">Drop PDF here or click to browse</div>
+      <div class="uz-sub">Claude will auto-extract rating, TP, estimates, and analyst data</div>
+    </div>
+    <input type="file" id="file-input" accept=".pdf" onchange="handleFileUpload(event)" />
+
+    <div id="upload-status" style="display:none;margin-top:12px" class="upload-status"></div>
+
+    <div id="parsed-output" style="display:none;margin-top:16px">
+      <div class="sec-label">Extracted data — review before applying</div>
+      <ul id="parsed-list" style="list-style:none;padding:0;margin:0 0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+      </ul>
+      <button onclick="applyUpdate()" class="btn">Apply to dashboard</button>
+      <button onclick="document.getElementById('parsed-output').style.display='none'" class="btn btn-outline" style="margin-left:8px">Discard</button>
+    </div>
+
+  </div>
+
+</div>
+</div><!-- /page -->
+
+<script>
+// ══════════════════════ DATA ══════════════════════
+const HOUSES = [
+  {name:'CLSA',date:'6 Feb 2026',rating:'O-PF',tp:1920,prev:1920,chg:0,basis:'10x FY27 EV/EBITDA',note:'Unchanged'},
+  {name:'Nuvama',date:'5 Feb 2026',rating:'BUY',tp:1605,prev:1605,chg:0,basis:'DCF-based',note:'Unchanged'},
+  {name:'ICICI Sec',date:'6 Feb 2026',rating:'BUY',tp:1500,prev:1500,chg:0,basis:'15x adj FY27 EBITDA',note:'Maintained'},
+  {name:'Kotak',date:'6 Feb 2026',rating:'BUY',tp:1400,prev:1380,chg:20,basis:'12x FY28E EV/EBITDA',note:'Raised from 1,380'},
+  {name:'Nirmal Bang',date:'5 Feb 2026',rating:'BUY',tp:1344,prev:1358,chg:-14,basis:'10x Dec-27E EBITDA',note:'Slightly cut from 1,358'},
+  {name:'Elara',date:'6 Feb 2026',rating:'BUY',tp:1300,prev:1225,chg:75,basis:'13x Sep-27 pre-IndAS EBITDA',note:'Upgraded from Accum; TP raised'},
+  {name:'ICICI Direct',date:'9 Feb 2026',rating:'BUY',tp:1320,prev:1320,chg:0,basis:'11.5x FY27 ex-IndAS EBITDA',note:'Unchanged'},
+  {name:'B&K',date:'5 Feb 2026',rating:'HOLD',tp:1285,prev:1285,chg:0,basis:'DCF-based',note:'Maintained Hold'},
+  {name:'PL Capital',date:'6 Feb 2026',rating:'BUY',tp:1274,prev:1261,chg:13,basis:'9.5x FY28E pre-IndAS EBITDA',note:'Raised from 1,261'},
+  {name:'Investec',date:'6 Feb 2026',rating:'BUY',tp:1248,prev:1238,chg:10,basis:'12.5x Dec-27 EV/EBITDA',note:'Upgraded from HOLD'},
+];
+
+const ESTIMATES = [
+  {house:'Kotak',fy26r:66625,fy26e:8213,fy27r:71032,fy27e:10258,fy28r:76184,fy28e:11456},
+  {house:'B&K',fy26r:68535,fy26e:9298,fy27r:74612,fy27e:9562,fy28r:81973,fy28e:10948},
+  {house:'Nirmal Bang',fy26r:68180,fy26e:9069,fy27r:75819,fy27e:12036,fy28r:81637,fy28e:13855},
+  {house:'Investec',fy26r:66302,fy26e:20093,fy27r:74255,fy27e:22838,fy28r:81613,fy28e:25568},
+  {house:'CLSA',fy26r:68092,fy26e:21153,fy27r:77086,fy27e:24714,fy28r:84279,fy28e:27964},
+  {house:'Elara',fy26r:73900,fy26e:23202,fy27r:76909,fy27e:23457,fy28r:81408,fy28e:25236},
+  {house:'Nuvama',fy26r:68318,fy26e:20644,fy27r:80066,fy27e:24288,fy28r:92603,fy28e:28129},
+  {house:'PL Capital',fy26r:67923,fy26e:20153,fy27r:73759,fy27e:23286,fy28r:81275,fy28e:26063},
+  {house:'ICICI Sec',fy26r:69587,fy26e:22551,fy27r:76578,fy27e:24588,fy28r:85275,fy28e:28182},
+  {house:'ICICI Direct',fy26r:67608,fy26e:21154,fy27r:75636,fy27e:24107,fy28r:82200,fy28e:26477},
+];
+
+const EPS_DATA = [
+  {house:'CLSA',fy26:23.4,fy27:51.6,fy28:75.2,pat26:2296,pat27:5054,basis:'10x FY27 EV/EBITDA'},
+  {house:'Nuvama',fy26:45.5,fy27:78.2,fy28:96.7,pat26:4473,pat27:7678,basis:'DCF'},
+  {house:'ICICI Sec',fy26:33.5,fy27:47.3,fy28:62.1,pat26:3281,pat27:4632,basis:'15x adj FY27 EBITDA'},
+  {house:'Kotak',fy26:45.4,fy27:41.9,fy28:52.9,pat26:4454,pat27:4118,basis:'12x FY28 EV/EBITDA'},
+  {house:'Nirmal Bang',fy26:25.0,fy27:42.4,fy28:56.8,pat26:2452,pat27:4161,basis:'10x Dec-27 EBITDA'},
+  {house:'Elara',fy26:33.8,fy27:13.2,fy28:15.3,pat26:3315,pat27:1293,basis:'13x Sep-27 EBITDA'},
+  {house:'ICICI Direct',fy26:17.9,fy27:28.7,fy28:41.6,pat26:1758,pat27:2821,basis:'11.5x FY27 EBITDA'},
+  {house:'B&K',fy26:33.4,fy27:38.4,fy28:52.2,pat26:3278,pat27:3769,basis:'DCF'},
+  {house:'PL Capital',fy26:13.4,fy27:35.1,fy28:58.6,pat26:1320,pat27:3448,basis:'9.5x FY28 EBITDA'},
+  {house:'Investec',fy26:13.2,fy27:33.4,fy28:54.2,pat26:1300,pat27:3279,basis:'12.5x Dec-27 EBITDA'},
+];
+
+const KPI = {
+  labels:['Q3FY24','Q4FY24','Q1FY25','Q2FY25','Q3FY25','Q4FY25','Q1FY26','Q2FY26','Q3FY26'],
+  footfalls:{data:[36.5,32.6,30.4,38.8,37.3,30.5,34.0,44.5,40.5],color:'#1B4F8A',label:'Footfalls (mn)'},
+  occ:{data:[25,23,20,26,26,21,22,29,29],color:'#1D9E75',label:'Occupancy (%)'},
+  atp:{data:[271,233,235,257,281,258,254,262,293],color:'#B07D00',label:'Gross ATP (Rs)'},
+  sph:{data:[132,129,134,136,140,125,148,134,146],color:'#9B2226',label:'SPH (Rs)'},
+  rev:{data:[15459,12564,11907,16221,17173,12498,14691,18230,18798],color:'#534AB7',label:'Revenue (Rs mn)'},
+  ebitda:{data:[2259,352,-199,2069,2583,250,1141,3273,3435],color:'#0F6E56',label:'Pre-IndAS EBITDA (Rs mn)'},
+  nd:{data:[16081,12940,13195,11531,9958,9522,8915,6188,3652],color:'#9B2226',label:'Net debt (Rs mn)'},
+  screens:{data:[1708,1748,1754,1747,1728,1743,1745,1761,1791],color:'#888780',label:'Screens'},
+};
+
+const KPI_TABLE = [
+  ['Q3FY24',15459,4724,30.6,2259,14.4,36.5,'25%',271,132,16081],
+  ['Q4FY24',12564,2784,22.2,352,2.7,32.6,'23%',233,129,12940],
+  ['Q1FY25',11907,2515,21.1,-199,-1.6,30.4,'20%',235,134,13195],
+  ['Q2FY25',16221,4793,29.5,2069,12.6,38.8,'26%',257,136,11531],
+  ['Q3FY25',17173,5277,30.7,2583,14.9,37.3,'26%',281,140,9958],
+  ['Q4FY25',12498,2831,22.7,250,1.9,30.5,'21%',258,125,9522],
+  ['Q1FY26',14691,3973,27.0,1141,7.7,34.0,'22%',254,148,8915],
+  ['Q2FY26',18230,6117,33.6,3273,17.8,44.5,'29%',262,134,6188],
+  ['Q3FY26',18798,6223,33.1,3435,18.0,40.5,'29%',293,146,3652],
+];
+
+const HIST = {
+  'Nirmal Bang':[
+    {d:'05 Feb 2026',r:'BUY',tp:1344},{d:'20 Oct 2025',r:'BUY',tp:1358},
+    {d:'07 Aug 2025',r:'BUY',tp:1259},{d:'13 May 2025',r:'BUY',tp:1251},
+    {d:'07 Feb 2025',r:'BUY',tp:1598},{d:'16 Oct 2024',r:'BUY',tp:1863},
+    {d:'22 Jul 2024',r:'BUY',tp:1759},{d:'15 May 2024',r:'BUY',tp:1754},
+  ],
+  'CLSA':[
+    {d:'06 Feb 2026',r:'O-PF',tp:1920},{d:'07 Feb 2025',r:'O-PF',tp:1980},
+    {d:'16 Oct 2024',r:'O-PF',tp:2450},{d:'28 Jun 2024',r:'O-PF',tp:2420},
+    {d:'15 May 2024',r:'BUY',tp:2420},{d:'20 Oct 2023',r:'BUY',tp:2280},
+    {d:'16 May 2023',r:'BUY',tp:2015},{d:'20 Feb 2023',r:'BUY',tp:2500},
+  ],
+  'PL Capital':[
+    {d:'06 Feb 2026',r:'BUY',tp:1274},{d:'07 Jan 2026',r:'BUY',tp:1261},
+    {d:'18 Oct 2025',r:'HOLD',tp:1211},{d:'07 Oct 2025',r:'HOLD',tp:1191},
+    {d:'07 Aug 2025',r:'HOLD',tp:1052},{d:'09 Jul 2025',r:'HOLD',tp:1045},
+    {d:'13 May 2025',r:'HOLD',tp:1040},{d:'07 Feb 2025',r:'HOLD',tp:1215},
+  ],
+  'Investec':[
+    {d:'06 Feb 2026',r:'BUY',tp:1248},{d:'02 Jan 2026',r:'HOLD',tp:1238},
+    {d:'06 Oct 2025',r:'HOLD',tp:1215},{d:'07 Aug 2025',r:'HOLD',tp:1147},
+    {d:'12 May 2025',r:'SELL',tp:996},{d:'06 Feb 2025',r:'SELL',tp:1140},
+    {d:'04 Oct 2024',r:'SELL',tp:1399},{d:'06 Aug 2024',r:'SELL',tp:1333},
+  ],
+  'Elara':[
+    {d:'06 Feb 2026',r:'BUY',tp:1300},{d:'17 Oct 2025',r:'ACCUM',tp:1225},
+    {d:'06 Aug 2025',r:'ACCUM',tp:1150},{d:'12 May 2025',r:'ACCUM',tp:1100},
+    {d:'06 Feb 2025',r:'BUY',tp:1600},{d:'15 Oct 2024',r:'BUY',tp:1950},
+    {d:'28 Jun 2024',r:'O-PF',tp:2420},{d:'18 Jan 2024',r:'BUY',tp:1900},
+  ],
+  'Nuvama':[
+    {d:'05 Feb 2026',r:'BUY',tp:1605},{d:'17 Oct 2025',r:'BUY',tp:1086},
+    {d:'06 Aug 2025',r:'BUY',tp:1035},{d:'12 May 2025',r:'BUY',tp:962},
+  ],
+};
+
+let parsedReport = null;
+
+// ══════════════════════ INIT ══════════════════════
+function showTab(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  el.classList.add('active');
+  // Force Chart.js to resize all charts after tab becomes visible (fixes iOS Safari blank canvas)
+  setTimeout(() => {
+    if (window.Chart) {
+      Object.values(Chart.instances).forEach(chart => {
+        try { chart.resize(); } catch(e) {}
+      });
+    }
+  }, 50);
+}
+
+const TP_ASSUMPTIONS = [
+  {
+    house:'CLSA', tp:1920, rating:'O-PF',
+    method:'EV/EBITDA', multiple:'10x', baseEbitda:'Rs 24,714mn', baseYear:'FY27CL',
+    totalEV:'Rs 247,143mn', lessDebt:'Rs 60,046mn (incl. Ind AS 116 leases)',
+    indas:'Post-IndAS',
+    differentiator:'Uses post-IndAS EBITDA (~2.5x higher) but deducts full Ind AS 116 lease liability (~Rs 57bn) as debt. Net result: higher numerator and higher denominator — equity value per share lands higher because EV expansion outpaces debt. 5-yr avg multiple of 10x.',
+    thesis:'Highest conviction on structural BO recovery. Hollywood share recovery (49% up in CY25) directly benefits CLSA given PVR\'s premium screen dominance in English content. Views ad revenue normalisation as the single biggest earnings catalyst.',
+    color:'#1B4F8A'
+  },
+  {
+    house:'Nuvama', tp:1605, rating:'BUY',
+    method:'DCF', multiple:'DCF-based', baseEbitda:'Rs 20,644mn (FY26E)', baseYear:'FY26E–FY28E',
+    totalEV:'Implied ~Rs 170bn+', lessDebt:'Minimal (pre-IndAS basis)',
+    indas:'Post-IndAS',
+    differentiator:'Only house using explicit DCF. FY27E revenue of Rs 80bn and EPS of Rs 78 are the highest among all houses — reflects aggressive footfall CAGR assumption of ~10% and ATP growth of 3.5–4%. Terminal value likely drives significant value.',
+    thesis:'Most bullish on revenue trajectory. Sees FY28E EPS of Rs 96.7 — nearly 2x the CLSA estimate. Key call: ad revenue recovery to near pre-Covid levels by FY28, adding ~Rs 2bn incremental EBITDA. Also positive on F&B premiumisation.',
+    color:'#2D6A4F'
+  },
+  {
+    house:'ICICI Sec', tp:1500, rating:'BUY',
+    method:'EV/EBITDA', multiple:'15x', baseEbitda:'Rs 24,588mn', baseYear:'adj. FY27E',
+    totalEV:'Derived from 15x multiple', lessDebt:'Post-4700BC sale net debt',
+    indas:'Post-IndAS',
+    differentiator:'Uses the highest multiple (15x) among all houses, but on a different EBITDA base. The 15x reflects a structural rerating thesis: post-merger cost structure means 28% occupancy now delivers margins that pre-merger required 32–33%. Net cash positive by Q4FY26 is the key trigger.',
+    thesis:'Focuses on balance sheet transformation as the re-rating catalyst. Key insight: net debt down Rs 10.7bn since merger, driven by FCF + capex discipline + asset sales. Once net cash, dividend/buyback potential unlocks a new investor base.',
+    color:'#7C3AED'
+  },
+  {
+    house:'Kotak', tp:1400, rating:'BUY',
+    method:'EV/EBITDA', multiple:'12x', baseEbitda:'Rs 11,456mn', baseYear:'FY28E',
+    totalEV:'Derived from DCF-roll forward', lessDebt:'Pre-IndAS net debt ~Rs 3.5bn',
+    indas:'Pre-IndAS',
+    differentiator:'Uses pre-IndAS EBITDA (lowest base) with 12x FY28E multiple — conservative approach that strips out Ind AS 116 lease distortion. Roll-forward to FY28 (vs FY27 used by most others) adds ~1 year of earnings growth, partially offsetting the lower multiple.',
+    thesis:'Most focused on cost initiatives and capital-light model. Calls out rent renegotiation, solar panel deployment, variable cost conversion. FY2026E EBITDA raised 7% post-results. Screen additions under FOCO/asset-light cited as the key to FCF preservation.',
+    color:'#B07D00'
+  },
+  {
+    house:'Nirmal Bang', tp:1344, rating:'BUY',
+    method:'EV/EBITDA', multiple:'10x', baseEbitda:'Rs 12,036mn', baseYear:'Dec-27E',
+    totalEV:'~Rs 120bn', lessDebt:'Pre-IndAS net debt ~Rs 4.4bn',
+    indas:'Pre-IndAS',
+    differentiator:'Uses Dec-27E (mid-year) EBITDA at 0.5 standard deviation of 5-year average EV/EBITDA. Conservative multiple reflects structural content volatility risk. Among the most granular on operational assumptions — screen-level ATP, occupancy, ad revenue per screen.',
+    thesis:'Longest-covering analyst on PVR (track record since 2016). Core thesis: monopoly-like structure (65% of functional multiplex screens) creates durable pricing power. Highlight: India has only 3,700 multiplex screens vs 75,000 in China — penetration story is the 10-year call.',
+    color:'#9B2226'
+  },
+  {
+    house:'Elara', tp:1300, rating:'BUY',
+    method:'EV/EBITDA', multiple:'13x', baseEbitda:'Rs 9,468mn', baseYear:'Sep-27E',
+    totalEV:'Rs 120,982mn', lessDebt:'Rs 4,058mn (post asset sale)',
+    indas:'Pre-IndAS',
+    differentiator:'Uses Sep-27E (mid-year) with 13x multiple — slightly more aggressive multiple than Kotak/Nirmal Bang to compensate for the lower mid-year EBITDA. Just upgraded from Accumulate to Buy post-3Q. EBITDA estimates raised 13% for FY27/28 — biggest estimate revision this cycle.',
+    thesis:'Newly turned bullish post 3Q print. Key call: ad revenue is still ~30% below pre-Covid levels — recovery is the earnings surprise most houses are not fully pricing in. Also flags Paramount and Universal exploring wider India releases as a Hollywood tailwind.',
+    color:'#0F6E56'
+  },
+  {
+    house:'ICICI Direct', tp:1320, rating:'BUY',
+    method:'EV/EBITDA', multiple:'11.5x', baseEbitda:'Rs 11,210mn', baseYear:'FY27E',
+    totalEV:'~Rs 129bn', lessDebt:'Pre-IndAS ~Rs 3.7bn',
+    indas:'Pre-IndAS',
+    differentiator:'Retail-focused house, uses 11.5x FY27E ex-IndAS EBITDA. Footfall CAGR of 10% over FY25–27 is one of the higher estimates. Focuses on consumption proxy angle — positions PVR as a discretionary entertainment spend play linked to urban India income growth.',
+    thesis:'Emphasises footfall recovery trajectory. Forecasts 183mn footfalls in FY28 (10% CAGR over FY25–27). Key metrics: Box office/F&B revenue CAGR of 13.3%/14.3% over FY25–28. Screens growing from 1,723 to 1,979 by FY28 is the volume driver.',
+    color:'#534AB7'
+  },
+  {
+    house:'B&K', tp:1285, rating:'HOLD',
+    method:'DCF', multiple:'DCF (10x/9x FY27/28E)', baseEbitda:'Rs 9,562mn', baseYear:'FY27E',
+    totalEV:'Implied ~Rs 120bn', lessDebt:'Pre-IndAS net debt',
+    indas:'Pre-IndAS',
+    differentiator:'Only HOLD in the group. DCF-based valuation is most conservative. Key concern: "decoding the content piece is challenging" — structural volatility in earnings means valuation multiples remain "extremely fluid." PAT estimates +7%/9% for FY27/28 vs prior — but margin thesis is tempered.',
+    thesis:'Most cautious on structural durability of margins. Acknowledges strong execution on costs and balance sheet, but unwilling to assign re-rating multiple until content-driven earnings volatility subsides. Variable rental conversion and FOCO expansion cited as right moves but insufficient to justify BUY.',
+    color:'#888780'
+  },
+  {
+    house:'PL Capital', tp:1274, rating:'BUY',
+    method:'EV/EBITDA', multiple:'9.5x', baseEbitda:'Rs 12,640mn', baseYear:'FY28E',
+    totalEV:'Rs 120,078mn', lessDebt:'Rs 4,658mn',
+    indas:'Pre-IndAS',
+    differentiator:'Lowest multiple (9.5x) in the BUY group, anchored to FY28E. Previously HOLD — upgraded in Jan 2026. Uses "multiple re-aligned as we roll forward to FY28." The conservative multiple reflects skepticism around ad revenue recovery speed and OTT window compression risk.',
+    thesis:'Focuses on balance sheet and capital-light model as earnings quality improvers rather than growth drivers. Key stat cited: 149 screens signed under FOCO/asset-light — "cash preservation ensures balance sheet strength." Footfall CAGR of 7.1% over FY25–28 is the most conservative in the group.',
+    color:'#D85A30'
+  },
+  {
+    house:'Investec', tp:1248, rating:'BUY',
+    method:'EV/EBITDA', multiple:'12.5x', baseEbitda:'Rs 22,838mn', baseYear:'Dec-27 (post-IndAS)',
+    totalEV:'Derived from 12.5x', lessDebt:'Post-IndAS lease liabilities included',
+    indas:'Post-IndAS',
+    differentiator:'Just upgraded from Hold to Buy this cycle. Uses 12.5x on Dec-27 EBITDA (post-IndAS). Despite using a higher base EBITDA, the inclusion of lease liabilities in net debt brings TP to the lowest in the BUY group. Key upgrade trigger: near net-debt-free balance sheet driving PAT compounding.',
+    thesis:'Upgrade thesis: "4x PAT jump over FY26-28E" from near-zero base. 12% revenue + 13% EBITDA CAGR = earnings compounding story. Key risk flags: OTT threat (longer term) and content volatility. Valuations at 18x FY28E PE and sub-10x EV/EBITDA cited as "very attractive."',
+    color:'#1A1916'
+  },
+];
+
+function renderTPAssumptions() {
+  // Table
+  const tbody = document.getElementById('tp-assump-body');
+  if (!tbody) return;
+  let html = '';
+  TP_ASSUMPTIONS.forEach(a => {
+    const tagCls = a.rating === 'HOLD' ? 'tag-hold' : 'tag-buy';
+    const indBadge = a.indas === 'Post-IndAS'
+      ? `<span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#DBEAFE;color:#1B4F8A">Post-IAS</span>`
+      : `<span style="font-size:9px;padding:2px 5px;border-radius:3px;background:#D8F3DC;color:#2D6A4F">Pre-IAS</span>`;
+    html += `<tr>
+      <td style="font-weight:600">${a.house}</td>
+      <td style="font-weight:600;font-family:var(--font-mono)">₹${a.tp.toLocaleString()}</td>
+      <td><span class="tag ${tagCls}">${a.rating}</span></td>
+      <td style="font-size:10px">${a.method}</td>
+      <td style="font-family:var(--font-mono)">${a.multiple}</td>
+      <td style="font-family:var(--font-mono);font-size:10px">${a.baseEbitda}</td>
+      <td style="font-size:10px">${a.baseYear}</td>
+      <td style="font-size:10px;color:var(--text3)">${a.totalEV}</td>
+      <td style="font-size:10px;color:var(--red)">${a.lessDebt}</td>
+      <td>${indBadge}</td>
+      <td style="font-size:10px;color:var(--text2);max-width:200px;white-space:normal;line-height:1.4">${a.differentiator.substring(0,80)}...</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+
+  // Thesis cards
+  const tc = document.getElementById('thesis-cards');
+  if (!tc) return;
+  let tcHtml = '';
+  TP_ASSUMPTIONS.forEach(a => {
+    const tagCls = a.rating === 'HOLD' ? 'tag-hold' : 'tag-buy';
+    tcHtml += `<div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid ${a.color};border-radius:var(--radius-lg);padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">${a.house}</span>
+        <span class="tag ${tagCls}" style="font-size:9px">₹${a.tp.toLocaleString()}</span>
+      </div>
+      <div style="font-size:10px;font-family:var(--font-mono);color:var(--text3);margin-bottom:8px">${a.multiple} · ${a.baseYear} · ${a.indas}</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px"><strong style="color:var(--text)">Why different:</strong> ${a.differentiator}</div>
+      <div style="height:1px;background:var(--border);margin:8px 0"></div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Core thesis:</strong> ${a.thesis}</div>
+    </div>`;
+  });
+  tc.innerHTML = tcHtml;
+
+  // TP comparison chart
+  const ctx = document.getElementById('tpCompChart');
+  if (!ctx) return;
+  const sorted = [...TP_ASSUMPTIONS].sort((a,b) => b.tp - a.tp);
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(a => a.house),
+      datasets: [
+        {
+          label: 'Target Price (₹)',
+          data: sorted.map(a => a.tp),
+          backgroundColor: sorted.map(a => a.color + 'CC'),
+          borderColor: sorted.map(a => a.color),
+          borderWidth: 1,
+          borderRadius: 4,
+        },
+        {
+          label: 'CMP ₹987',
+          data: sorted.map(() => 987),
+          type: 'line',
+          borderColor: '#9B2226',
+          borderDash: [5,4],
+          borderWidth: 2,
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            afterBody: (items) => {
+              const idx = items[0]?.dataIndex;
+              if (idx !== undefined && items[0]?.datasetIndex === 0) {
+                const a = sorted[idx];
+                return [`Multiple: ${a.multiple}`, `Base: ${a.baseEbitda}`, `Year: ${a.baseYear}`, `IND AS: ${a.indas}`];
+              }
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          min: 800,
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { font: { size: 11 }, callback: v => '₹' + v.toLocaleString() }
+        },
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+const RECON_DATA = [
+  {house:'CLSA',     tp:1920, year:'FY27CL',  months:13, ebitdaUsed:'₹24,714mn (post-IAS)',  ias:'Post-IAS', peAtTp:37.2, evAtTp:'10.0x',  preIasEbitda:24714, postIasEbitda:24714, eps:51.6},
+  {house:'Nuvama',   tp:1605, year:'FY27E',   months:13, ebitdaUsed:'₹24,288mn (post-IAS)',  ias:'Post-IAS', peAtTp:20.5, evAtTp:'~9.3x', preIasEbitda:10258, postIasEbitda:24288, eps:78.2},
+  {house:'ICICI Sec',tp:1500, year:'FY27E',   months:13, ebitdaUsed:'₹24,588mn (post-IAS)',  ias:'Post-IAS', peAtTp:31.7, evAtTp:'15.0x', preIasEbitda:10258, postIasEbitda:24588, eps:47.3},
+  {house:'Kotak',    tp:1400, year:'FY28E',   months:25, ebitdaUsed:'₹11,456mn (pre-IAS)',   ias:'Pre-IAS',  peAtTp:26.5, evAtTp:'12.0x', preIasEbitda:11456, postIasEbitda:28182, eps:52.9},
+  {house:'Nirmal Bang',tp:1344,year:'Dec-27E',months:22, ebitdaUsed:'₹12,036mn (pre-IAS)',   ias:'Pre-IAS',  peAtTp:31.7, evAtTp:'10.0x', preIasEbitda:12036, postIasEbitda:28000, eps:42.4},
+  {house:'ICICI Direct',tp:1320,year:'FY27E', months:13, ebitdaUsed:'₹11,210mn (pre-IAS)',   ias:'Pre-IAS',  peAtTp:46.0, evAtTp:'11.5x', preIasEbitda:10700, postIasEbitda:23286, eps:28.7},
+  {house:'Elara',    tp:1300, year:'Sep-27E', months:19, ebitdaUsed:'₹9,468mn (pre-IAS)',    ias:'Pre-IAS',  peAtTp:85.0, evAtTp:'13.0x', preIasEbitda:9468,  postIasEbitda:23457, eps:15.3},
+  {house:'B&K',      tp:1285, year:'FY28E',   months:25, ebitdaUsed:'₹10,948mn (pre-IAS)',   ias:'Pre-IAS',  peAtTp:24.6, evAtTp:'~9x',   preIasEbitda:10948, postIasEbitda:25568, eps:52.2},
+  {house:'PL Capital',tp:1274,year:'FY28E',   months:25, ebitdaUsed:'₹12,640mn (pre-IAS)',   ias:'Pre-IAS',  peAtTp:21.7, evAtTp:'9.5x',  preIasEbitda:12640, postIasEbitda:26063, eps:58.6},
+  {house:'Investec', tp:1248, year:'Dec-27E', months:22, ebitdaUsed:'₹22,838mn (post-IAS)',  ias:'Post-IAS', peAtTp:37.4, evAtTp:'12.5x', preIasEbitda:8717,  postIasEbitda:22838, eps:33.4},
+];
+
+const CMP_EV_PRE = 100500;
+const CMP_EV_POST = 162800;
+const CMP = 987;
+
+function renderTPRecon() {
+  // Anchor year table
+  const ryb = document.getElementById('recon-year-body');
+  if (!ryb) return;
+  ryb.innerHTML = RECON_DATA.map(r => {
+    const monthBadge = r.months <= 13
+      ? `<span style="background:#D8F3DC;color:#1B4F2A;font-size:10px;padding:2px 7px;border-radius:3px">${r.months}M</span>`
+      : r.months <= 22
+      ? `<span style="background:#FFE8A3;color:#7B4F00;font-size:10px;padding:2px 7px;border-radius:3px">${r.months}M</span>`
+      : `<span style="background:#DBEAFE;color:#1B4F8A;font-size:10px;padding:2px 7px;border-radius:3px">${r.months}M</span>`;
+    const iasBadge = r.ias === 'Post-IAS'
+      ? `<span style="background:#DBEAFE;color:#1B4F8A;font-size:9px;padding:2px 5px;border-radius:3px">Post-IAS</span>`
+      : `<span style="background:#D8F3DC;color:#2D6A4F;font-size:9px;padding:2px 5px;border-radius:3px">Pre-IAS</span>`;
+    const peColor = r.peAtTp < 25 ? 'color:#2D6A4F;font-weight:600' : r.peAtTp > 40 ? 'color:#9B2226' : '';
+    return `<tr>
+      <td style="font-weight:600">${r.house}</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹${r.tp.toLocaleString()}</td>
+      <td>${r.year}</td>
+      <td>${monthBadge}</td>
+      <td style="font-size:10px;color:var(--text2)">${r.ebitdaUsed}</td>
+      <td>${iasBadge}</td>
+      <td style="${peColor}">${r.peAtTp}x</td>
+      <td>${r.evAtTp}</td>
+    </tr>`;
+  }).join('');
+
+  // Implied multiples table
+  const imb = document.getElementById('implied-mult-body');
+  if (!imb) return;
+  imb.innerHTML = RECON_DATA.map(r => {
+    const impliedEvPre = (CMP_EV_PRE / r.preIasEbitda).toFixed(1);
+    const impliedPeCmp = (CMP / r.eps).toFixed(1);
+    const impliedPeTp  = r.peAtTp.toFixed(1);
+    const evColor = parseFloat(impliedEvPre) < 10 ? 'cell-hi' : parseFloat(impliedEvPre) > 15 ? 'cell-lo' : '';
+    const peColor = parseFloat(impliedPeCmp) < 25 ? 'cell-hi' : parseFloat(impliedPeCmp) > 50 ? 'cell-lo' : '';
+    const verdict = parseFloat(impliedPeTp) < 20 ? '🟢 Cheap at TP' : parseFloat(impliedPeTp) < 30 ? '🟡 Fair at TP' : '🔴 Rich at TP';
+    return `<tr>
+      <td style="font-weight:600">${r.house}</td>
+      <td style="font-family:var(--font-mono)">₹${r.tp.toLocaleString()}</td>
+      <td>${r.year}</td>
+      <td>${(r.preIasEbitda/1000).toFixed(1)}k mn</td>
+      <td class="${evColor}">${impliedEvPre}x</td>
+      <td>${r.eps}</td>
+      <td class="${peColor}">${impliedPeCmp}x</td>
+      <td>${impliedPeTp}x</td>
+      <td style="font-size:10px">${verdict}</td>
+    </tr>`;
+  }).join('');
+
+  // Implied EV/EBITDA chart (pre-IAS at CMP)
+  const evCtx = document.getElementById('impliedEvChart');
+  if (!evCtx) return;
+  const evLabels = ['FY26E','FY27E','FY28E'];
+  const preIasEbitdas = {
+    FY26E: 9069, FY27E: 10500, FY28E: 12000
+  };
+  new Chart(evCtx, {
+    type: 'bar',
+    data: {
+      labels: evLabels,
+      datasets: [{
+        label: 'EV/EBITDA at CMP (pre-Ind AS)',
+        data: evLabels.map(yr => parseFloat((CMP_EV_PRE / preIasEbitdas[yr]).toFixed(1))),
+        backgroundColor: ['#B5D4F4','#7BB3E8','#378ADD'],
+        borderWidth: 0, borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.parsed.y + 'x EV/EBITDA' } }
+      },
+      scales: {
+        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font:{size:11}, callback: v => v + 'x' } },
+        x: { grid: { display: false }, ticks: { font:{size:11} } }
+      }
+    }
+  });
+
+  // Implied P/E chart at CMP
+  const peCtx = document.getElementById('impliedPeChart');
+  if (!peCtx) return;
+  const peSorted = [...RECON_DATA].filter(r => r.eps > 0).sort((a,b) => (CMP/a.eps) - (CMP/b.eps));
+  new Chart(peCtx, {
+    type: 'bar',
+    data: {
+      labels: peSorted.map(r => r.house),
+      datasets: [{
+        label: 'P/E at CMP',
+        data: peSorted.map(r => parseFloat((CMP / r.eps).toFixed(1))),
+        backgroundColor: peSorted.map(r => {
+          const pe = CMP / r.eps;
+          return pe < 20 ? '#9FE1CB' : pe < 35 ? '#FAC775' : '#F5C4B3';
+        }),
+        borderWidth: 0, borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.parsed.x + 'x P/E' } }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font:{size:10}, callback: v => v + 'x' } },
+        y: { grid: { display: false }, ticks: { font:{size:10} } }
+      }
+    }
+  });
+}
+
+// ══════════════════════ VALUATION DATA ══════════════════════
+// Pre-Ind AS EBITDA estimates per house (mn)
+const VAL_DATA = [
+  {house:'CLSA',      tp:1920, nd:3700,
+   rev:  {fy26:68092, fy27:77086, fy28:84279},
+   ebitda:{fy25:3756, fy26:21153, fy27:24714, fy28:27964},  // CLSA post-IAS (they don't split)
+   preEbitda:{fy25:3756, fy26:8200,  fy27:10258, fy28:11456}, // estimated pre-IAS
+   eps:  {fy26:23.4,  fy27:51.6,  fy28:75.2},
+   bv:   {fy25:694,   fy26:717,   fy27:768,   fy28:844}},
+
+  {house:'Nuvama',    tp:1605, nd:3700,
+   rev:  {fy26:68318, fy27:80066, fy28:92603},
+   ebitda:{fy25:15416,fy26:20644, fy27:24288, fy28:28129},
+   preEbitda:{fy25:3756,fy26:8200, fy27:10258, fy28:11456},
+   eps:  {fy26:45.5,  fy27:78.2,  fy28:96.7},
+   bv:   {fy25:718,   fy26:757,   fy27:836,   fy28:936}},
+
+  {house:'ICICI Sec', tp:1500, nd:3700,
+   rev:  {fy26:69587, fy27:76578, fy28:85275},
+   ebitda:{fy25:15416,fy26:22551, fy27:24588, fy28:28182},
+   preEbitda:{fy25:3756,fy26:8200, fy27:10258, fy28:11456},
+   eps:  {fy26:33.5,  fy27:47.3,  fy28:62.1},
+   bv:   {fy25:718,   fy26:799,   fy27:899,   fy28:1032}},
+
+  {house:'Kotak',     tp:1400, nd:3700,
+   rev:  {fy26:66625, fy27:71032, fy28:76184},
+   ebitda:{fy25:3756, fy26:8213,  fy27:10258, fy28:11456},
+   preEbitda:{fy25:3756,fy26:8213, fy27:10258, fy28:11456},
+   eps:  {fy26:45.4,  fy27:41.9,  fy28:52.9},
+   bv:   {fy25:718,   fy26:895,   fy27:938,   fy28:990}},
+
+  {house:'Nirmal Bang',tp:1344,nd:4400,
+   rev:  {fy26:68180, fy27:75819, fy28:81637},
+   ebitda:{fy25:3756, fy26:9069,  fy27:12036, fy28:13855},
+   preEbitda:{fy25:3756,fy26:9069, fy27:12036, fy28:13855},
+   eps:  {fy26:25.0,  fy27:42.4,  fy28:56.8},
+   bv:   {fy25:719,   fy26:740,   fy27:782,   fy28:839}},
+
+  {house:'Elara',     tp:1300, nd:3700,
+   rev:  {fy26:73900, fy27:76909, fy28:81408},
+   ebitda:{fy25:15416,fy26:23202, fy27:23457, fy28:25236},
+   preEbitda:{fy25:3756,fy26:7461, fy27:9468,  fy28:11000},
+   eps:  {fy26:33.8,  fy27:13.2,  fy28:15.3},
+   bv:   {fy25:719,   fy26:776,   fy27:789,   fy28:804}},
+
+  {house:'ICICI Direct',tp:1320,nd:3700,
+   rev:  {fy26:67608, fy27:75636, fy28:82200},
+   ebitda:{fy25:15416,fy26:21154, fy27:24107, fy28:26477},
+   preEbitda:{fy25:3756,fy26:8920, fy27:11210, fy28:12960},
+   eps:  {fy26:17.9,  fy27:28.7,  fy28:41.6},
+   bv:   {fy25:718,   fy26:734,   fy27:760,   fy28:799}},
+
+  {house:'B&K',       tp:1285, nd:3700,
+   rev:  {fy26:68535, fy27:74612, fy28:81973},
+   ebitda:{fy25:3756, fy26:9298,  fy27:9562,  fy28:10948},
+   preEbitda:{fy25:3756,fy26:9298, fy27:9562,  fy28:10948},
+   eps:  {fy26:33.4,  fy27:38.4,  fy28:52.2},
+   bv:   {fy25:718,   fy26:771,   fy27:809,   fy28:861}},
+
+  {house:'PL Capital', tp:1274,nd:4658,
+   rev:  {fy26:67923, fy27:73759, fy28:81275},
+   ebitda:{fy25:15416,fy26:20153, fy27:23286, fy28:26063},
+   preEbitda:{fy25:3756,fy26:8001, fy27:10550, fy28:12640},
+   eps:  {fy26:13.4,  fy27:35.1,  fy28:58.6},
+   bv:   {fy25:720,   fy26:729,   fy27:764,   fy28:823}},
+
+  {house:'Investec',  tp:1248, nd:3700,
+   rev:  {fy26:66302, fy27:74255, fy28:81613},
+   ebitda:{fy25:15416,fy26:20093, fy27:22838, fy28:25568},
+   preEbitda:{fy25:3756,fy26:7461, fy27:8717,  fy28:10402},
+   eps:  {fy26:13.2,  fy27:33.4,  fy28:54.2},
+   bv:   {fy25:718,   fy26:732,   fy27:765,   fy28:819}},
+];
+
+const MCAP = 96800;
+const CMP2 = 987;
+
+function evAtPrice(price, nd) { return MCAP * (price/CMP2) + nd; }
+
+function evEbitdaAt(price, ebitda, nd) {
+  if (!ebitda || ebitda <= 0) return null;
+  return parseFloat((evAtPrice(price, nd) / ebitda).toFixed(1));
+}
+function evSalesAt(price, rev, nd) {
+  if (!rev || rev <= 0) return null;
+  return parseFloat((evAtPrice(price, nd) / rev).toFixed(2));
+}
+function peAt(price, eps) {
+  if (!eps || eps <= 0) return null;
+  return parseFloat((price / eps).toFixed(1));
+}
+
+function multColor(val, low, mid) {
+  if (val === null || val <= 0) return '';
+  if (val <= low)  return 'cell-hi';
+  if (val >= mid)  return 'cell-lo';
+  return 'cell-amber';
+}
+
+// add amber style to CSS dynamically
+(function(){ const s=document.createElement('style'); s.textContent='.cell-amber{background:#FFF8E1!important;color:#7B4F00}'; document.head.appendChild(s); })();
+
+function renderValuation() {
+  const ev26 = [], ev27 = [], ev28 = [], houses = [];
+  const es26 = [], es27 = [], es28 = [];
+  const pe26 = [], pe27 = [], pe28 = [];
+
+  // ── EV/EBITDA table ──
+  let evHtml = '';
+  VAL_DATA.forEach(d => {
+    const e26cmp = evEbitdaAt(CMP2, d.preEbitda.fy26, d.nd);
+    const e27cmp = evEbitdaAt(CMP2, d.preEbitda.fy27, d.nd);
+    const e28cmp = evEbitdaAt(CMP2, d.preEbitda.fy28, d.nd);
+    const e26tp  = evEbitdaAt(d.tp,  d.preEbitda.fy26, d.nd);
+    const e27tp  = evEbitdaAt(d.tp,  d.preEbitda.fy27, d.nd);
+    const e28tp  = evEbitdaAt(d.tp,  d.preEbitda.fy28, d.nd);
+    const actuals = evEbitdaAt(CMP2, d.preEbitda.fy25, d.nd);
+    houses.push(d.house); ev26.push(e26cmp); ev27.push(e27cmp); ev28.push(e28cmp);
+    evHtml += `<tr>
+      <td style="font-weight:600">${d.house}</td>
+      <td>${actuals ? actuals+'x' : '—'}</td>
+      <td>${(d.preEbitda.fy26/1000).toFixed(1)}k</td>
+      <td class="${multColor(e26cmp,10,14)}">${e26cmp ? e26cmp+'x' : '—'}</td>
+      <td class="${multColor(e26tp,10,14)}">${e26tp ? e26tp+'x' : '—'}</td>
+      <td>${(d.preEbitda.fy27/1000).toFixed(1)}k</td>
+      <td class="${multColor(e27cmp,8,12)}">${e27cmp ? e27cmp+'x' : '—'}</td>
+      <td class="${multColor(e27tp,8,12)}">${e27tp ? e27tp+'x' : '—'}</td>
+      <td>${(d.preEbitda.fy28/1000).toFixed(1)}k</td>
+      <td class="${multColor(e28cmp,7,10)}">${e28cmp ? e28cmp+'x' : '—'}</td>
+      <td class="${multColor(e28tp,7,10)}">${e28tp ? e28tp+'x' : '—'}</td>
+    </tr>`;
+  });
+  document.getElementById('ev-ebitda-body').innerHTML = evHtml;
+
+  // ── EV/Sales table ──
+  let esHtml = '';
+  VAL_DATA.forEach(d => {
+    const s26c = evSalesAt(CMP2, d.rev.fy26, d.nd);
+    const s27c = evSalesAt(CMP2, d.rev.fy27, d.nd);
+    const s28c = evSalesAt(CMP2, d.rev.fy28, d.nd);
+    const s26t = evSalesAt(d.tp,  d.rev.fy26, d.nd);
+    const s27t = evSalesAt(d.tp,  d.rev.fy27, d.nd);
+    const s28t = evSalesAt(d.tp,  d.rev.fy28, d.nd);
+    es26.push(s26c); es27.push(s27c); es28.push(s28c);
+    esHtml += `<tr>
+      <td style="font-weight:600">${d.house}</td>
+      <td>${(d.rev.fy26/1000).toFixed(0)}k</td>
+      <td class="${multColor(s26c,1.2,2.0)}">${s26c ? s26c+'x' : '—'}</td>
+      <td class="${multColor(s26t,1.2,2.0)}">${s26t ? s26t+'x' : '—'}</td>
+      <td>${(d.rev.fy27/1000).toFixed(0)}k</td>
+      <td class="${multColor(s27c,1.0,1.8)}">${s27c ? s27c+'x' : '—'}</td>
+      <td class="${multColor(s27t,1.0,1.8)}">${s27t ? s27t+'x' : '—'}</td>
+      <td>${(d.rev.fy28/1000).toFixed(0)}k</td>
+      <td class="${multColor(s28c,0.9,1.5)}">${s28c ? s28c+'x' : '—'}</td>
+      <td class="${multColor(s28t,0.9,1.5)}">${s28t ? s28t+'x' : '—'}</td>
+    </tr>`;
+  });
+  document.getElementById('ev-sales-body').innerHTML = esHtml;
+
+  // ── P/E table ──
+  let peHtml = '';
+  VAL_DATA.forEach(d => {
+    const p26c = peAt(CMP2, d.eps.fy26);
+    const p27c = peAt(CMP2, d.eps.fy27);
+    const p28c = peAt(CMP2, d.eps.fy28);
+    const p26t = peAt(d.tp,  d.eps.fy26);
+    const p27t = peAt(d.tp,  d.eps.fy27);
+    const p28t = peAt(d.tp,  d.eps.fy28);
+    pe26.push(p26c); pe27.push(p27c); pe28.push(p28c);
+    peHtml += `<tr>
+      <td style="font-weight:600">${d.house}</td>
+      <td style="font-family:var(--font-mono)">₹${d.eps.fy26}</td>
+      <td class="${multColor(p26c,30,60)}">${p26c ? p26c+'x' : '—'}</td>
+      <td class="${multColor(p26t,20,40)}">${p26t ? p26t+'x' : '—'}</td>
+      <td style="font-family:var(--font-mono)">₹${d.eps.fy27}</td>
+      <td class="${multColor(p27c,20,35)}">${p27c ? p27c+'x' : '—'}</td>
+      <td class="${multColor(p27t,15,25)}">${p27t ? p27t+'x' : '—'}</td>
+      <td style="font-family:var(--font-mono)">₹${d.eps.fy28}</td>
+      <td class="${multColor(p28c,15,28)}">${p28c ? p28c+'x' : '—'}</td>
+      <td class="${multColor(p28t,12,20)}">${p28t ? p28t+'x' : '—'}</td>
+    </tr>`;
+  });
+  document.getElementById('pe-body').innerHTML = peHtml;
+
+  // ── P/B table ──
+  let pbHtml = '';
+  VAL_DATA.forEach(d => {
+    const pb25 = parseFloat((CMP2/d.bv.fy25).toFixed(2));
+    const pb26 = parseFloat((CMP2/d.bv.fy26).toFixed(2));
+    const pb27 = parseFloat((CMP2/d.bv.fy27).toFixed(2));
+    const pb28 = parseFloat((CMP2/d.bv.fy28).toFixed(2));
+    pbHtml += `<tr>
+      <td style="font-weight:600">${d.house}</td>
+      <td>₹${d.bv.fy25}</td><td class="${multColor(pb25,1.0,1.6)}">${pb25}x</td>
+      <td>₹${d.bv.fy26}</td><td class="${multColor(pb26,1.0,1.5)}">${pb26}x</td>
+      <td>₹${d.bv.fy27}</td><td class="${multColor(pb27,0.9,1.4)}">${pb27}x</td>
+      <td>₹${d.bv.fy28}</td><td class="${multColor(pb28,0.8,1.2)}">${pb28}x</td>
+    </tr>`;
+  });
+  document.getElementById('pb-body').innerHTML = pbHtml;
+
+  // ── All-multiples summary ──
+  let allHtml = '';
+  VAL_DATA.forEach(d => {
+    const e26 = evEbitdaAt(CMP2,d.preEbitda.fy26,d.nd);
+    const e27 = evEbitdaAt(CMP2,d.preEbitda.fy27,d.nd);
+    const e28 = evEbitdaAt(CMP2,d.preEbitda.fy28,d.nd);
+    const s26 = evSalesAt(CMP2,d.rev.fy26,d.nd);
+    const s27 = evSalesAt(CMP2,d.rev.fy27,d.nd);
+    const s28 = evSalesAt(CMP2,d.rev.fy28,d.nd);
+    const p26 = peAt(CMP2,d.eps.fy26);
+    const p27 = peAt(CMP2,d.eps.fy27);
+    const p28 = peAt(CMP2,d.eps.fy28);
+    const pb27 = parseFloat((CMP2/d.bv.fy27).toFixed(2));
+    allHtml += `<tr>
+      <td style="font-weight:600">${d.house}</td>
+      <td style="font-family:var(--font-mono);font-weight:600">₹${d.tp.toLocaleString()}</td>
+      <td class="${multColor(e26,10,14)}">${e26 ? e26+'x' : '—'}</td>
+      <td class="${multColor(e27,8,12)}">${e27 ? e27+'x' : '—'}</td>
+      <td class="${multColor(e28,7,10)}">${e28 ? e28+'x' : '—'}</td>
+      <td class="${multColor(s26,1.2,2.0)}">${s26 ? s26+'x' : '—'}</td>
+      <td class="${multColor(s27,1.0,1.8)}">${s27 ? s27+'x' : '—'}</td>
+      <td class="${multColor(s28,0.9,1.5)}">${s28 ? s28+'x' : '—'}</td>
+      <td class="${multColor(p26,30,60)}">${p26 ? p26+'x' : '—'}</td>
+      <td class="${multColor(p27,20,35)}">${p27 ? p27+'x' : '—'}</td>
+      <td class="${multColor(p28,15,28)}">${p28 ? p28+'x' : '—'}</td>
+      <td class="${multColor(pb27,0.9,1.4)}">${pb27}x</td>
+    </tr>`;
+  });
+  document.getElementById('all-mult-body').innerHTML = allHtml;
+
+  // ── Charts ──
+  setTimeout(() => {
+    const labels = VAL_DATA.map(d => d.house);
+
+    // EV/EBITDA grouped bar
+    new Chart(document.getElementById('evEbitdaChart'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label:'FY26E', data: VAL_DATA.map(d => evEbitdaAt(CMP2,d.preEbitda.fy26,d.nd)), backgroundColor:'#B5D4F4', borderWidth:0, borderRadius:3 },
+          { label:'FY27E', data: VAL_DATA.map(d => evEbitdaAt(CMP2,d.preEbitda.fy27,d.nd)), backgroundColor:'#378ADD', borderWidth:0, borderRadius:3 },
+          { label:'FY28E', data: VAL_DATA.map(d => evEbitdaAt(CMP2,d.preEbitda.fy28,d.nd)), backgroundColor:'#0C447C', borderWidth:0, borderRadius:3 },
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false},
+          annotation: { annotations: [{ type:'line', yMin:10, yMax:10, borderColor:'#E24B4A', borderWidth:1.5, borderDash:[5,4], label:{content:'10x',display:true,position:'end',font:{size:9}} }] }
+        },
+        scales:{
+          y:{ min:0, grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:10},callback:v=>v+'x'} },
+          x:{ grid:{display:false}, ticks:{font:{size:10},maxRotation:30} }
+        }
+      }
+    });
+
+    // Historical EV/EBITDA line
+    new Chart(document.getElementById('evHistChart'), {
+      type:'line',
+      data:{
+        labels:['FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26E','FY27E','FY28E'],
+        datasets:[
+          {label:'EV/EBITDA (historical actuals + consensus est)',
+           data:[10.2,11.8,null,null,8.5,12.8,28.8,11.1,9.6,8.3],
+           borderColor:'#1B4F8A',backgroundColor:'#1B4F8A22',fill:true,tension:0.3,pointRadius:5,
+           pointBackgroundColor:'#1B4F8A',pointBorderColor:'#fff',pointBorderWidth:2},
+          {label:'10x reference',
+           data:[10,10,10,10,10,10,10,10,10,10],
+           borderColor:'#E24B4A',borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{
+          y:{min:0,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10},callback:v=>v+'x'}},
+          x:{grid:{display:false},ticks:{font:{size:10}}}
+        }
+      }
+    });
+
+    // EV/Sales grouped
+    new Chart(document.getElementById('evSalesChart'), {
+      type:'bar',
+      data:{
+        labels,
+        datasets:[
+          {label:'FY26E',data:VAL_DATA.map(d=>evSalesAt(CMP2,d.rev.fy26,d.nd)),backgroundColor:'#9FE1CB',borderWidth:0,borderRadius:3},
+          {label:'FY27E',data:VAL_DATA.map(d=>evSalesAt(CMP2,d.rev.fy27,d.nd)),backgroundColor:'#1D9E75',borderWidth:0,borderRadius:3},
+          {label:'FY28E',data:VAL_DATA.map(d=>evSalesAt(CMP2,d.rev.fy28,d.nd)),backgroundColor:'#085041',borderWidth:0,borderRadius:3},
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{y:{min:0,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10},callback:v=>v+'x'}},
+          x:{grid:{display:false},ticks:{font:{size:10},maxRotation:30}}}}
+    });
+
+    // P/E grouped
+    new Chart(document.getElementById('peChart'), {
+      type:'bar',
+      data:{
+        labels,
+        datasets:[
+          {label:'FY26E',data:VAL_DATA.map(d=>peAt(CMP2,d.eps.fy26)),backgroundColor:'#FAC775',borderWidth:0,borderRadius:3},
+          {label:'FY27E',data:VAL_DATA.map(d=>peAt(CMP2,d.eps.fy27)),backgroundColor:'#BA7517',borderWidth:0,borderRadius:3},
+          {label:'FY28E',data:VAL_DATA.map(d=>peAt(CMP2,d.eps.fy28)),backgroundColor:'#633806',borderWidth:0,borderRadius:3},
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{y:{min:0,max:120,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10},callback:v=>v+'x'}},
+          x:{grid:{display:false},ticks:{font:{size:10},maxRotation:30}}}}
+    });
+
+    // P/B
+    new Chart(document.getElementById('pbChart'), {
+      type:'bar',
+      data:{
+        labels,
+        datasets:[
+          {label:'FY25A',data:VAL_DATA.map(d=>parseFloat((CMP2/d.bv.fy25).toFixed(2))),backgroundColor:'#D3D1C7',borderWidth:0,borderRadius:3},
+          {label:'FY26E',data:VAL_DATA.map(d=>parseFloat((CMP2/d.bv.fy26).toFixed(2))),backgroundColor:'#AFA9EC',borderWidth:0,borderRadius:3},
+          {label:'FY27E',data:VAL_DATA.map(d=>parseFloat((CMP2/d.bv.fy27).toFixed(2))),backgroundColor:'#7F77DD',borderWidth:0,borderRadius:3},
+          {label:'FY28E',data:VAL_DATA.map(d=>parseFloat((CMP2/d.bv.fy28).toFixed(2))),backgroundColor:'#534AB7',borderWidth:0,borderRadius:3},
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{y:{min:0,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10},callback:v=>v+'x'}},
+          x:{grid:{display:false},ticks:{font:{size:10},maxRotation:30}}}}
+    });
+
+    // Scatter: EV/EBITDA FY27 vs TP
+    new Chart(document.getElementById('scatterChart'), {
+      type:'scatter',
+      data:{
+        datasets:[{
+          label:'Houses',
+          data: VAL_DATA.map(d => ({
+            x: evEbitdaAt(d.tp, d.preEbitda.fy27, d.nd),
+            y: d.tp,
+            house: d.house
+          })),
+          backgroundColor: VAL_DATA.map(d => d.house==='B&K'?'#BA7517':'#1B4F8A'),
+          pointRadius:8, pointHoverRadius:10
+        }]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{
+          legend:{display:false},
+          tooltip:{callbacks:{
+            label:ctx=>`${ctx.raw.house}: TP ₹${ctx.raw.y.toLocaleString()}, EV/EBITDA @ TP = ${ctx.raw.x}x`
+          }}
+        },
+        scales:{
+          x:{title:{display:true,text:'EV/EBITDA FY27E at TP (pre-Ind AS)',font:{size:11}},min:6,max:16,
+             grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10},callback:v=>v+'x'}},
+          y:{title:{display:true,text:'Target Price (₹)',font:{size:11}},
+             grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10},callback:v=>'₹'+v.toLocaleString()}}
+        }
+      },
+      plugins:[{
+        afterDraw(chart){
+          const ctx2=chart.ctx;
+          chart.data.datasets[0].data.forEach((pt,i)=>{
+            const meta=chart.getDatasetMeta(0);
+            const point=meta.data[i];
+            ctx2.fillStyle='#1A1916';
+            ctx2.font='10px DM Mono, monospace';
+            ctx2.textAlign='center';
+            ctx2.fillText(pt.house, point.x, point.y-12);
+          });
+        }
+      }]
+    });
+  }, 250);
+}
+
+function showValTab(id, el) {
+  document.querySelectorAll('.val-pane').forEach(p => p.style.display='none');
+  document.querySelectorAll('#val-subtabs .kpi-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('vt-'+id).style.display='block';
+  el.classList.add('active');
+}
+
+// ══════════════════════ ANALYST DATA ══════════════════════
+const ANALYST_DATA = [
+  {
+    house: 'Kotak Institutional Equities',
+    rating: 'BUY', tp: 1400, date: '06 Feb 2026',
+    color: '#C62D1F',
+    analysts: [
+      { name:'Umang Mehta',     role:'Lead Analyst',    email:'umang.mehta@kotak.com',           phone:'+91-22-4336-0881', senior:true  },
+      { name:'Jaykumar Doshi',  role:'Analyst',         email:'jaykumar.doshi@kotak.com',        phone:'+91-22-4336-0885', senior:false },
+      { name:'Eesha Mohanty',   role:'Analyst',         email:'eesha.mohanty@kotak.com',         phone:'+91-22-4336-0877', senior:false },
+      { name:'Praneeth Reddy',  role:'Research Analyst',email:'praneethkumar.reddy@kotak.com',   phone:'+91-22-4336-0882', senior:false },
+    ]
+  },
+  {
+    house: 'Prabhudas Lilladher (PL Capital)',
+    rating: 'BUY', tp: 1274, date: '06 Feb 2026',
+    color: '#003366',
+    analysts: [
+      { name:'Jinesh Joshi',    role:'Lead Analyst',    email:'jineshjoshi@plindia.com',         phone:'+91-22-6632-2238', senior:true  },
+      { name:'Stuti Beria',     role:'Analyst',         email:'stutiberia@plindia.com',          phone:'+91-22-6632-2246', senior:false },
+      { name:'Dhvanit Shah',    role:'Research Analyst',email:'dhvanitshah@plindia.com',         phone:'+91-22-6632-2258', senior:false },
+    ]
+  },
+  {
+    house: 'ICICI Securities (Institutional)',
+    rating: 'BUY', tp: 1500, date: '06 Feb 2026',
+    color: '#F36F21',
+    analysts: [
+      { name:'Abhisek Banerjee',role:'Lead Analyst',    email:'abhisek.banerjee@icicisecurities.com', phone:'+91-22-6807-7574', senior:true  },
+      { name:'Jayram Shetty',   role:'Analyst',         email:'jayram.shetty@icicisecurities.com',    phone:'—',               senior:false },
+      { name:'Nirant Dhumal',   role:'Research Analyst',email:'nirant.dhumal@icicisecurities.com',    phone:'—',               senior:false },
+    ]
+  },
+  {
+    house: 'CLSA India',
+    rating: 'O-PF', tp: 1920, date: '06 Feb 2026',
+    color: '#E31837',
+    analysts: [
+      { name:'Deepti Chaturvedi',role:'Lead Analyst',   email:'deepti.chaturvedi@clsa.com',      phone:'+91-22-6650-5066', senior:true  },
+      { name:'Saurabh Mehrotra', role:'Analyst',        email:'saurabh.mehrotra@clsa.com',       phone:'+91-22-6650-5064', senior:false },
+    ]
+  },
+  {
+    house: 'Investec Capital Services (India)',
+    rating: 'BUY', tp: 1248, date: '06 Feb 2026',
+    color: '#004B87',
+    analysts: [
+      { name:'Harit Kapoor',    role:'Lead Analyst',    email:'harit.kapoor@investec.com',       phone:'+91-22-6849-7493', senior:true  },
+      { name:'Anurag Lodha',    role:'Analyst',         email:'Anurag.lodha@investec.com',       phone:'+91-22-6849-7423', senior:false },
+    ]
+  },
+  {
+    house: 'ICICI Securities (Retail / ICICI Direct)',
+    rating: 'BUY', tp: 1320, date: '09 Feb 2026',
+    color: '#F36F21',
+    analysts: [
+      { name:'Bhupendra Tiwary',role:'Lead Analyst (CFA)',email:'bhupendra.tiwary@icicisecurities.com', phone:'—', senior:true  },
+      { name:'Anjini Sharma',   role:'Research Analyst (CA)', email:'anjini.sharma@icicisecurities.com', phone:'—', senior:false },
+    ]
+  },
+  {
+    house: 'B&K Securities (Batlivala & Karani)',
+    rating: 'HOLD', tp: 1285, date: '05 Feb 2026',
+    color: '#1C3557',
+    analysts: [
+      { name:'Kavish Parekh',   role:'Lead Analyst',    email:'kavish.parekh@bksec.com',         phone:'+91-22-4031-7260', senior:true  },
+      { name:'Kartik Mediratta',role:'Research Analyst', email:'kartik.mediratta@bksec.com',     phone:'+91-22-4031-7107', senior:false },
+      { name:'Yash Sharma',     role:'Research Analyst', email:'yash.sharma@bksec.com',          phone:'+91-22-4031-7107', senior:false },
+    ]
+  },
+  {
+    house: 'Elara Securities (India)',
+    rating: 'BUY', tp: 1300, date: '06 Feb 2026',
+    color: '#00A79D',
+    analysts: [
+      { name:'Karan Taurani',   role:'Lead Analyst',    email:'karan.taurani@elaracapital.com',  phone:'+91-22-6164-8513', senior:true  },
+      { name:'Harshad Gadekar', role:'Associate',       email:'harshad.gadekar@elaracapital.com',phone:'—',               senior:false },
+    ]
+  },
+  {
+    house: 'Nirmal Bang Institutional Equities',
+    rating: 'BUY', tp: 1344, date: '05 Feb 2026',
+    color: '#E31837',
+    analysts: [
+      { name:'Suket Kothari',   role:'Research Associate', email:'suket.kothari@nirmalbang.com',phone:'+91-22-6273-8280', senior:true  },
+    ]
+  },
+  {
+    house: 'Nuvama Institutional Equities',
+    rating: 'BUY', tp: 1605, date: '05 Feb 2026',
+    color: '#6D2077',
+    analysts: [
+      { name:'Abneesh Roy',     role:'Head of Research / Lead', email:'Abneesh.Roy@nuvama.com',  phone:'—',               senior:true  },
+      { name:'Jainam Gosar',    role:'Analyst',         email:'Jainam.Gosar@nuvama.com',         phone:'—',               senior:false },
+      { name:'Shlok Mehta',     role:'Research Analyst',email:'Shlok.Mehta@nuvama.com',          phone:'—',               senior:false },
+    ]
+  },
+];
+
+function initials(name) {
+  return name.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+}
+
+function renderAnalysts() {
+  const grid = document.getElementById('analyst-cards');
+  const tbody = document.getElementById('analyst-tbl-body');
+  if (!grid || !tbody) return;
+
+  let cardHtml = '';
+  let tblHtml  = '';
+
+  ANALYST_DATA.forEach(h => {
+    const tagCls = h.rating === 'HOLD' ? 'tag-hold' : 'tag-buy';
+    const leadCount = h.analysts.filter(a => a.senior).length;
+    const juniorCount = h.analysts.filter(a => !a.senior).length;
+
+    // analysts list inside card
+    let analystRows = h.analysts.map(a => {
+      const bg = a.senior ? h.color + '22' : 'var(--surface2)';
+      const border = a.senior ? `border-left:2px solid ${h.color}` : 'border-left:2px solid var(--border)';
+      const roleColor = a.senior ? h.color : 'var(--text3)';
+      const emailLink = a.email !== '—' ? `<a href="mailto:${a.email}" style="color:var(--blue);font-size:10px;font-family:var(--font-mono)">${a.email}</a>` : `<span style="color:var(--text3);font-size:10px">—</span>`;
+      const phoneSpan = `<span style="font-size:10px;font-family:var(--font-mono);color:var(--text3)">${a.phone}</span>`;
+      const ini = initials(a.name);
+      return `<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:${bg};${border};border-radius:4px;margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:${h.color}33;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:${h.color};flex-shrink:0">${ini}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">${a.name} ${a.senior ? `<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:${h.color}22;color:${h.color}">Lead</span>` : ''}</div>
+          <div style="font-size:10px;color:${roleColor};margin-bottom:3px">${a.role}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">${emailLink} ${a.phone !== '—' ? '&nbsp;·&nbsp;'+phoneSpan : ''}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    cardHtml += `<div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid ${h.color};border-radius:var(--radius-lg);padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.3">${h.house}</div>
+        <span class="tag ${tagCls}">₹${h.tp.toLocaleString()}</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:12px">${h.date} &nbsp;·&nbsp; ${leadCount} lead${leadCount>1?'s':''}, ${juniorCount} associate${juniorCount!==1?'s':''}</div>
+      ${analystRows}
+    </div>`;
+
+    // flat table rows
+    h.analysts.forEach(a => {
+      const roleStyle = a.senior ? 'font-weight:600;color:var(--text)' : 'color:var(--text2)';
+      tblHtml += `<tr>
+        <td style="font-weight:600">${h.house}</td>
+        <td style="${roleStyle}">${a.name}</td>
+        <td style="font-size:11px;color:var(--text3)">${a.role}${a.senior?' ★':''}</td>
+        <td>${a.email !== '—' ? `<a href="mailto:${a.email}" style="color:var(--blue);font-size:11px;font-family:var(--font-mono)">${a.email}</a>` : '—'}</td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">${a.phone}</td>
+        <td><span class="tag ${h.rating==='HOLD'?'tag-hold':'tag-buy'}">${h.rating}</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600">₹${h.tp.toLocaleString()}</td>
+      </tr>`;
+    });
+  });
+
+  grid.innerHTML  = cardHtml;
+  tbody.innerHTML = tblHtml;
+}
+
+// ══════════════════════ INDUSTRY TAB ══════════════════════
+function showIndTab(id, el) {
+  document.querySelectorAll('.val-pane[id^="ind-"]').forEach(p => p.style.display = 'none');
+  document.querySelectorAll('#ind-subtabs .kpi-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('ind-' + id).style.display = 'block';
+  el.classList.add('active');
+}
+
+function renderIndustryCharts() {
+  const qLabels = ['Q3FY24','Q4FY24','Q1FY25','Q2FY25','Q3FY25','Q4FY25','Q1FY26','Q2FY26','Q3FY26'];
+
+  // ATP trend
+  new Chart(document.getElementById('indAtpChart'), {
+    type: 'line',
+    data: {
+      labels: qLabels,
+      datasets: [{
+        label: 'ATP (Rs)', data: [271,233,235,257,281,258,254,262,293],
+        borderColor: '#1B4F8A', backgroundColor: '#1B4F8A18', fill: true,
+        tension: 0.35, pointRadius: 5, pointBackgroundColor: '#1B4F8A',
+        pointBorderColor: '#fff', pointBorderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { min: 200, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 }, callback: v => '₹' + v } },
+        x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 45 } }
+      }
+    }
+  });
+
+  // SPH trend
+  new Chart(document.getElementById('indSphChart'), {
+    type: 'line',
+    data: {
+      labels: qLabels,
+      datasets: [{
+        label: 'SPH (Rs)', data: [132,129,134,136,140,125,148,134,146],
+        borderColor: '#1D9E75', backgroundColor: '#1D9E7518', fill: true,
+        tension: 0.35, pointRadius: 5, pointBackgroundColor: '#1D9E75',
+        pointBorderColor: '#fff', pointBorderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { min: 100, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 }, callback: v => '₹' + v } },
+        x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 45 } }
+      }
+    }
+  });
+
+  // GBO language mix donut
+  new Chart(document.getElementById('indGboMixChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Hindi', 'South (Telugu/Tamil/Kannada/Malayalam)', 'Hollywood', 'Marathi/Regional'],
+      datasets: [{
+        data: [38, 35, 22, 5],
+        backgroundColor: ['#1B4F8A', '#1D9E75', '#E24B4A', '#B07D00'],
+        borderWidth: 3, borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '55%',
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 8 } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + '%' } }
+      }
+    }
+  });
+
+  // India GBO trend bar
+  new Chart(document.getElementById('indGboTrendChart'), {
+    type: 'bar',
+    data: {
+      labels: ['FY19', 'FY20', 'FY21', 'FY22', 'FY23', 'FY24', 'FY25', 'FY26E', 'FY27E'],
+      datasets: [{
+        label: 'India GBO (Rs bn)',
+        data: [92, 112, 8, 35, 105, 115, 120, 130, 148],
+        backgroundColor: ['#B5D4F4','#B5D4F4','#F5C4B3','#FAC775','#7BB3E8','#7BB3E8','#378ADD','#9FE1CB','#1D9E75'],
+        borderWidth: 0, borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 }, callback: v => '₹' + v + 'bn' } },
+        x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+      }
+    }
+  });
+
+  // Market share donut
+  new Chart(document.getElementById('indMktShareChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['PVR INOX', 'Cinepolis', 'Carnival', 'Miraj', 'Others'],
+      datasets: [{
+        data: [40, 10, 9, 3, 38],
+        backgroundColor: ['#1B4F8A', '#1D9E75', '#B07D00', '#534AB7', '#D3D1C7'],
+        borderWidth: 3, borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '55%',
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 8 } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ~' + ctx.parsed + '%' } }
+      }
+    }
+  });
+}
+
+function initAll() {
+  renderTPBars('tp-bars-consensus');
+  renderHouseCards();
+  renderEstTable();
+  renderEpsTable();
+  renderKpiTable();
+  renderHistGrid();
+  renderTPAssumptions();
+  renderTPRecon();
+  renderValuation();
+  renderAnalysts();
+  initCharts();
+  initUpdateTab();
+  renderIndustryCharts();
+  showKpi('footfalls', document.querySelector('.kpi-tab.active'));
+}
+
+// ── TP Bars ──
+function renderTPBars(containerId) {
+  const c = document.getElementById(containerId);
+  const sorted = [...HOUSES].sort((a,b) => b.tp - a.tp);
+  const minTp = 987, maxTp = 1920, range = maxTp - minTp;
+  let html = '';
+  sorted.forEach(h => {
+    const pct = Math.round((h.tp - minTp) / range * 100);
+    const color = h.rating === 'HOLD' ? '#B07D00' : '#1B4F8A';
+    const chgHtml = h.chg > 0 ? `<span style="color:var(--buy);font-size:10px">+${h.chg}</span>` :
+                    h.chg < 0 ? `<span style="color:var(--red);font-size:10px">${h.chg}</span>` :
+                    `<span style="color:var(--text3);font-size:10px">unch</span>`;
+    html += `<div class="tp-bar-row">
+      <span class="tp-house-lbl">${h.name}</span>
+      <div class="tp-track">
+        <div class="tp-fill" style="width:${pct}%;background:${color}"></div>
+        <div class="tp-cmp-line" style="left:0"></div>
+      </div>
+      <span class="tp-val-lbl">₹${h.tp.toLocaleString()} ${chgHtml}</span>
+    </div>`;
+  });
+  c.innerHTML = html;
+}
+
+// ── House Cards ──
+function renderHouseCards() {
+  const c = document.getElementById('house-cards');
+  let html = '';
+  HOUSES.forEach(h => {
+    const up = Math.round((h.tp / 987 - 1) * 100);
+    const cls = h.rating === 'HOLD' ? 'hold-card' : 'buy-card';
+    const tagCls = h.rating === 'HOLD' ? 'tag-hold' : 'tag-buy';
+    const chgHtml = h.chg > 0 ? `<span class="tp-up">TP +${h.chg} from ${h.prev.toLocaleString()}</span>` :
+                    h.chg < 0 ? `<span class="tp-dn">TP ${h.chg} from ${h.prev.toLocaleString()}</span>` :
+                    `<span style="color:var(--text3)">TP unchanged at ${h.prev.toLocaleString()}</span>`;
+    html += `<div class="house-card ${cls}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="hname">${h.name}</div>
+        <span class="tag ${tagCls}">${h.rating}</span>
+      </div>
+      <div class="hdate">${h.date}</div>
+      <div class="divider"></div>
+      <div class="htp">₹${h.tp.toLocaleString()}</div>
+      <div class="hup">+${up}% upside vs CMP ₹987</div>
+      <div style="font-size:10px;margin-top:4px" class="tp-chg">${chgHtml}</div>
+      <div class="hbasis">${h.basis}</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">${h.note}</div>
+    </div>`;
+  });
+  document.getElementById('house-cards').innerHTML = html;
+}
+
+// ── Estimates table ──
+function renderEstTable() {
+  const all26e = ESTIMATES.map(e => e.fy26e);
+  const all27e = ESTIMATES.map(e => e.fy27e);
+  const all28e = ESTIMATES.map(e => e.fy28e);
+  const max26=Math.max(...all26e),min26=Math.min(...all26e);
+  const max27=Math.max(...all27e),min27=Math.min(...all27e);
+  const max28=Math.max(...all28e),min28=Math.min(...all28e);
+  let html = '';
+  ESTIMATES.forEach(e => {
+    const m26 = (e.fy26e/e.fy26r*100).toFixed(1);
+    const m27 = (e.fy27e/e.fy27r*100).toFixed(1);
+    const m28 = (e.fy28e/e.fy28r*100).toFixed(1);
+    const c26 = e.fy26e===max26?'cell-hi':e.fy26e===min26?'cell-lo':'';
+    const c27 = e.fy27e===max27?'cell-hi':e.fy27e===min27?'cell-lo':'';
+    const c28 = e.fy28e===max28?'cell-hi':e.fy28e===min28?'cell-lo':'';
+    html += `<tr>
+      <td>${e.house}</td>
+      <td>${(e.fy26r/1000).toFixed(0)}k</td>
+      <td class="${c26}">${(e.fy26e/1000).toFixed(1)}k</td>
+      <td>${m26}%</td>
+      <td>${(e.fy27r/1000).toFixed(0)}k</td>
+      <td class="${c27}">${(e.fy27e/1000).toFixed(1)}k</td>
+      <td>${m27}%</td>
+      <td>${(e.fy28r/1000).toFixed(0)}k</td>
+      <td class="${c28}">${(e.fy28e/1000).toFixed(1)}k</td>
+      <td>${m28}%</td>
+    </tr>`;
+  });
+  document.getElementById('est-body').innerHTML = html;
+}
+
+// ── EPS table ──
+function renderEpsTable() {
+  let html = '';
+  EPS_DATA.forEach(e => {
+    html += `<tr>
+      <td>${e.house}</td>
+      <td>${e.fy26}</td>
+      <td>${e.fy27}</td>
+      <td>${e.fy28}</td>
+      <td>${e.pat26.toLocaleString()}</td>
+      <td>${e.pat27.toLocaleString()}</td>
+      <td style="font-family:var(--font-sans);font-size:10px;color:var(--text3)">${e.basis}</td>
+    </tr>`;
+  });
+  document.getElementById('eps-body').innerHTML = html;
+}
+
+// ── KPI table ──
+function renderKpiTable() {
+  let html = '';
+  KPI_TABLE.forEach(r => {
+    html += `<tr>
+      <td style="font-family:var(--font-mono);font-size:10px">${r[0]}</td>
+      <td>${r[1].toLocaleString()}</td>
+      <td>${r[2].toLocaleString()}</td>
+      <td>${r[3].toFixed(1)}%</td>
+      <td>${r[4] < 0 ? '(' + Math.abs(r[4]) + ')' : r[4].toLocaleString()}</td>
+      <td>${r[5].toFixed(1)}%</td>
+      <td>${r[6]}</td>
+      <td>${r[7]}</td>
+      <td>${r[8]}</td>
+      <td>${r[9]}</td>
+      <td>${r[10].toLocaleString()}</td>
+    </tr>`;
+  });
+  document.getElementById('kpi-tbl-body').innerHTML = html;
+}
+
+// ── Hist grid ──
+function renderHistGrid() {
+  let html = '';
+  Object.entries(HIST).forEach(([house, rows]) => {
+    let trs = rows.map(r => {
+      const rc = r.r==='BUY'||r.r==='O-PF'?'tag-buy':r.r==='HOLD'||r.r==='ACCUM'?'tag-hold':'tag-sell';
+      return `<tr>
+        <td>${r.d}</td>
+        <td><span class="tag ${rc}">${r.r}</span></td>
+        <td style="text-align:right">₹${r.tp.toLocaleString()}</td>
+      </tr>`;
+    }).join('');
+    html += `<div class="hist-card">
+      <div class="hc-title">${house}</div>
+      <table><thead><tr><th>Date</th><th>Rating</th><th style="text-align:right">TP</th></tr></thead>
+      <tbody>${trs}</tbody></table>
+    </div>`;
+  });
+  document.getElementById('hist-grid').innerHTML = html;
+}
+
+// ── Charts ──
+let kpiChart = null;
+function showKpi(key, el) {
+  document.querySelectorAll('.kpi-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const d = KPI[key];
+  if (kpiChart) kpiChart.destroy();
+  kpiChart = new Chart(document.getElementById('kpiChart'), {
+    type: 'line',
+    data: {
+      labels: KPI.labels,
+      datasets: [{
+        label: d.label, data: d.data,
+        borderColor: d.color, backgroundColor: d.color + '18',
+        fill: true, tension: 0.35, pointRadius: 5,
+        pointBackgroundColor: d.color, pointBorderColor: '#fff', pointBorderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 45, autoSkip: false } }
+      }
+    }
+  });
+}
+
+function initCharts() {
+  // Shareholding pie
+  new Chart(document.getElementById('shareChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Promoters','FII','DII','Others'],
+      datasets: [{ data: [27.5,21.2,34.5,16.8], backgroundColor: ['#1A1916','#1B4F8A','#1D9E75','#888780'], borderWidth: 3, borderColor: '#fff' }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, cutout: '55%' }
+  });
+
+  // Revenue mix doughnut
+  new Chart(document.getElementById('mixChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Tickets','F&B','Advertising','Other'],
+      datasets: [{ data: [10056,5938,1180,1624], backgroundColor: ['#1B4F8A','#1D9E75','#B07D00','#888780'], borderWidth: 3, borderColor: '#fff' }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, cutout: '60%' }
+  });
+
+  // Cost bar
+  new Chart(document.getElementById('costsChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Film hire','F&B COGS','Employee','Rent','CAM','Electricity','Other'],
+      datasets: [{ data: [4044,1395,1922,3333,959,919,2057], backgroundColor: ['#B5D4F4','#9FE1CB','#FAC775','#F5C4B3','#D3D1C7','#C0DD97','#CECBF6'], borderWidth: 0 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 } } }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } }
+    }
+  });
+
+  // Revenue trend bar
+  const revGrowth = [-8.8,-18.9,11.1,-0.5,23.4,12.4,9.5];
+  new Chart(document.getElementById('revTrendChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Q1FY25','Q2FY25','Q3FY25','Q4FY25','Q1FY26','Q2FY26','Q3FY26'],
+      datasets: [
+        { label: 'Revenue (Rs mn)', data: [11907,16221,17173,12498,14691,18230,18798], backgroundColor: '#B5D4F4', borderWidth: 0, yAxisID: 'y' },
+        { label: 'YoY growth %', data: revGrowth, type: 'line', borderColor: '#1B4F8A', pointBackgroundColor: '#1B4F8A', tension: 0.3, yAxisID: 'y1', fill: false, pointRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { position: 'left', grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 } } },
+        y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { font: { size: 10 }, callback: v => v + '%' } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+}
+
+// ══════════════════════ UPLOAD & AI ══════════════════════
+function copyWorkerCode() {
+  const code = document.getElementById('worker-code-block').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.getElementById('copy-code-btn');
+    btn.textContent = 'Copied!'; btn.style.background = '#1D9E75';
+    setTimeout(() => { btn.textContent = 'Copy code'; btn.style.background = '#378ADD'; }, 2000);
+  });
+}
+
+function saveWorkerUrl() {
+  const url = document.getElementById('worker-url-input').value.trim();
+  if (!url || !url.startsWith('https://')) {
+    document.getElementById('worker-url-status').textContent = 'Please enter a valid https:// URL';
+    document.getElementById('worker-url-status').style.color = '#9B2226';
+    return;
+  }
+  localStorage.setItem('worker_url', url);
+  document.getElementById('worker-url-status').textContent = 'Saved!';
+  document.getElementById('worker-url-status').style.color = '#1D9E75';
+  setTimeout(() => initUpdateTab(), 800);
+}
+
+function resetWorkerUrl() {
+  localStorage.removeItem('worker_url');
+  initUpdateTab();
+}
+
+function initUpdateTab() {
+  const workerUrl = localStorage.getItem('worker_url') || '';
+  const apiKey    = localStorage.getItem('anthropic_key') || '';
+  if (workerUrl) {
+    document.getElementById('setup-section').style.display   = 'none';
+    document.getElementById('upload-section').style.display  = 'block';
+    document.getElementById('worker-url-display').textContent = workerUrl;
+    if (apiKey) {
+      document.getElementById('api-key-input').value = '••••••••••••••••';
+      document.getElementById('api-key-status').textContent = 'API key saved.';
+    }
+  } else {
+    document.getElementById('setup-section').style.display  = 'block';
+    document.getElementById('upload-section').style.display = 'none';
+    const saved = localStorage.getItem('worker_url_draft') || '';
+    if (saved) document.getElementById('worker-url-input').value = saved;
+  }
+}
+
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (key && key.startsWith('sk-ant-')) {
+    localStorage.setItem('anthropic_key', key);
+    document.getElementById('api-key-status').textContent = 'API key saved locally in this browser.';
+    document.getElementById('api-key-status').style.color = '#1D9E75';
+    document.getElementById('api-key-input').value = '••••••••••••••••';
+  } else {
+    document.getElementById('api-key-status').textContent = 'Key must start with sk-ant-';
+    document.getElementById('api-key-status').style.color = '#9B2226';
+  }
+}
+
+function handleDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag'); }
+function handleDrop(e) {
+  e.preventDefault(); e.currentTarget.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type === 'application/pdf') processFile(file);
+}
+function handleFileUpload(e) { const f = e.target.files[0]; if (f) processFile(f); }
+
+function showStatus(msg, type) {
+  const el = document.getElementById('upload-status');
+  el.style.display = 'block'; el.className = 'upload-status ' + type; el.textContent = msg;
+}
+
+async function extractTextFromPDF(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async function(ev) {
+      try {
+        // Dynamically load PDF.js from CDN
+        if (!window.pdfjsLib) {
+          await new Promise((res, rej) => {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+            script.onload = res; script.onerror = rej;
+            document.head.appendChild(script);
+          });
+          // Disable worker to avoid file:// security restrictions
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+        }
+        const typedArray = new Uint8Array(ev.target.result);
+        const pdf = await window.pdfjsLib.getDocument({ data: typedArray }).promise;
+        let fullText = '';
+        for (let i = 1; i <= Math.min(pdf.numPages, 20); i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          fullText += content.items.map(s => s.str).join(' ') + '\n';
+        }
+        resolve(fullText.slice(0, 30000)); // cap at ~30k chars, well within limits
+      } catch(err) { reject(err); }
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function processFile(file) {
+  const apiKey = localStorage.getItem('anthropic_key') || document.getElementById('api-key-input').value.trim();
+  if (!apiKey) { showStatus('Please enter your Anthropic API key first.', 'error'); return; }
+
+  showStatus('Reading PDF...', 'processing');
+
+  let pdfText = '';
+  try {
+    pdfText = await extractTextFromPDF(file);
+  } catch(e) {
+    showStatus('Could not read PDF: ' + e.message, 'error'); return;
+  }
+
+  if (!pdfText || pdfText.trim().length < 100) {
+    showStatus('PDF appears to be image-only or unreadable. Please try a text-based PDF.', 'error'); return;
+  }
+
+  showStatus('Sending to Claude AI — please wait 20–30 seconds...', 'processing');
+
+    const payload = {
+      model: 'claude-sonnet-4-5',
+      max_tokens: 1500,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'text', text: `Here is the extracted text from an analyst report on PVR INOX:\n\n${pdfText}\n\nExtract the data and return ONLY valid JSON, no markdown or extra text:
+{
+  "house": "research house name",
+  "date": "report date",
+  "rating": "BUY/HOLD/SELL/ACCUMULATE/OUTPERFORM",
+  "tp": target_price_number,
+  "prev_tp": previous_tp_number_or_null,
+  "cmp": cmp_number_or_null,
+  "fy26_rev": fy26_revenue_mn_or_null,
+  "fy26_ebitda": fy26_ebitda_mn_or_null,
+  "fy27_rev": fy27_revenue_mn_or_null,
+  "fy27_ebitda": fy27_ebitda_mn_or_null,
+  "fy28_rev": fy28_revenue_mn_or_null,
+  "fy28_ebitda": fy28_ebitda_mn_or_null,
+  "fy26_eps": eps_fy26_or_null,
+  "fy27_eps": eps_fy27_or_null,
+  "fy28_eps": eps_fy28_or_null,
+  "valuation_basis": "brief valuation method",
+  "key_positives": ["point1","point2","point3"],
+  "key_risks": ["risk1","risk2"]
+}` }
+        ]
+      }]
+    };
+
+    const workerUrl = localStorage.getItem('worker_url') || '';
+
+    if (!workerUrl) {
+      showStatus('Worker URL not configured. Please complete Step 2 in the Update tab.', 'error');
+      document.getElementById('setup-section').style.display = 'block';
+      return;
+    }
+
+    let data = null;
+    let lastErr = '';
+
+    try {
+      const bodyWithKey = { ...payload, _apiKey: apiKey };
+      const bodyStr = JSON.stringify(bodyWithKey);
+      console.log('Proxy URL:', workerUrl);
+      console.log('Payload size (bytes):', new Blob([bodyStr]).size);
+      const r = await fetch(workerUrl, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: bodyStr
+      });
+      console.log('Response status:', r.status, r.statusText);
+      if (r.ok) {
+        data = await r.json();
+        console.log('Response data full:', JSON.stringify(data).slice(0, 500));
+      } else {
+        let errBody = '';
+        try { errBody = await r.text(); } catch(_) {}
+        console.error('Error response body:', errBody);
+        lastErr = 'HTTP ' + r.status + ' — ' + (errBody.slice(0,200) || r.statusText);
+      }
+    } catch(e) {
+      console.error('Fetch exception:', e);
+      lastErr = e.message || 'Network error — check browser console (F12) for details';
+    }
+
+    if (data && data.content && data.content[0]) {
+      try {
+        const text = data.content[0].text.trim().replace(/```json|```/g,'').trim();
+        parsedReport = JSON.parse(text);
+        displayParsed(parsedReport, file.name);
+      } catch(parseErr) {
+        showStatus('Extraction error: could not parse Claude response. Try again.', 'error');
+      }
+    } else {
+      showStatus('Auto-extraction failed: ' + lastErr + '. Check browser console (F12 → Console) for details.', 'error');
+      showManualEntry(file.name);
+    }
+}
+
+function showManualEntry(fname) {
+  const el = document.getElementById('manual-entry');
+  if (el) { el.style.display = 'block'; document.getElementById('me-filename').textContent = fname; }
+}
+
+function submitManual() {
+  const g = id => document.getElementById(id).value.trim();
+  parsedReport = {
+    house:           g('me-house'),
+    date:            g('me-date'),
+    rating:          g('me-rating'),
+    tp:              parseFloat(g('me-tp')) || null,
+    prev_tp:         parseFloat(g('me-prevtp')) || null,
+    fy26_rev:        parseFloat(g('me-fy26rev')) || null,
+    fy26_ebitda:     parseFloat(g('me-fy26ebitda')) || null,
+    fy27_rev:        parseFloat(g('me-fy27rev')) || null,
+    fy27_ebitda:     parseFloat(g('me-fy27ebitda')) || null,
+    fy28_rev:        parseFloat(g('me-fy28rev')) || null,
+    fy28_ebitda:     parseFloat(g('me-fy28ebitda')) || null,
+    fy26_eps:        parseFloat(g('me-fy26eps')) || null,
+    fy27_eps:        parseFloat(g('me-fy27eps')) || null,
+    fy28_eps:        parseFloat(g('me-fy28eps')) || null,
+    valuation_basis: g('me-basis'),
+    key_positives:   g('me-positives').split('\n').filter(Boolean),
+    key_risks:       g('me-risks').split('\n').filter(Boolean),
+  };
+  if (!parsedReport.house || !parsedReport.tp) {
+    alert('House name and Target Price are required.'); return;
+  }
+  document.getElementById('manual-entry').style.display = 'none';
+  displayParsed(parsedReport, g('me-house') + ' (manual)');
+}
+
+function displayParsed(r, fname) {
+  showStatus('Extraction complete from: ' + fname, 'done');
+  const items = [
+    ['Research house', r.house],
+    ['Report date', r.date],
+    ['Rating', r.rating],
+    ['Target price', r.tp ? '₹' + r.tp.toLocaleString() : '—'],
+    ['Previous TP', r.prev_tp ? '₹' + r.prev_tp.toLocaleString() : '—'],
+    ['FY26E Revenue', r.fy26_rev ? (r.fy26_rev/1000).toFixed(1) + 'k mn' : '—'],
+    ['FY26E EBITDA', r.fy26_ebitda ? (r.fy26_ebitda/1000).toFixed(1) + 'k mn' : '—'],
+    ['FY27E Revenue', r.fy27_rev ? (r.fy27_rev/1000).toFixed(1) + 'k mn' : '—'],
+    ['FY27E EBITDA', r.fy27_ebitda ? (r.fy27_ebitda/1000).toFixed(1) + 'k mn' : '—'],
+    ['FY26E EPS', r.fy26_eps || '—'],
+    ['FY27E EPS', r.fy27_eps || '—'],
+    ['Valuation basis', r.valuation_basis || '—'],
+    ['Key positives', r.key_positives ? r.key_positives.join(' | ') : '—'],
+    ['Key risks', r.key_risks ? r.key_risks.join(' | ') : '—'],
+  ];
+  const ul = document.getElementById('parsed-list');
+  ul.innerHTML = items.map(([k,v]) => `<li><span>${k}</span><span style="text-align:right;color:var(--text);max-width:60%;word-break:break-word">${v}</span></li>`).join('');
+  document.getElementById('parsed-output').style.display = 'block';
+}
+
+function updateSnapshot() {
+  const total = HOUSES.length;
+  const buys = HOUSES.filter(h => h.rating && ['BUY','OUTPERFORM','OVERWEIGHT','OW','OP','O-PF','OPF','OUT-PERFORM','OUT PERFORM'].includes(h.rating.toUpperCase())).length;
+  const holds = HOUSES.filter(h => h.rating && ['HOLD','ACCUMULATE','ADD','NEUTRAL','EQUAL WEIGHT','EW','MARKET PERFORM','MP'].includes(h.rating.toUpperCase())).length;
+  const sells = HOUSES.filter(h => h.rating && ['SELL','REDUCE','UNDERPERFORM','UNDERWEIGHT','UW'].includes(h.rating.toUpperCase())).length;
+  const parts = [];
+  if (buys) parts.push(buys + ' BUY/OP');
+  if (holds) parts.push(holds + ' HOLD');
+  if (sells) parts.push(sells + ' SELL');
+  const el = document.getElementById('snap-houses');
+  const el2 = document.getElementById('snap-ratings');
+  if (el) el.textContent = total;
+  if (el2) el2.textContent = parts.join(' · ');
+}
+
+function applyUpdate() {
+  if (!parsedReport) return;
+  const r = parsedReport;
+  const existing = HOUSES.findIndex(h => h.name.toLowerCase().includes(r.house.toLowerCase()) || r.house.toLowerCase().includes(h.name.toLowerCase()));
+
+  const newEntry = {
+    name: r.house,
+    date: r.date,
+    rating: r.rating,
+    tp: r.tp || 0,
+    prev: r.prev_tp || r.tp || 0,
+    chg: r.tp && r.prev_tp ? r.tp - r.prev_tp : 0,
+    basis: r.valuation_basis || '—',
+    note: r.prev_tp && r.tp !== r.prev_tp ? `TP changed from ${r.prev_tp.toLocaleString()}` : 'Updated'
+  };
+
+  if (existing >= 0) HOUSES[existing] = newEntry;
+  else HOUSES.push(newEntry);
+
+  if (r.fy26_rev) {
+    const ei = ESTIMATES.findIndex(e => e.house.toLowerCase().includes(r.house.toLowerCase()) || r.house.toLowerCase().includes(e.house.toLowerCase()));
+    const newEst = { house: r.house, fy26r: r.fy26_rev||0, fy26e: r.fy26_ebitda||0, fy27r: r.fy27_rev||0, fy27e: r.fy27_ebitda||0, fy28r: r.fy28_rev||0, fy28e: r.fy28_ebitda||0 };
+    if (ei >= 0) ESTIMATES[ei] = newEst; else ESTIMATES.push(newEst);
+  }
+
+  renderTPBars('tp-bars-consensus');
+  renderHouseCards();
+  renderEstTable();
+  renderEpsTable();
+  updateSnapshot();
+  refreshCMPDependents();
+
+  document.getElementById('parsed-output').style.display = 'none';
+  showStatus('Dashboard updated with data from ' + r.house + '!', 'done');
+  // Persist to localStorage so data survives page refresh
+  localStorage.setItem('pvrinox_houses', JSON.stringify(HOUSES));
+  localStorage.setItem('pvrinox_estimates', JSON.stringify(ESTIMATES));
+  alert('Dashboard updated! Switch tabs to see the refreshed data.');
+}
+
+// ══════════════════════ CMP UPDATE ══════════════════════
+let CURRENT_CMP = parseFloat(localStorage.getItem('pvrinox_cmp') || '987');
+
+function updateCMP() {
+  const input = document.getElementById('cmp-input').value.trim();
+  const newCMP = parseFloat(input);
+  if (!newCMP || newCMP < 100 || newCMP > 10000) {
+    alert('Please enter a valid CMP between 100 and 10,000'); return;
+  }
+  CURRENT_CMP = newCMP;
+  localStorage.setItem('pvrinox_cmp', newCMP);
+  document.getElementById('cmp-value').textContent = newCMP.toLocaleString('en-IN');
+  document.getElementById('cmp-input').value = '';
+  refreshCMPDependents();
+}
+
+function refreshCMPDependents() {
+  const cmp = CURRENT_CMP;
+  // Avg TP and upside
+  const tps = HOUSES.map(h => h.tp).filter(t => t > 0);
+  if (tps.length) {
+    const avg = Math.round(tps.reduce((a,b) => a+b, 0) / tps.length);
+    const upside = ((avg - cmp) / cmp * 100).toFixed(0);
+    const minTP = Math.min(...tps);
+    const maxTP = Math.max(...tps);
+    const el1 = document.getElementById('snap-avg-tp');
+    const el2 = document.getElementById('snap-upside');
+    const el3 = document.getElementById('snap-tp-low');
+    const el4 = document.getElementById('snap-tp-high');
+    if (el1) el1.textContent = '₹' + avg.toLocaleString('en-IN');
+    if (el2) { el2.textContent = (upside >= 0 ? '+' : '') + upside + '% upside'; el2.className = 'sub ' + (upside >= 0 ? 'up' : 'down'); }
+    if (el3) el3.textContent = '₹' + minTP.toLocaleString('en-IN');
+    if (el4) el4.textContent = 'to ₹' + maxTP.toLocaleString('en-IN');
+  }
+  // Update CMP display
+  document.getElementById('cmp-display').innerHTML = '₹<span id="cmp-value">' + cmp.toLocaleString('en-IN') + '</span>';
+  // Auto Mcap: 98.2mn shares outstanding
+  const mcapBn = ((cmp * 98.2) / 1000).toFixed(0);
+  const mcapEl = document.getElementById('mcap-display');
+  if (mcapEl) mcapEl.textContent = '₹' + mcapBn + 'bn';
+}
+
+// ══════════════════════ EXPORT ══════════════════════
+function exportDashboard() {
+  // Get current HTML source
+  let html = document.documentElement.outerHTML;
+
+  // Serialize current HOUSES and ESTIMATES into JS
+  const housesJson = JSON.stringify(HOUSES, null, 2);
+  const estimatesJson = JSON.stringify(ESTIMATES, null, 2);
+
+  // Replace the const HOUSES = [...] block with current data
+  html = html.replace(
+    /const HOUSES = \[[\s\S]*?\];(?=\s*\nconst ESTIMATES)/,
+    'const HOUSES = ' + housesJson + ';'
+  );
+  html = html.replace(
+    /const ESTIMATES = \[[\s\S]*?\];(?=\s*\n)/,
+    'const ESTIMATES = ' + estimatesJson + ';'
+  );
+
+  // Download as file
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'PVRINOX_Analyst_Dashboard_' + new Date().toISOString().slice(0,10) + '.html';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ══════════════════════ BOOTSTRAP ══════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // Restore any previously saved data before rendering
+  const savedHouses = localStorage.getItem('pvrinox_houses');
+  const savedEstimates = localStorage.getItem('pvrinox_estimates');
+  if (savedHouses) {
+    try {
+      const parsed = JSON.parse(savedHouses);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        HOUSES.length = 0;
+        parsed.forEach(h => HOUSES.push(h));
+      }
+    } catch(e) {}
+  }
+  if (savedEstimates) {
+    try {
+      const parsed = JSON.parse(savedEstimates);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        ESTIMATES.length = 0;
+        parsed.forEach(e => ESTIMATES.push(e));
+      }
+    } catch(e) {}
+  }
+  initAll();
+  updateSnapshot();
+  CURRENT_CMP = parseFloat(localStorage.getItem('pvrinox_cmp') || '987');
+  refreshCMPDependents();
+  const saved = localStorage.getItem('anthropic_key');
+  if (saved) document.getElementById('api-key-input').value = saved;
+});
+</script>
+</body>
+</html>
