@@ -903,6 +903,7 @@ function checkPwd() {
     <button class="kpi-tab" onclick="showIndTab('kpibench',this)">KPI Benchmarks</button>
     <button class="kpi-tab" onclick="showIndTab('content',this)">Content &amp; GBO</button>
     <button class="kpi-tab" onclick="showIndTab('mktstructure',this)">Market Structure</button>
+    <button class="kpi-tab" onclick="showIndTab('ott',this)">OTT Landscape</button>
   </div>
 
   <!-- ══ SCREEN LANDSCAPE ══ -->
@@ -1147,6 +1148,85 @@ function checkPwd() {
 
   </div>
 
+  <!-- ══ OTT LANDSCAPE ══ -->
+  <div id="ind-ott" class="val-pane" style="display:none">
+
+    <div class="sec-label">OTT — the key risk and its moderation</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px">
+      <div class="metric-card" style="border-top-color:#9B2226"><div class="metric-label">OTT content spend peak</div><div class="metric-val" style="color:#9B2226">₹29.7bn</div><div class="metric-sub">CY23 — now moderating</div></div>
+      <div class="metric-card"><div class="metric-label">OTT content spend CY25</div><div class="metric-val">₹21.8bn</div><div class="metric-sub">-27% from CY23 peak</div></div>
+      <div class="metric-card" style="border-top-color:#1D9E75"><div class="metric-label">Direct OTT releases CY25</div><div class="metric-val" style="color:#1D9E75">30</div><div class="metric-sub">vs 105 in CY22 — sharply down</div></div>
+      <div class="metric-card"><div class="metric-label">Theatrical releases CY25</div><div class="metric-val">470</div><div class="metric-sub">vs 217 in CY22 — up 2x</div></div>
+      <div class="metric-card"><div class="metric-label">OTT subscriber universe</div><div class="metric-val">601mn</div><div class="metric-sub">CY25; growth slowing to 10%</div></div>
+      <div class="metric-card" style="border-top-color:#1D9E75"><div class="metric-label">Digital/OTT rights share</div><div class="metric-val" style="color:#1D9E75">14%</div><div class="metric-sub">CY25 vs 49% peak in CY21</div></div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:24px">
+      <div>
+        <div class="sec-label">OTT content spend trend (Rs bn)</div>
+        <div class="chart-box">
+          <div class="chart-wrap" style="height:220px"><canvas id="ottSpendChart"></canvas></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-label">Theatrical vs direct OTT releases</div>
+        <div class="chart-box">
+          <div class="chart-wrap" style="height:220px"><canvas id="ottReleasesChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">OTT subscriber growth — moderating post-Covid</div>
+    <div style="overflow-x:auto;margin-bottom:20px">
+      <table>
+        <thead><tr><th>Year</th><th>OTT Subscribers (mn)</th><th>YoY Growth</th><th>Direct OTT Releases</th><th>Theatrical Releases</th><th>OTT Rights % of filmed entertainment</th></tr></thead>
+        <tbody>
+          <tr><td>CY21</td><td>353</td><td>—</td><td>—</td><td>—</td><td style="color:#9B2226;font-weight:600">49%</td></tr>
+          <tr><td>CY22</td><td>424</td><td style="color:#9B2226">+20%</td><td style="color:#9B2226">105</td><td>217</td><td>43%</td></tr>
+          <tr><td>CY23</td><td>481</td><td>+14%</td><td>57</td><td>359</td><td>21%</td></tr>
+          <tr><td>CY24</td><td>547</td><td>+14%</td><td>60</td><td>440</td><td>18%</td></tr>
+          <tr style="background:var(--surface2);font-weight:600"><td>CY25</td><td>601</td><td>+10%</td><td style="color:#1D9E75">30</td><td style="color:#1D9E75">470</td><td style="color:#1D9E75">14%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec-label">Analyst view — is the OTT threat subsiding?</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #1D9E75;border-radius:var(--radius);padding:10px 12px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:3px">IIFL Capital — Largely yes</div>
+        <div style="font-size:11px;color:var(--text2)">OTT investments have slowed significantly as subscriber growth moderates. Direct OTT releases fell from 105 in CY22 to just 30 in CY25. OTT rights as share of filmed entertainment revenue has normalised from 49% peak to mid-teens. Low-hanging fruit of subscriber acquisition is over.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #1B4F8A;border-radius:var(--radius);padding:10px 12px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:3px">CLSA — OTT window extension is key</div>
+        <div style="font-size:11px;color:var(--text2)">Extension of OTT release window to 3+ months for theatrical releases is a structural positive. Gives cinema a longer exclusive window to monetise content before streaming. CLSA views this as a permanent change in studio strategy post the OTT experiment.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #B07D00;border-radius:var(--radius);padding:10px 12px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:3px">Consensus — Jury still out on structural shift</div>
+        <div style="font-size:11px;color:var(--text2)">While near-term OTT pressure is easing, most analysts acknowledge uncertainty on long-term consumer behaviour. Covid accelerated OTT adoption permanently. The question is whether cinema has repositioned itself as a premium experience category (bullish) or remains vulnerable to content-driven OTT acceleration (bearish).</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #534AB7;border-radius:var(--radius);padding:10px 12px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:3px">Historical precedent — cinema has survived every disruption</div>
+        <div style="font-size:11px;color:var(--text2)">Radio (1930s), TV (1950s, -50% attendance), VCR (1980s), streaming (2020s) — cinema survived each by repositioning as an experience, not a utility. IIFL analysis shows cinema attendance recovered each time by premiumising the offering.</div>
+      </div>
+    </div>
+
+    <div class="sec-label">OTT major platforms — India landscape</div>
+    <div style="overflow-x:auto;margin-bottom:16px">
+      <table>
+        <thead><tr><th>Platform</th><th>Parent</th><th>India subscribers est.</th><th>Strategy shift post-peak</th><th>Impact on theatrical</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Netflix</strong></td><td>Netflix Inc.</td><td>~10–12mn paid</td><td>Password sharing crackdown; ad-supported tier; fewer originals</td><td>Now releasing select films theatrically first</td></tr>
+          <tr><td><strong>Amazon Prime Video</strong></td><td>Amazon</td><td>~20–25mn</td><td>Content spend rationalised; fewer big-budget originals</td><td>Maintained theatrical window for premium titles</td></tr>
+          <tr><td><strong>Disney+ Hotstar</strong></td><td>Reliance-Disney JV</td><td>~35–40mn</td><td>Sports (IPL) remains anchor; movie content window extended</td><td>Most new Bollywood first theatrical then OTT</td></tr>
+          <tr><td><strong>JioCinema / Jio</strong></td><td>Reliance</td><td>~150mn+ (free)</td><td>Free tier driving reach; premium tier emerging</td><td>Some direct OTT but now pivoting to theatrical-first</td></tr>
+          <tr><td><strong>ZEE5 / SonyLIV</strong></td><td>ZEEL / Sony</td><td>~15–20mn combined</td><td>Merger talks; content spend constrained</td><td>Minimal impact on theatrical</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:10px;color:var(--text3)">Source: IIFL Capital research, EY-FICCI report CY25, Ormax Media. Subscriber figures are estimates.</div>
+
+  </div>
+
 </div>
 
 <!-- ══════════════════════════════════
@@ -1297,237 +1377,29 @@ function checkPwd() {
 <script>
 // ══════════════════════ DATA ══════════════════════
 const HOUSES = [
-  {
-    "name": "CLSA",
-    "date": "6 Feb 2026",
-    "rating": "O-PF",
-    "tp": 1920,
-    "prev": 1920,
-    "chg": 0,
-    "basis": "10x FY27 EV/EBITDA",
-    "note": "Unchanged"
-  },
-  {
-    "name": "Nuvama",
-    "date": "5 Feb 2026",
-    "rating": "BUY",
-    "tp": 1605,
-    "prev": 1605,
-    "chg": 0,
-    "basis": "DCF-based",
-    "note": "Unchanged"
-  },
-  {
-    "name": "ICICI Sec",
-    "date": "6 Feb 2026",
-    "rating": "BUY",
-    "tp": 1500,
-    "prev": 1500,
-    "chg": 0,
-    "basis": "15x adj FY27 EBITDA",
-    "note": "Maintained"
-  },
-  {
-    "name": "Kotak",
-    "date": "6 Feb 2026",
-    "rating": "BUY",
-    "tp": 1400,
-    "prev": 1380,
-    "chg": 20,
-    "basis": "12x FY28E EV/EBITDA",
-    "note": "Raised from 1,380"
-  },
-  {
-    "name": "Nirmal Bang",
-    "date": "5 Feb 2026",
-    "rating": "BUY",
-    "tp": 1344,
-    "prev": 1358,
-    "chg": -14,
-    "basis": "10x Dec-27E EBITDA",
-    "note": "Slightly cut from 1,358"
-  },
-  {
-    "name": "Elara",
-    "date": "6 Feb 2026",
-    "rating": "BUY",
-    "tp": 1300,
-    "prev": 1225,
-    "chg": 75,
-    "basis": "13x Sep-27 pre-IndAS EBITDA",
-    "note": "Upgraded from Accum; TP raised"
-  },
-  {
-    "name": "ICICI Direct",
-    "date": "9 Feb 2026",
-    "rating": "BUY",
-    "tp": 1320,
-    "prev": 1320,
-    "chg": 0,
-    "basis": "11.5x FY27 ex-IndAS EBITDA",
-    "note": "Unchanged"
-  },
-  {
-    "name": "B&K",
-    "date": "5 Feb 2026",
-    "rating": "HOLD",
-    "tp": 1285,
-    "prev": 1285,
-    "chg": 0,
-    "basis": "DCF-based",
-    "note": "Maintained Hold"
-  },
-  {
-    "name": "PL Capital",
-    "date": "6 Feb 2026",
-    "rating": "BUY",
-    "tp": 1274,
-    "prev": 1261,
-    "chg": 13,
-    "basis": "9.5x FY28E pre-IndAS EBITDA",
-    "note": "Raised from 1,261"
-  },
-  {
-    "name": "Investec",
-    "date": "6 Feb 2026",
-    "rating": "BUY",
-    "tp": 1248,
-    "prev": 1238,
-    "chg": 10,
-    "basis": "12.5x Dec-27 EV/EBITDA",
-    "note": "Upgraded from HOLD"
-  },
-  {
-    "name": "IIFL Capital",
-    "date": "2026-04-16",
-    "rating": "BUY",
-    "tp": 1350,
-    "prev": 1350,
-    "chg": 0,
-    "basis": "12x FY27 EV/EBITDA",
-    "note": "Updated"
-  },
-  {
-    "name": "Avendus Spark Research",
-    "date": "2026-02-06",
-    "rating": "BUY",
-    "tp": 1100,
-    "prev": 1100,
-    "chg": 0,
-    "basis": "10x Sep'FY27E Adj. EBITDA",
-    "note": "Updated"
-  }
+  {name:'CLSA',date:'6 Feb 2026',rating:'O-PF',tp:1920,prev:1920,chg:0,basis:'10x FY27 EV/EBITDA',note:'Unchanged'},
+  {name:'Nuvama',date:'5 Feb 2026',rating:'BUY',tp:1605,prev:1605,chg:0,basis:'DCF-based',note:'Unchanged'},
+  {name:'ICICI Sec',date:'6 Feb 2026',rating:'BUY',tp:1500,prev:1500,chg:0,basis:'15x adj FY27 EBITDA',note:'Maintained'},
+  {name:'Kotak',date:'6 Feb 2026',rating:'BUY',tp:1400,prev:1380,chg:20,basis:'12x FY28E EV/EBITDA',note:'Raised from 1,380'},
+  {name:'Nirmal Bang',date:'5 Feb 2026',rating:'BUY',tp:1344,prev:1358,chg:-14,basis:'10x Dec-27E EBITDA',note:'Slightly cut from 1,358'},
+  {name:'Elara',date:'6 Feb 2026',rating:'BUY',tp:1300,prev:1225,chg:75,basis:'13x Sep-27 pre-IndAS EBITDA',note:'Upgraded from Accum; TP raised'},
+  {name:'ICICI Direct',date:'9 Feb 2026',rating:'BUY',tp:1320,prev:1320,chg:0,basis:'11.5x FY27 ex-IndAS EBITDA',note:'Unchanged'},
+  {name:'B&K',date:'5 Feb 2026',rating:'HOLD',tp:1285,prev:1285,chg:0,basis:'DCF-based',note:'Maintained Hold'},
+  {name:'PL Capital',date:'6 Feb 2026',rating:'BUY',tp:1274,prev:1261,chg:13,basis:'9.5x FY28E pre-IndAS EBITDA',note:'Raised from 1,261'},
+  {name:'Investec',date:'6 Feb 2026',rating:'BUY',tp:1248,prev:1238,chg:10,basis:'12.5x Dec-27 EV/EBITDA',note:'Upgraded from HOLD'},
 ];
 
 const ESTIMATES = [
-  {
-    "house": "Kotak",
-    "fy26r": 66625,
-    "fy26e": 8213,
-    "fy27r": 71032,
-    "fy27e": 10258,
-    "fy28r": 76184,
-    "fy28e": 11456
-  },
-  {
-    "house": "B&K",
-    "fy26r": 68535,
-    "fy26e": 9298,
-    "fy27r": 74612,
-    "fy27e": 9562,
-    "fy28r": 81973,
-    "fy28e": 10948
-  },
-  {
-    "house": "Nirmal Bang",
-    "fy26r": 68180,
-    "fy26e": 9069,
-    "fy27r": 75819,
-    "fy27e": 12036,
-    "fy28r": 81637,
-    "fy28e": 13855
-  },
-  {
-    "house": "Investec",
-    "fy26r": 66302,
-    "fy26e": 20093,
-    "fy27r": 74255,
-    "fy27e": 22838,
-    "fy28r": 81613,
-    "fy28e": 25568
-  },
-  {
-    "house": "CLSA",
-    "fy26r": 68092,
-    "fy26e": 21153,
-    "fy27r": 77086,
-    "fy27e": 24714,
-    "fy28r": 84279,
-    "fy28e": 27964
-  },
-  {
-    "house": "Elara",
-    "fy26r": 73900,
-    "fy26e": 23202,
-    "fy27r": 76909,
-    "fy27e": 23457,
-    "fy28r": 81408,
-    "fy28e": 25236
-  },
-  {
-    "house": "Nuvama",
-    "fy26r": 68318,
-    "fy26e": 20644,
-    "fy27r": 80066,
-    "fy27e": 24288,
-    "fy28r": 92603,
-    "fy28e": 28129
-  },
-  {
-    "house": "PL Capital",
-    "fy26r": 67923,
-    "fy26e": 20153,
-    "fy27r": 73759,
-    "fy27e": 23286,
-    "fy28r": 81275,
-    "fy28e": 26063
-  },
-  {
-    "house": "ICICI Sec",
-    "fy26r": 69587,
-    "fy26e": 22551,
-    "fy27r": 76578,
-    "fy27e": 24588,
-    "fy28r": 85275,
-    "fy28e": 28182
-  },
-  {
-    "house": "ICICI Direct",
-    "fy26r": 67608,
-    "fy26e": 21154,
-    "fy27r": 75636,
-    "fy27e": 24107,
-    "fy28r": 82200,
-    "fy28e": 26477
-  },
-  {
-    "house": "IIFL Capital",
-    "fy26r": 66663,
-    "fy26e": 20395,
-    "fy27r": 71612,
-    "fy27e": 22271,
-    "fy28r": 80288,
-    "fy28e": 26174
-  },
-  {
-    "house": "Avendus Spark Research",
-    "fy26r": 66760,
-    "fy26e": 8290,
-    "fy27r": 70345,
-    "fy27e": 9626,
-    "fy28r": 77808,
-    "fy28e": 11670
-  }
+  {house:'Kotak',fy26r:66625,fy26e:8213,fy27r:71032,fy27e:10258,fy28r:76184,fy28e:11456},
+  {house:'B&K',fy26r:68535,fy26e:9298,fy27r:74612,fy27e:9562,fy28r:81973,fy28e:10948},
+  {house:'Nirmal Bang',fy26r:68180,fy26e:9069,fy27r:75819,fy27e:12036,fy28r:81637,fy28e:13855},
+  {house:'Investec',fy26r:66302,fy26e:20093,fy27r:74255,fy27e:22838,fy28r:81613,fy28e:25568},
+  {house:'CLSA',fy26r:68092,fy26e:21153,fy27r:77086,fy27e:24714,fy28r:84279,fy28e:27964},
+  {house:'Elara',fy26r:73900,fy26e:23202,fy27r:76909,fy27e:23457,fy28r:81408,fy28e:25236},
+  {house:'Nuvama',fy26r:68318,fy26e:20644,fy27r:80066,fy27e:24288,fy28r:92603,fy28e:28129},
+  {house:'PL Capital',fy26r:67923,fy26e:20153,fy27r:73759,fy27e:23286,fy28r:81275,fy28e:26063},
+  {house:'ICICI Sec',fy26r:69587,fy26e:22551,fy27r:76578,fy27e:24588,fy28r:85275,fy28e:28182},
+  {house:'ICICI Direct',fy26r:67608,fy26e:21154,fy27r:75636,fy27e:24107,fy28r:82200,fy28e:26477},
 ];
 
 const EPS_DATA = [
@@ -2608,6 +2480,48 @@ function renderIndustryCharts() {
       plugins: {
         legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 8 } },
         tooltip: { callbacks: { label: ctx => ctx.label + ': ~' + ctx.parsed + '%' } }
+      }
+    }
+  });
+
+  // OTT content spend chart
+  new Chart(document.getElementById('ottSpendChart'), {
+    type: 'bar',
+    data: {
+      labels: ['CY19','CY20','CY21','CY22','CY23','CY24','CY25'],
+      datasets: [{
+        label: 'OTT Content Spend (Rs bn)',
+        data: [14.0, 10.2, 23.1, 25.5, 29.7, 26.7, 21.8],
+        backgroundColor: ['#B5D4F4','#B5D4F4','#9B2226','#9B2226','#9B2226','#FAC775','#1D9E75'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => 'Rs ' + ctx.parsed.y + 'bn' } } },
+      scales: {
+        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 }, callback: v => 'Rs ' + v + 'bn' } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+
+  // OTT vs Theatrical releases chart
+  new Chart(document.getElementById('ottReleasesChart'), {
+    type: 'bar',
+    data: {
+      labels: ['CY22','CY23','CY24','CY25'],
+      datasets: [
+        { label: 'Theatrical first', data: [217, 359, 440, 470], backgroundColor: '#1B4F8A', borderWidth: 0 },
+        { label: 'Direct OTT', data: [105, 57, 60, 30], backgroundColor: '#9B2226', borderWidth: 0 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 8 } } },
+      scales: {
+        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 } }, stacked: false },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
       }
     }
   });
